@@ -32,7 +32,7 @@ public class AdminController {
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("status", HttpStatus.OK.value());
 	    map.put("message", "Identification de l' admin reussi");
-	    map.put("data", admin);
+	   // map.put("data", admin);
 	    return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
