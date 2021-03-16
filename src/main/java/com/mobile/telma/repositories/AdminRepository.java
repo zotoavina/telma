@@ -27,10 +27,9 @@ public class AdminRepository {
 				);
 	});
 	
-	
+	@SuppressWarnings("deprecation")
 	public Admin findAdminByEmailAndMdp(String email, String mdp) throws EtAuthException{
 		try {
-			@SuppressWarnings("deprecation")
 			Admin admin = jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL, new Object[] {email}, adminRowMapper);
 			if(admin.getMdp().compareTo(mdp) != 0) throw new EtAuthException("Mot de passe non valide");
 			return admin;
