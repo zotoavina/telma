@@ -28,8 +28,8 @@ public class AdminController {
 	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> adminMap) {
 		String email = (String) adminMap.get("email");
 		String mdp = (String) adminMap.get("mdp");
-	    Admin admin = adminService.getByEmailAndMdp(email, mdp);
-	    System.out.println(admin.toString());
+	   // Admin admin = adminService.getByEmailAndMdp(email, mdp);
+	    //System.out.println(admin.toString());
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("status", HttpStatus.OK.value());
 	    map.put("message", "Identification de l' admin reussi");
