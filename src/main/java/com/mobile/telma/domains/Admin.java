@@ -55,6 +55,9 @@ public class Admin {
 		this.mdp = mdp;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return idAdmin + " " + idoperateur + " " + nom + " " + prenom + " " + email + " " + mdp; 
+	}
 	
 }
