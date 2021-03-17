@@ -119,7 +119,7 @@ create table actions(
 	dateaction timestamp not null
 );
 alter table actions add constraint fk_typeactions foreign key (idtypeaction) references typeactions(idtypeaction);
-alter table actions add constraint fk_comptemvolas foreign key (idclient) references clients(idclient);
+alter table actions add constraint fk_clients foreign key (idclient) references clients(idclient);
 
 
 create table credits(
