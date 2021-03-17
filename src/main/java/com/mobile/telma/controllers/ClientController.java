@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mobile.telma.domains.Client;
 import com.mobile.telma.services.ClientService;
+import com.mobile.telma.utils.ResponseMaker;
 
 @RequestMapping("/api/clients")
 @Controller
@@ -32,6 +34,14 @@ public class ClientController {
 		map.put("message", "Inscription reussi");
 		map.put("data", null);
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> clientMap){
+		String numero  = (String) clientMap.get("numero");
+		String mdp = (String) clientMap.get("mdp");
+		Client client = clientService.identifyClient(numero, mdp);
+		return ResponseMaker.makeResponse(client, 200, "Login reussi", HttpStatus.ACCEPTED);
 	}
 	
 	

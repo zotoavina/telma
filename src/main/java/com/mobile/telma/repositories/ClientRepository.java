@@ -32,6 +32,8 @@ public class ClientRepository {
 				rs.getString("prenom"),
 				rs.getString("numero"),
 				rs.getString("mdp"),
+				rs.getDouble("solde"),
+				rs.getDouble("credit"),
 				rs.getDate("dateadhesion")
 				);
 	});
@@ -54,12 +56,19 @@ public class ClientRepository {
 				}
 	}
 	
-	public Client getClientByNumero(String numero, String mdp) throws EtBadRequestException{
+	
+	@SuppressWarnings("deprecation")
+	public Client getClientByNumero(String numero, String mdp) throws EtAuthException{
 		try {
-			jdbcTemplate.queryForObject(SQL_GET_BY_NUMERO, new Object[] {numero}, clientRowMapper);
+			Client client = jdbcTemplate.queryForObject(SQL_GET_BY_NUMERO, new Object[] {numero}, clientRowMapper);
+			 if(!client.validPassword(mdp))
+				 throw new EtAuthException("Mot de passe non valide");
+			 return client;
 		}catch(Exception e) {
-			throw new EtBadRequestException("numero et ou mot de passe non valide");
+			throw new EtAuthException("numero et ou mot de passe non valide");
 		}
 	}
+	
+	
 	
 }
