@@ -92,18 +92,14 @@ create table clients(
     nom varchar(30) not null,
     prenom varchar(30),
     numero varchar(15) not null,
+	mdp varchar(20) not null,
+    solde decimal not null,
+	credit decimal not null,
     dateadhesion timestamp not null,
 );
 alter table clients add constraint fk_operateur foreign key (idoperateur) references operateur(idoperateur);
 create unique index numtelephone on clients (numero);
 
-create table comptemvolas(
-    idcomptemvola serial primary key not null,
-    idclient int not null,
-    mdp varchar(20) not null,
-    solde decimal not null default 0
-);
-alter table comptemvolas add constraint fk_clients foreign key (idclient) references clients(idclient);
 
 create table typeactions(
     idtypeaction serial primary key not null,
@@ -114,13 +110,13 @@ create unique index fknomtypeaction on typeactions (nomtypeaction);
 create table actions(
     idaction serial primary key not null,
     idtypeaction int not null,
-    idcomptemvola int not null,
-    dateaction timestamp not null,
+    idclient int not null,
     montant decimal not null,
-    etat int not null 
+    etat int not null ,
+	dateaction timestamp not null
 );
 alter table actions add constraint fk_typeactions foreign key (idtypeaction) references typeactions(idtypeaction);
-alter table actions add constraint fk_comptemvolas foreign key (idcomptemvola) references comptemvolas(idcomptemvola);
+alter table actions add constraint fk_comptemvolas foreign key (idclient) references clients(idclient);
 
 
 create table credits(
