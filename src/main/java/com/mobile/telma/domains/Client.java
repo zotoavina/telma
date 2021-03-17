@@ -61,6 +61,19 @@ public class Client {
 	}
 	
 	public Client() {}
+	public Client(int idClient, int idOperateur, String nom, String prenom, String mdp, double solde, double credit,
+			Date dateAdhesion) {
+		super();
+		this.idClient = idClient;
+		this.idOperateur = idOperateur;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.mdp = mdp;
+		this.solde = solde;
+		this.credit = credit;
+		this.dateAdhesion = dateAdhesion;
+	}
+	
 	
 	
 	
