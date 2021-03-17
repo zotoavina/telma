@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mobile.telma.domains.Admin;
 import com.mobile.telma.services.AdminService;
+import com.mobile.telma.utils.ResponseMaker;
 import com.mobile.telma.Constants;
 
 import io.jsonwebtoken.Jwts;
@@ -34,12 +35,7 @@ public class AdminController {
 		String email = (String) adminMap.get("email");
 		String mdp = (String) adminMap.get("mdp");
 	    Admin admin = adminService.getByEmailAndMdp(email, mdp);
-	    System.out.println(admin.toString());
-	    Map<String, Object> map = new HashMap<>();
-	    map.put("status", HttpStatus.OK.value());
-	    map.put("message", "Identification de l' admin reussi");
-	    map.put("data", admin);
-	    return new ResponseEntity<>(map, HttpStatus.OK);
+	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
 	}
 	
 	
