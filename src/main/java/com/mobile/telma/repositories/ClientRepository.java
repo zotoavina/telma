@@ -20,6 +20,8 @@ public class ClientRepository {
 			+ "(?, ?, ?, ?);";
 	
 	private static final String SQL_GET_BY_NUMERO ="select * from clients where numero = ?";
+	
+	private static final String SQL_GET_BY_ID = "select * from clients where idclient = ?";
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -69,6 +71,15 @@ public class ClientRepository {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
+	public Client getClientById(int idClient)throws EtBadRequestException{
+		try {
+			Client client = jdbcTemplate.queryForObject(SQL_GET_BY_ID, new Object[] {idClient},  clientRowMapper);
+			return client;
+		}catch(Exception e) {
+			throw new EtBadRequestException("Une erreur est surevenue");
+		}
+	}
 	
 	
 }

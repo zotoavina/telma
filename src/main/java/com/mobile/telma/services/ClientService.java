@@ -16,8 +16,9 @@ public class ClientService {
 	@Autowired
 	ClientRepository clientRepository;
 	
-	public int createClient(String nom, String prenom, String numero, String mdp)throws EtBadRequestException{
-		return clientRepository.insert(nom, prenom, numero, mdp);
+	public Client createClient(String nom, String prenom, String numero, String mdp)throws EtBadRequestException{
+		int idClient =  clientRepository.insert(nom, prenom, numero, mdp);
+		return clientRepository.getClientById(idClient);
 	}
 	
 	public Client identifyClient(String numero, String mdp)throws EtAuthException{

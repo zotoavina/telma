@@ -33,11 +33,11 @@ public class ClientController {
 		String prenom = (String) clientMap.get("prenom");
 		String numero = (String) clientMap.get("numero");
 		String mdp = (String) clientMap.get("mdp");
-		int idClient = clientService.createClient(nom, prenom, numero, mdp);
+		Client client = clientService.createClient(nom, prenom, numero, mdp);
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", HttpStatus.OK.value());
 		map.put("message", "Inscription reussi");
-		map.put("data", null);
+		map.put("data", generateToken(client));
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
 	}
 	
