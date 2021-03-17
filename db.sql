@@ -16,6 +16,7 @@ create table operateurs(
     predicat varchar(5) not null
 );
 create unique index fkpredicat on operateurs (predicat);
+insert into operateurs values(1, 'telma', '2010-01-01 12:00:00','034');
 
 create table admins(
     idadmin serial primary key not null,
@@ -27,6 +28,7 @@ create table admins(
 ); 
 create unique index fkemail on admins (email);
 alter table admins add constraint fk_operateurs foreign key (idoperateur) references operateurs(idoperateur);
+insert into admins(idoperateur, nom, prenom, email, mdp) values(1, 'Rasoaharisoa', 'zotoavina', 'zotoavina@gmail.com', '123456');
 
 
 ----------- gestion offres  atao mongodb --------------- gestion offres ---------------
@@ -93,11 +95,11 @@ create table clients(
     prenom varchar(30),
     numero varchar(15) not null,
 	mdp varchar(20) not null,
-    solde decimal not null,
-	credit decimal not null,
-    dateadhesion timestamp not null,
+    solde decimal not null default 0,
+	credit decimal not null default 0,
+    dateadhesion timestamp not null
 );
-alter table clients add constraint fk_operateur foreign key (idoperateur) references operateur(idoperateur);
+alter table clients add constraint fk_operateur foreign key (idoperateur) references operateurs(idoperateur);
 create unique index numtelephone on clients (numero);
 
 
