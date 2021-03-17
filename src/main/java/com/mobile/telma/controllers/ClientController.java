@@ -8,12 +8,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mobile.telma.Constants;
 import com.mobile.telma.domains.Client;
 import com.mobile.telma.services.ClientService;
 import com.mobile.telma.utils.ResponseMaker;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @RequestMapping("/api/clients")
 @Controller
@@ -36,12 +41,27 @@ public class ClientController {
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
 	}
 	
+	
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> clientMap){
 		String numero  = (String) clientMap.get("numero");
 		String mdp = (String) clientMap.get("mdp");
 		Client client = clientService.identifyClient(numero, mdp);
-		return ResponseMaker.makeResponse(client, 200, "Login reussi", HttpStatus.ACCEPTED);
+		return ResponseMaker.makeResponse(generateToken(client), 200, "Login reussi", HttpStatus.ACCEPTED);
+	}
+	
+	
+	private String generateToken(Client client){
+		long timestamp = System.currentTimeMillis(); 
+		String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SERCRET_KEY)
+				.setIssuedAt(new Date(timestamp))
+				.setExpiration(new Date(timestamp + Constants.VALIDITY)) 
+				.claim("idUtilisateur", client.getIdClient() )
+				.claim("idOperateur", client.getIdOperateur())
+				.claim("nom", client.getNom())
+				.claim("prenom", client.getPrenom())
+				.compact();
+		return token;
 	}
 	
 	

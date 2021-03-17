@@ -60,4 +60,6 @@ public class Admin {
 		return idAdmin + " " + idoperateur + " " + nom + " " + prenom + " " + email + " " + mdp; 
 	}
 	
+	
+	
 }
