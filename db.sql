@@ -90,17 +90,18 @@ insert into admins(idoperateur, nom, prenom, email, mdp) values(1, 'Rasoaharisoa
 
 create table clients(
     idclient serial primary key not null,
-    idoperateur int not null,
+    idoperateur int not null default 1,
     nom varchar(30) not null,
     prenom varchar(30),
     numero varchar(15) not null,
 	mdp varchar(20) not null,
     solde decimal not null default 0,
 	credit decimal not null default 0,
-    dateadhesion timestamp not null
+    dateadhesion timestamp not null default current_timestamp
 );
 alter table clients add constraint fk_operateur foreign key (idoperateur) references operateurs(idoperateur);
 create unique index numtelephone on clients (numero);
+insert into clients (nom, prenom, numero, mdp) values('Rahalinjanahary','martinah','8818232','123456');
 
 
 create table typeactions(
