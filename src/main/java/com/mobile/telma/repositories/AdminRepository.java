@@ -1,6 +1,7 @@
 package com.mobile.telma.repositories;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,9 @@ public class AdminRepository {
 	
 	@Autowired 
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	MongoTemplate mongoTemplate;
 	
 	RowMapper<Admin> adminRowMapper = ((rs, rowNum) ->{
 		return new Admin(
@@ -31,6 +35,7 @@ public class AdminRepository {
 	public Admin findAdminByEmailAndMdp(String email, String mdp) throws EtAuthException{
 		try {
 			Admin admin = jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL, new Object[] {email}, adminRowMapper);
+			System.out.println(mongoTemplate);
 			if(admin.getMdp().compareTo(mdp) != 0) throw new EtAuthException("Mot de passe non valide");
 			return admin;
 		}catch(Exception e) {
