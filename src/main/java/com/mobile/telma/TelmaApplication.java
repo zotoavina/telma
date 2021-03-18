@@ -45,7 +45,7 @@ public class TelmaApplication {
 	            // registry.addMapping("/api/clients/*").allowedOrigins("http://localhost:4200");
 	            // registry.addMapping("admin/*").allowedOrigins("http://localhost:4200").allowedHeaders("*");
 	        	 registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").
-	        	 allowedOrigins("*").allowedHeaders("*").allowCredentials(true);
+	        	 allowedOrigins("*").allowedHeaders("*");
 	         }
 	      };
 	   }
