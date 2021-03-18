@@ -124,7 +124,9 @@ create table actions(
 alter table actions add constraint fk_typeactions foreign key (idtypeaction) references typeactions(idtypeaction);
 alter table actions add constraint fk_clients foreign key (idclient) references clients(idclient);
 
-insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 2000, 1); 
+insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 2000, 0); 
+insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 3000, 0); 
+insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 4000, 0); 
 
 
 create table appels(
@@ -154,3 +156,4 @@ act.montant as montantaction, act.etat,
 act.dateaction, ta.nomtypeaction
 from clients cl join actions act on cl.idclient = act.idclient
 join typeactions ta on act.idtypeaction = ta.idtypeaction
+ 
