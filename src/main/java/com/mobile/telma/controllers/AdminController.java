@@ -41,7 +41,8 @@ public class AdminController {
 	
 	@GetMapping("/admin/actions")
 	public ResponseEntity<Map<String , Object>> listeActions(){
-		return null;
+		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
+				"selection des actions non valide reussi", HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/actions/validation")
