@@ -43,6 +43,7 @@ public class TelmaApplication {
 	         @Override
 	         public void addCorsMappings(CorsRegistry registry) {
 	            registry.addMapping("/api/clients/*").allowedOrigins("http://localhost:4200");
+	            registry.addMapping("admin/*").allowedOrigins("http://localhost:4200");
 	         }
 	      };
 	   }
