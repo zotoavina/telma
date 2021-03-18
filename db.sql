@@ -138,8 +138,8 @@ create table credits(
 
 --- Action + clients
 create view actionclient as
-select clients.* , actions.idAction, actions.idtypeaction,
-actions.montant as montantaction, actions.etat,
-actions.dateaction, typeactions.nomtypeaction
+select cl.* , act.idAction, act.idtypeaction,
+act.montant as montantaction, act.etat,
+act.dateaction, ta.nomtypeaction
 from clients cl join actions act on cl.idclient = act.idclient
 join typeactions ta on act.idtypeaction = ta.idtypeaction
