@@ -3,6 +3,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +43,9 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/validations")
-	public ResponseEntity<Map<String , Object>> listeActions(){
+	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request){
+		int idAdmin = Integer.parseInt( (String) request.getAttribute("idAdmin") );
+		System.out.println("IdAdmin : " + idAdmin);
 		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
 				"selection des actions non valide reussi", HttpStatus.OK);
 	}
