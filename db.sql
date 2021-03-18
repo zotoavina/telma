@@ -110,19 +110,36 @@ create table typeactions(
 );
 create unique index fknomtypeaction on typeactions (nomtypeaction);
 
+insert into typeactions values(1, 'depot');
+insert into typeactions values(2, 'retrait');
+
 create table actions(
     idaction serial primary key not null,
     idtypeaction int not null,
     idclient int not null,
     montant decimal not null,
     etat int not null ,
-	dateaction timestamp not null
+	dateaction timestamp not null default current_timestamp
 );
 alter table actions add constraint fk_typeactions foreign key (idtypeaction) references typeactions(idtypeaction);
 alter table actions add constraint fk_clients foreign key (idclient) references clients(idclient);
+
+insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 2000, 1); 
 
 
 create table credits(
     idcredits serial primary key not null,
     valmin decimal 
 );
+
+
+
+------------------------ Vues
+
+--- Action + clients
+create view actionclient as
+select clients.* , actions.idAction, actions.idtypeaction,
+actions.montant as montantaction, actions.etat,
+actions.dateaction, typeactions.nomtypeaction
+from clients cl join actions act on cl.idclient = act.idclient
+join typeactions ta on act.idtypeaction = ta.idtypeaction

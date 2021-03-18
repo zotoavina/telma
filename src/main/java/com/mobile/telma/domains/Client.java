@@ -47,7 +47,8 @@ public class Client {
 	public double getSolde() {
 		return solde;
 	}
-	public void setSolde(double solde) {
+	public void setSolde(double solde) throws EtBadRequestException{
+		if(solde < 0) throw new EtBadRequestException("La valeur du solde doit etre positive");
 		this.solde = solde;
 	}
 	public double getCredit() {
@@ -95,13 +96,16 @@ public class Client {
 		return solde + credit;
 	}
 	
-	public void verifyRetrait(double montant)throws EtBadRequestException{
+	public void faireRetrait(double montant)throws EtBadRequestException{
 		String message = "Solde : " + solde + " insuffisant pour votre retrait : " + montant; 
 		if(solde < montant) throw new EtBadRequestException(message);
+		setSolde(solde - montant);
 	}
 	
 	
-	
+	public void faireDepot(double montant) {
+		setSolde(montant + solde);
+	}
 	
 
 }

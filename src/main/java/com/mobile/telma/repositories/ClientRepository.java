@@ -22,6 +22,9 @@ public class ClientRepository {
 	private static final String SQL_GET_BY_NUMERO ="select * from clients where numero = ?";
 	
 	private static final String SQL_GET_BY_ID = "select * from clients where idclient = ?";
+	
+	private static final String SQL_UPDATE_SOLDE = "update clients set solde = ? where idclient = ?";
+	
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -78,6 +81,14 @@ public class ClientRepository {
 			return client;
 		}catch(Exception e) {
 			throw new EtBadRequestException("Une erreur est surevenue");
+		}
+	}
+	
+	public void updateSolde(Client client)throws EtBadRequestException{
+		try {
+			jdbcTemplate.update(SQL_UPDATE_SOLDE, new Object[] { client.getSolde(), client.getIdClient()});
+		}catch(EtBadRequestException et) {
+			throw new EtBadRequestException("Une erreur est survenue lors du mise ajour de votre solde");
 		}
 	}
 	

@@ -39,6 +39,17 @@ public class AdminController {
 	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
 	}
 	
+	@GetMapping("/admin/actions")
+	public ResponseEntity<Map<String , Object>> listeActions(){
+		return null;
+	}
+	
+	@GetMapping("/admin/actions/validation")
+	public ResponseEntity<Map<String, Object>> login(){
+		return null;
+	}
+	
+	
 	
 	private String generateToken(Admin admin){
 		long timestamp = System.currentTimeMillis();

@@ -12,11 +12,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.mobile.telma.Constants;
 import com.mobile.telma.domains.Client;
 import com.mobile.telma.services.ClientService;
 import com.mobile.telma.utils.ResponseMaker;
-
+import com.mobile.telma.domains.Action;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -49,6 +51,17 @@ public class ClientController {
 		Client client = clientService.identifyClient(numero, mdp);
 		return ResponseMaker.makeResponse(generateToken(client), 200, "Login reussi", HttpStatus.ACCEPTED);
 	}
+	
+	@PostMapping("/action")
+	public ResponseEntity<Map<String,Object>> faireAction(HttpServletRequest request,@RequestBody Action action){
+		//System.out.println( request.getAttribute("idUtilisateur"));
+		int idClient = Integer.parseInt((String) request.getAttribute("idUtilisateur"));
+		Client client = clientService.getClientById(idClient);
+		action.setIdClient(idClient);
+		clientService.faireAction(client, action);
+		return ResponseMaker.makeResponse(null, 200, action.getDescription(), HttpStatus.OK);
+	}
+	
 	
 	
 	private String generateToken(Client client){
