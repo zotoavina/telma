@@ -1,16 +1,20 @@
 package com.mobile.telma.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Client;
+import com.mobile.telma.domains.Appel;
 import com.mobile.telma.exceptions.EtAuthException;
 import com.mobile.telma.exceptions.EtBadRequestException;
 import com.mobile.telma.repositories.ActionRepository;
 import com.mobile.telma.repositories.AppelRepository;
 import com.mobile.telma.repositories.ClientRepository;
+
+import java.util.List;
 
 @Transactional
 @Service
@@ -43,8 +47,8 @@ public class ClientService {
 	}
 	
 	
-	public List<Appel> listeAppel()throws EtBadRequestException{
-		
+	public List<Appel> listeAppel(int idClient)throws EtBadRequestException{
+		return appelRepository.getAppelClient(idClient);
 	}
 	
 	public Client getClientById(int id)throws EtBadRequestException{
