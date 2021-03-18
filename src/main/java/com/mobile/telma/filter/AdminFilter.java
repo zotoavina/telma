@@ -35,10 +35,8 @@ public class AdminFilter extends GenericFilterBean{
 							Claims claim = Jwts.parser().setSigningKey(Constants.ADMIN_API_SERCRET_KEY)
 									.parseClaimsJws(token).getBody();
 							srequest.setAttribute("idAdmin", claim.get("idAdmin").toString());
-							if (CorsUtils.isPreFlightRequest(srequest)) {
-						        sresponse.setStatus(HttpServletResponse.SC_OK);
+						    sresponse.setStatus(HttpServletResponse.SC_OK);
 						       // return new AuthFilter() ; //whatever your token implementation class is - return an instance of it
-						    }
 						}catch(Exception e) {
 							sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Token invalide ou expire");
 							return;
