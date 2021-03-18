@@ -3,6 +3,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,19 +43,21 @@ public class AdminController {
 	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/admin/actions")
-	public ResponseEntity<Map<String , Object>> listeActions(){
+	@GetMapping("/admin/validations")
+	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request, HttpServletResponse response){
+		System.out.println(response.getStatus());
+		int idAdmin = Integer.parseInt( (String) request.getAttribute("idAdmin") );
+		System.out.println("IdAdmin : " + idAdmin);
 		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
 				"selection des actions non valide reussi", HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/actions/validation/{idAction}")
+	@GetMapping("/admin/validations/{idAction}")
 	public ResponseEntity<Map<String, Object>> validerAction(@PathVariable("idAction") int idAction){
 		Action action = adminService.validerAction(idAction);
 		return ResponseMaker.makeResponse(action, 200, 
 				"Validation de " + action.getDescription(), HttpStatus.OK);
 	}
-	
 	
 	
 	private String generateToken(Admin admin){
@@ -68,6 +73,7 @@ public class AdminController {
 				.compact();
 		return token;
 	}
+	
 	
 	
 }
