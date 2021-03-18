@@ -81,4 +81,13 @@ public class Action {
 	public String getDescription() {
 		return describe() + " de " +  montant + " reussi ";
 	}
+	
+	public String getDescriptionAttente() {
+		return describe() + " de " + montant + " en attente de validation";
+	}
+	
+	public void valider() {
+		setEtat(1);
+	}
+	
 }

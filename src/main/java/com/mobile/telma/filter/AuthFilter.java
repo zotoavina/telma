@@ -31,9 +31,9 @@ public class AuthFilter extends GenericFilterBean{
 			if(authArray.length > 1 && authArray[1] != null) {
 				String token = authArray[1];
 				try {
-					Claims claim = Jwts.parser().setSigningKey(Constants.API_SERCRET_KEY)
+					Claims claim = Jwts.parser().setSigningKey(Constants.CLIENT_API_SERCRET_KEY)
 							.parseClaimsJws(token).getBody();
-					srequest.setAttribute("idUtilisateur", claim.get("idUtilisateur").toString());
+					srequest.setAttribute("idClient", claim.get("idClient").toString());
 				}catch(Exception e) {
 					sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Token invalide ou expire");
 					return;

@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.mobile.telma.filter.AdminFilter;
 import com.mobile.telma.filter.AuthFilter;
 
 @SpringBootApplication
@@ -26,6 +27,14 @@ public class TelmaApplication {
 		return filter;
 	}
 	
+	@Bean
+	public FilterRegistrationBean<AdminFilter> filterRegistrationBeanAdmin(){
+		FilterRegistrationBean<AdminFilter> filter = new FilterRegistrationBean<>();
+		AdminFilter authFilter = new AdminFilter();
+		filter.setFilter(authFilter);
+		filter.addUrlPatterns("/admin/*");
+		return filter;
+	}
 	
 	@SuppressWarnings("deprecation")
 	@Bean
@@ -33,7 +42,7 @@ public class TelmaApplication {
 	      return new WebMvcConfigurerAdapter() {
 	         @Override
 	         public void addCorsMappings(CorsRegistry registry) {
-	            registry.addMapping("/api/clients").allowedOrigins("http://localhost:4200");
+	            registry.addMapping("/api/clients/*").allowedOrigins("http://localhost:4200");
 	         }
 	      };
 	   }

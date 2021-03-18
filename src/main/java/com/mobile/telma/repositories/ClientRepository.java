@@ -88,7 +88,7 @@ public class ClientRepository {
 		try {
 			jdbcTemplate.update(SQL_UPDATE_SOLDE, new Object[] { client.getSolde(), client.getIdClient()});
 		}catch(EtBadRequestException et) {
-			throw new EtBadRequestException("Une erreur est survenue lors du mise ajour de votre solde");
+			throw new EtBadRequestException("Une erreur est survenue lors du mise a jour de votre solde");
 		}
 	}
 	

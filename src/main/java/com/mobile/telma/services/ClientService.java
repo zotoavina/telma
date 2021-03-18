@@ -32,8 +32,7 @@ public class ClientService {
 	
 	public void faireAction(Client client , Action action)throws EtBadRequestException{
 		try {
-			if(action.isDepot())   client.faireDepot( action.getMontant());
-			if(action.isRetrait()) client.faireRetrait( action.getMontant());
+		    client.faireAction(action);
 			actionRepository.insertAction(action);
 		}catch(Exception e) {
 			throw e;

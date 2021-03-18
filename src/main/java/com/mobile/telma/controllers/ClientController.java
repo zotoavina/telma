@@ -58,21 +58,21 @@ public class ClientController {
 	@PostMapping("/action")
 	public ResponseEntity<Map<String,Object>> faireAction(HttpServletRequest request,@RequestBody Action action){
 		//System.out.println( request.getAttribute("idUtilisateur"));
-		int idClient = Integer.parseInt((String) request.getAttribute("idUtilisateur"));
+		int idClient = Integer.parseInt((String) request.getAttribute("idClient"));
 		Client client = clientService.getClientById(idClient);
 		action.setIdClient(idClient);
 		clientService.faireAction(client, action);
-		return ResponseMaker.makeResponse(null, 200, action.getDescription(), HttpStatus.OK);
+		return ResponseMaker.makeResponse(null, 200, action.getDescriptionAttente(), HttpStatus.OK);
 	}
 	
 	
 	
 	private String generateToken(Client client){
 		long timestamp = System.currentTimeMillis(); 
-		String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SERCRET_KEY)
+		String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.CLIENT_API_SERCRET_KEY)
 				.setIssuedAt(new Date(timestamp))
 				.setExpiration(new Date(timestamp + Constants.VALIDITY)) 
-				.claim("idUtilisateur", client.getIdClient() )
+				.claim("idClient", client.getIdClient() )
 				.claim("idOperateur", client.getIdOperateur())
 				.claim("nom", client.getNom())
 				.claim("prenom", client.getPrenom())

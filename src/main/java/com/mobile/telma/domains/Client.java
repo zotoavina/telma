@@ -96,16 +96,20 @@ public class Client {
 		return solde + credit;
 	}
 	
-	public void faireRetrait(double montant)throws EtBadRequestException{
-		String message = "Solde : " + solde + " insuffisant pour votre retrait : " + montant; 
+	private void faireRetrait(double montant)throws EtBadRequestException{
+		String message = "Votre solde actuelle " + solde + " est insuffisant pour faire une retrait de " + montant; 
 		if(solde < montant) throw new EtBadRequestException(message);
 		setSolde(solde - montant);
 	}
 	
 	
-	public void faireDepot(double montant) {
+	private void faireDepot(double montant) {
 		setSolde(montant + solde);
 	}
 	
+	public void faireAction(Action action) throws EtBadRequestException{
+		if(action.isDepot()) faireDepot(action.getMontant());
+		if(action.isRetrait()) faireRetrait(action.getMontant());
+	}
 
 }

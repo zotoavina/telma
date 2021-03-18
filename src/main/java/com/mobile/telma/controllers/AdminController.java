@@ -8,12 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Admin;
 import com.mobile.telma.services.AdminService;
 import com.mobile.telma.utils.ResponseMaker;
@@ -45,19 +46,21 @@ public class AdminController {
 				"selection des actions non valide reussi", HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/actions/validation")
-	public ResponseEntity<Map<String, Object>> login(){
-		return null;
+	@GetMapping("/admin/actions/validation/{idAction}")
+	public ResponseEntity<Map<String, Object>> validerAction(@PathVariable("idAction") int idAction){
+		Action action = adminService.validerAction(idAction);
+		return ResponseMaker.makeResponse(action, 200, 
+				"Validation de " + action.getDescription(), HttpStatus.OK);
 	}
 	
 	
 	
 	private String generateToken(Admin admin){
 		long timestamp = System.currentTimeMillis();
-		String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SERCRET_KEY)
+		String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.ADMIN_API_SERCRET_KEY)
 				.setIssuedAt(new Date(timestamp))
 				.setExpiration(new Date(timestamp + Constants.VALIDITY)) 
-				.claim("idUtilisateur", admin.getIdAdmin() )
+				.claim("idAdmin", admin.getIdAdmin() )
 				.claim("idoperateur", admin.getIdoperateur())
 				.claim("nom", admin.getNom())
 				.claim("prenom", admin.getPrenom())
