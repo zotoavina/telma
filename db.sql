@@ -127,6 +127,17 @@ alter table actions add constraint fk_clients foreign key (idclient) references 
 insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 2000, 1); 
 
 
+create table appels(
+	idappel serial primary key not null,
+	idclient int not null,
+	numero varchar(15) not null,
+	duree int not null,
+	dateappel timestamp not null default current_timestamp
+);
+alter table appels add constraint fk_clients foreign key (idclient) references clients(idclient);
+
+insert into appels(idclient, numero, duree) values(1, 0340035600, 60);
+
 create table credits(
     idcredits serial primary key not null,
     valmin decimal 

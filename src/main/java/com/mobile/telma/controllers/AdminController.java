@@ -40,19 +40,18 @@ public class AdminController {
 	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/admin/actions")
+	@GetMapping("/admin/validations")
 	public ResponseEntity<Map<String , Object>> listeActions(){
 		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
 				"selection des actions non valide reussi", HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/actions/validation/{idAction}")
+	@GetMapping("/admin/validations/{idAction}")
 	public ResponseEntity<Map<String, Object>> validerAction(@PathVariable("idAction") int idAction){
 		Action action = adminService.validerAction(idAction);
 		return ResponseMaker.makeResponse(action, 200, 
 				"Validation de " + action.getDescription(), HttpStatus.OK);
 	}
-	
 	
 	
 	private String generateToken(Admin admin){
@@ -68,6 +67,7 @@ public class AdminController {
 				.compact();
 		return token;
 	}
+	
 	
 	
 }
