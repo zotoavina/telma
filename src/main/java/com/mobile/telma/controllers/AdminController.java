@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/validations")
-	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request){
+	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request, HttpServletResponse response){
+		System.out.println(response.getStatus());
 		int idAdmin = Integer.parseInt( (String) request.getAttribute("idAdmin") );
 		System.out.println("IdAdmin : " + idAdmin);
 		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
