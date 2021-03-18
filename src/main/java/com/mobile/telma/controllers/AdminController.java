@@ -30,7 +30,7 @@ public class AdminController {
 	AdminService adminService;
 	
 	//@CrossOrigin(origins = "https://telmaproject.herokuapp.com/")
-	@CrossOrigin(origins = "http://localhost:8080")
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> adminMap) {
 		String email = (String) adminMap.get("email");

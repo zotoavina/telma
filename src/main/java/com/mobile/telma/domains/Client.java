@@ -1,6 +1,8 @@
 package com.mobile.telma.domains;
 import java.util.Date;
 
+import com.mobile.telma.exceptions.EtBadRequestException;
+
 public class Client {
 	private int idClient;
 	private int  idOperateur;
@@ -89,7 +91,14 @@ public class Client {
 		return this.mdp.compareTo(password) == 0;
 	}
 	
+	public double soldePlusCredit() {
+		return solde + credit;
+	}
 	
+	public void verifyRetrait(double montant)throws EtBadRequestException{
+		String message = "Solde : " + solde + " insuffisant pour votre retrait : " + montant; 
+		if(solde < montant) throw new EtBadRequestException(message);
+	}
 	
 	
 	
