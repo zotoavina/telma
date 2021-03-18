@@ -30,7 +30,7 @@ public class ClientController {
 	@Autowired
 	ClientService clientService;
 	
-	@CrossOrigin(origins = "http://localhost:4200")
+	
 	@PostMapping("")
 	public ResponseEntity<Map<String,Object>> inscription(@RequestBody Map<String, Object> clientMap){
 		String nom = (String) clientMap.get("nom");
@@ -46,7 +46,7 @@ public class ClientController {
 	}
 	
 	
-	@CrossOrigin(origins = "http://localhost:4200")
+	
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> clientMap){
 		String numero  = (String) clientMap.get("numero");
