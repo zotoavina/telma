@@ -64,12 +64,8 @@ public class AdminFilter extends GenericFilterBean{
 				System.out.println("filtrate");
 				HttpServletRequest srequest = (HttpServletRequest) request;
 				HttpServletResponse sresponse = (HttpServletResponse) response;
-<<<<<<< HEAD
-				String authorization = srequest.getHeader("authorization");
-=======
 				String authorization = srequest.getParameter("token");
 				System.out.println("attribute : " + authorization);
->>>>>>> 795e7fecab6c9f15a11261793631e79371d78ab3
 				if(authorization != null) {
 						String token = authorization;
 						System.out.println(token);
@@ -84,16 +80,8 @@ public class AdminFilter extends GenericFilterBean{
 						}catch(Exception e) {
 							sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Token invalide ou expire");
 							return;
-<<<<<<< HEAD
-						} 
-					}else {
-						sresponse.sendError(HttpStatus.FORBIDDEN.value(), "L' autorisation doit etre Bearer[token]");
-						return;
-					}	
-=======
 						}
 						
->>>>>>> 795e7fecab6c9f15a11261793631e79371d78ab3
 				}else {
 					sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Veuillez vous connectes pour obtenir une authorisation");
 					return;
