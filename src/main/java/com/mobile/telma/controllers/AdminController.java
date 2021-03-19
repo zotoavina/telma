@@ -96,7 +96,6 @@ public class AdminController {
 		return ResponseMaker.makeResponse( null , 200, "Mise ajour de l' offre reussi " , HttpStatus.OK);
 	}
 	
-<<<<<<< Updated upstream
 //	
 //	@PostMapping("/admin/offres")
 //	public ResponseEntity<Map<String, Object>> ajoutOffre(HttpServletRequest request, @RequestBody Offre offre)throws Exception{
@@ -114,8 +113,6 @@ public class AdminController {
 //	
 	
 	
-=======
->>>>>>> Stashed changes
 	private String generateToken(Admin admin){
 		long timestamp = System.currentTimeMillis();
 		String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.ADMIN_API_SERCRET_KEY)
