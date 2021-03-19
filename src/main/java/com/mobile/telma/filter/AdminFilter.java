@@ -20,17 +20,59 @@ import io.jsonwebtoken.Jwts;
 
 public class AdminFilter extends GenericFilterBean{
 
+//	@Override
+//	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+//			throws IOException, ServletException {
+//		// TODO Auto-generated method stub
+//				System.out.println("filtrate");
+//				HttpServletRequest srequest = (HttpServletRequest) request;
+//				HttpServletResponse sresponse = (HttpServletResponse) response;
+//				String authorization = srequest.getHeader("Authorization");
+//				if(authorization != null) {
+//					String[] authArray = authorization.split("Bearer");
+//					if(authArray.length > 1 && authArray[1] != null) {
+//						String token = authArray[1];
+//						try {
+//							Claims claim = Jwts.parser().setSigningKey(Constants.ADMIN_API_SERCRET_KEY)
+//									.parseClaimsJws(token).getBody();
+//							srequest.setAttribute("idAdmin", claim.get("idAdmin").toString());
+//							if (CorsUtils.isPreFlightRequest(srequest)) {
+//						        sresponse.setStatus(HttpServletResponse.SC_OK);
+//						       // return new AuthFilter() ; //whatever your token implementation class is - return an instance of it
+//						    }
+//						}catch(Exception e) {
+//							sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Token invalide ou expire");
+//							return;
+//						}
+//					}else {
+//						sresponse.sendError(HttpStatus.FORBIDDEN.value(), "L' autorisation doit etre Bearer[token]");
+//						return;
+//					}	
+//				}else {
+//					sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Veuillez vous connectes pour obtenir une authorisation");
+//					return;
+//				}
+//				chain.doFilter(request, response);
+//		
+//	}
+//	
+	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
+				System.out.println("filtrate");
 				HttpServletRequest srequest = (HttpServletRequest) request;
 				HttpServletResponse sresponse = (HttpServletResponse) response;
+<<<<<<< HEAD
 				String authorization = srequest.getHeader("authorization");
+=======
+				String authorization = srequest.getParameter("token");
+				System.out.println("attribute : " + authorization);
+>>>>>>> 795e7fecab6c9f15a11261793631e79371d78ab3
 				if(authorization != null) {
-					String[] authArray = authorization.split("Bearer");
-					if(authArray.length > 1 && authArray[1] != null) {
-						String token = authArray[1];
+						String token = authorization;
+						System.out.println(token);
 						try {
 							Claims claim = Jwts.parser().setSigningKey(Constants.ADMIN_API_SERCRET_KEY)
 									.parseClaimsJws(token).getBody();
@@ -42,11 +84,16 @@ public class AdminFilter extends GenericFilterBean{
 						}catch(Exception e) {
 							sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Token invalide ou expire");
 							return;
+<<<<<<< HEAD
 						} 
 					}else {
 						sresponse.sendError(HttpStatus.FORBIDDEN.value(), "L' autorisation doit etre Bearer[token]");
 						return;
 					}	
+=======
+						}
+						
+>>>>>>> 795e7fecab6c9f15a11261793631e79371d78ab3
 				}else {
 					sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Veuillez vous connectes pour obtenir une authorisation");
 					return;
@@ -54,9 +101,6 @@ public class AdminFilter extends GenericFilterBean{
 				chain.doFilter(request, response);
 		
 	}
-	
-	
-	
 	
 
 }
