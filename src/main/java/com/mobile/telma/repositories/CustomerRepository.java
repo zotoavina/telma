@@ -1,15 +1,24 @@
 package com.mobile.telma.repositories;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
-
-import org.springframework.data.mongodb.repository.MongoRepository;
-
 import com.mobile.telma.domains.Customer;
 
-public interface CustomerRepository extends MongoRepository<Customer, String> {
+@Repository
+public class CustomerRepository {
 
-  public Customer findByFirstName(String firstName);
-  public List<Customer> findByLastName(String lastName);
-  
-
+	@Autowired
+	private MongoTemplate mongoTemplate;
+	
+	public List<Customer> findAll(){
+		return mongoTemplate.findAll(Customer.class);
+	}
+	
+	public void save(Customer customer) {
+	   mongoTemplate.save(customer);
+	}
+	
 }

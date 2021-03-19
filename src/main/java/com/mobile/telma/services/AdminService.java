@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mobile.telma.domains.Admin;
 import com.mobile.telma.domains.Client;
+import com.mobile.telma.domains.Forfait;
+import com.mobile.telma.domains.Offre;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.ActionClient;
 import com.mobile.telma.exceptions.EtAuthException;
@@ -16,6 +18,7 @@ import com.mobile.telma.repositories.ActionClientRepository;
 import com.mobile.telma.repositories.ActionRepository;
 import com.mobile.telma.repositories.AdminRepository;
 import com.mobile.telma.repositories.ClientRepository;
+import com.mobile.telma.repositories.OffreRepository;
 
 @Transactional
 @Service
@@ -32,6 +35,9 @@ public class AdminService {
 	
 	@Autowired 
 	ActionRepository actionRepository;
+	
+	@Autowired
+	OffreRepository offreRepository;
 	
 	public Admin getByEmailAndMdp(String email, String mdp) throws EtAuthException{
 		return adminRepository.findAdminByEmailAndMdp(email, mdp);
@@ -53,6 +59,24 @@ public class AdminService {
 		clientRepository.updateSolde(client);
 		actionRepository.update(action);
 	    return action;
+	}
+	
+	
+	// -------------------------------------- Gestion Offre
+	public List<Offre> getListOffres(){
+		return offreRepository.findAll();
+	}
+	
+	public Offre getOffre(String idOffre) {
+		return offreRepository.findById(idOffre); 
+	}
+	
+	public void insertOffre(Offre offre) {
+		offreRepository.insert(offre);
+	}
+	
+	public Offre addForfaitToOffre(String idOffre, Forfait forfait) {
+		return offreRepository.updateAddForfaits(idOffre, forfait);
 	}
 	
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Admin;
 import com.mobile.telma.domains.Customer;
+import com.mobile.telma.domains.Forfait;
+import com.mobile.telma.domains.Offre;
+import com.mobile.telma.filter.GestionToken;
 import com.mobile.telma.repositories.CustomerRepository;
 import com.mobile.telma.services.AdminService;
 import com.mobile.telma.utils.ResponseMaker;
@@ -49,8 +53,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/validations")
-	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request, HttpServletResponse response){
-		System.out.println(response.getStatus());
+	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		GestionToken.gererToken(request, response);
 		System.out.println("validate");
 		int idAdmin = Integer.parseInt( (String) request.getAttribute("idAdmin") );
 		System.out.println("IdAdmin : " + idAdmin);
@@ -71,6 +75,31 @@ public class AdminController {
 			return ResponseMaker.makeResponse(repository.findAll(), 200, 
 					"selection reussi " , HttpStatus.OK);
 	}
+	
+	
+	// ----------------------------------- Gestion Offres
+	@GetMapping("/api/offres")
+	public ResponseEntity <Map<String, Object>> getListOffres(){
+			return ResponseMaker.makeResponse(adminService.getListOffres(), 200, 
+					"selection de la liste des offres reussi " , HttpStatus.OK);
+	}
+	
+	@GetMapping("/api/offres/{idOffre}")
+	public ResponseEntity<Map<String, Object>> getOffre(@PathVariable("idOffre") String idOffre){
+		return ResponseMaker.makeResponse( adminService.getOffre(idOffre), 200, "selection offre reussi " , HttpStatus.OK);
+	}
+	
+	@PostMapping("/api/offres")
+	public ResponseEntity<Map<String, Object>> ajoutOffre(@RequestBody Offre offre){
+		adminService.insertOffre(offre);
+		return ResponseMaker.makeResponse(null, 200, "offre desormais valable", HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/api/offres/{idOffre}")
+	public ResponseEntity<Map<String, Object>> updateOffreAddForfait(@PathVariable("idOffre") String idOffre, @RequestBody Forfait forfait){
+		return ResponseMaker.makeResponse(adminService.addForfaitToOffre(idOffre, forfait), 200, "forfait desormais valable", HttpStatus.CREATED);
+	}
+	
 	
 	
 	private String generateToken(Admin admin){

@@ -23,23 +23,23 @@ public class TelmaApplication {
 		SpringApplication.run(TelmaApplication.class, args);
 	}
 	
-	@Bean
-	public FilterRegistrationBean<AuthFilter> filterRegistrationBean(){
-		FilterRegistrationBean<AuthFilter> filter = new FilterRegistrationBean<>();
-		AuthFilter authFilter = new AuthFilter();
-		filter.setFilter(authFilter);
-		filter.addUrlPatterns("/api/clients/action");
-		return filter;
-	}
-	
-	@Bean
-	public FilterRegistrationBean<AdminFilter> filterRegistrationBeanAdmin(){
-		FilterRegistrationBean<AdminFilter> filter = new FilterRegistrationBean<>();
-		AdminFilter authFilter = new AdminFilter();
-		filter.setFilter(authFilter);
-		filter.addUrlPatterns("/admin/*");
-		return filter;
-	}
+//	@Bean
+//	public FilterRegistrationBean<AuthFilter> filterRegistrationBean(){
+//		FilterRegistrationBean<AuthFilter> filter = new FilterRegistrationBean<>();
+//		AuthFilter authFilter = new AuthFilter();
+//		filter.setFilter(authFilter);
+//		filter.addUrlPatterns("/api/clients/action");
+//		return filter;
+//	}
+//	
+//	@Bean
+//	public FilterRegistrationBean<AdminFilter> filterRegistrationBeanAdmin(){
+//		FilterRegistrationBean<AdminFilter> filter = new FilterRegistrationBean<>();
+//		AdminFilter authFilter = new AdminFilter();
+//		filter.setFilter(authFilter);
+//		filter.addUrlPatterns("/admin/*");
+//		return filter;
+//	}
 	
 	@SuppressWarnings("deprecation")
 	@Bean
