@@ -58,7 +58,6 @@ public class GestionToken {
 		if( token.length <= 1 || token[1] == null)
 			throw new EtAuthException("L' autorisation doit etre Bearer [token]");
 		return token[1];
-		
 	}
 	
 	

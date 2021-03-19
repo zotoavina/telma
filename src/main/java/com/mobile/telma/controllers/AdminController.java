@@ -20,11 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Admin;
-import com.mobile.telma.domains.Customer;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Offre;
 import com.mobile.telma.filter.GestionToken;
-import com.mobile.telma.repositories.CustomerRepository;
 import com.mobile.telma.services.AdminService;
 import com.mobile.telma.utils.ResponseMaker;
 import com.mobile.telma.Constants;
@@ -39,8 +37,7 @@ public class AdminController {
 	@Autowired
 	AdminService adminService;
 	
-	@Autowired
-	CustomerRepository repository;
+	
 	
 	//@CrossOrigin(origins = "https://telmaproject.herokuapp.com/")
 	@CrossOrigin(origins = "http://localhost:4200")
@@ -70,12 +67,6 @@ public class AdminController {
 			 	"Validation de " + action.getDescription(), HttpStatus.OK);
 	}
 	
-	@PostMapping("/api/customers")
-	public ResponseEntity <Map<String, Object>> addCustomer(@RequestBody Customer customer){
-		 repository.save( customer );
-			return ResponseMaker.makeResponse(repository.findAll(), 200, 
-					"selection reussi " , HttpStatus.OK);
-	}
 	
 	
 	// ----------------------------------- Gestion Offres
@@ -120,7 +111,5 @@ public class AdminController {
 				.compact();
 		return token;
 	}
-	
-	
 	
 }

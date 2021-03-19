@@ -156,4 +156,23 @@ act.montant as montantaction, act.etat,
 act.dateaction, ta.nomtypeaction
 from clients cl join actions act on cl.idclient = act.idclient
 join typeactions ta on act.idtypeaction = ta.idtypeaction
+
+
+
+--------------------------------------------------------------- MONGO DB
+db.offres.insert(
+	{
+		nomOffre : "Mora",
+		dateCreation : Date(),
+		code : "224*",
+		active : true,
+		description : "bla bla bla",
+		tarifs : {
+			telma : 0.6,
+			autres : 1,
+			international : 1.5
+		},
+		forfaits : []
+	}
+);
  
