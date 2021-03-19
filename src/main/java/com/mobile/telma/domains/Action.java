@@ -72,6 +72,10 @@ public class Action {
 		return idTypeAction == 2;
 	}
 	
+	public boolean isAchatCredit() {
+		return idTypeAction == 3;
+	}
+	
 	private String describe() {
 		if(isDepot()) return "depot";
 		if(isRetrait()) return "retrait";

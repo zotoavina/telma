@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.mobile.telma.Constants;
 import com.mobile.telma.domains.Client;
+import com.mobile.telma.filter.GestionToken;
 import com.mobile.telma.services.ClientService;
 import com.mobile.telma.utils.ResponseMaker;
 import com.mobile.telma.domains.Action;
@@ -56,16 +57,14 @@ public class ClientController {
 	}
 	
 	@PostMapping("/action")
-	public ResponseEntity<Map<String,Object>> faireAction(HttpServletRequest request,@RequestBody Action action){
-		//System.out.println( request.getAttribute("idUtilisateur"));
-		int idClient = Integer.parseInt((String) request.getAttribute("idClient"));
+	public ResponseEntity<Map<String,Object>> faireAction(HttpServletRequest request,@RequestBody Action action) throws Exception{
+		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
 		Client client = clientService.getClientById(idClient);
 		action.setIdClient(idClient);
 		clientService.faireAction(client, action);
 		return ResponseMaker.makeResponse(null, 200, action.getDescriptionAttente(), HttpStatus.OK);
 	}
-	
-	
+		
 	
 	private String generateToken(Client client){
 		long timestamp = System.currentTimeMillis(); 

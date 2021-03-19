@@ -107,9 +107,16 @@ public class Client {
 		setSolde(montant + solde);
 	}
 	
+	private void acheterCredit(double montant)throws EtBadRequestException {
+		String message = "Votre solde actuelle " + solde + " est insuffisant pour acheter une credit de :" + montant; 
+		if(solde < montant) throw new EtBadRequestException(message);
+		setSolde(solde - montant);
+	}
+	
 	public void faireAction(Action action) throws EtBadRequestException{
 		if(action.isDepot()) faireDepot(action.getMontant());
 		if(action.isRetrait()) faireRetrait(action.getMontant());
+		if(action.isAchatCredit()) acheterCredit(action.getMontant());
 	}
 
 }

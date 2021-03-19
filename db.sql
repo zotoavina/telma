@@ -112,7 +112,7 @@ create unique index fknomtypeaction on typeactions (nomtypeaction);
 
 insert into typeactions values(1, 'depot');
 insert into typeactions values(2, 'retrait');
-insert into typeactions values(2, 'retrait');
+insert into typeactions values(3, 'achat credit');
 
 
 create table actions(
@@ -139,8 +139,25 @@ create table appels(
 	dateappel timestamp not null default current_timestamp
 );
 alter table appels add constraint fk_clients foreign key (idclient) references clients(idclient);
-
 insert into appels(idclient, numero, duree) values(1, 0340035600, 60);
+
+create table offres(
+	idoffre serial primary key not null,
+	nomoffre varchar(15) not null,
+	code varchar(5) not null,
+	interne decimal(6,2) not null,
+	autres decimal(6,2) not null,
+	international decimal(6,2) not null,
+	datecreation timestamp not null default current_timestamp,
+	active int not null default 1,
+	description varchar(50) not null
+);
+insert into offres(idoffre, nomoffre, code, interne, autres, international, description) values 
+(1, 'Yellow', '#224#', 0.5, 1, 1.5, 'bla bal bla');
+
+update offres set nomoffre = 'yellow' , code ='#111#', interne = 0.5, autres = 1, international = 1.5, 
+active = 1, description = 'sgh' where idoffre = 1;
+
 
 create table credits(
     idcredits serial primary key not null,
@@ -179,4 +196,18 @@ db.offres.insert(
 		forfaits : []
 	}
 );
+
+
+
+------------------------------------------------------------------
+
+
+{
+		"nomOffre" : "Be",
+        "code" : "225*",
+        "description" : "dsghje",
+		"interne" : 0.5,
+		"autres" : 1.2,
+		"international" : 1.6
+	}
  

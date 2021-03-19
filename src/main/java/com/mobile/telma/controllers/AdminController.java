@@ -50,18 +50,18 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/validations")
-	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request) throws Exception{
 		System.out.println("validate");
-		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request, response) );
+		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request) );
 		System.out.println("IdAdmin : " + idAdmin);
 		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
 				"selection des actions non valide reussi", HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/validations/{idAction}")
-	public ResponseEntity<Map<String, Object>> validerAction(HttpServletRequest request, HttpServletResponse response,
+	public ResponseEntity<Map<String, Object>> validerAction(HttpServletRequest request,
 			@PathVariable("idAction") int idAction)throws Exception{
-		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request, response) );
+		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request ) );
 		Action action = adminService.validerAction(idAction);
 		return ResponseMaker.makeResponse(action, 200, 
 			 	"Validation de " + action.getDescription(), HttpStatus.OK);
@@ -77,25 +77,40 @@ public class AdminController {
 	}
 	
 	@GetMapping("/admin/offres/{idOffre}")
-	public ResponseEntity<Map<String, Object>> getOffre(@PathVariable("idOffre") String idOffre){
+	public ResponseEntity<Map<String, Object>> getOffre(@PathVariable("idOffre") int idOffre){
 		return ResponseMaker.makeResponse( adminService.getOffre(idOffre), 200, "selection offre reussi " , HttpStatus.OK);
 	}
 	
 	@PostMapping("/admin/offres")
-	public ResponseEntity<Map<String, Object>> ajoutOffre(HttpServletRequest request, HttpServletResponse response,
-			@RequestBody Offre offre)throws Exception{
-		GestionToken.gererTokenAdmin(request, response);
-		adminService.insertOffre(offre);
-		return ResponseMaker.makeResponse(null, 200, "offre desormais valable", HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> ajoutOffre(HttpServletRequest request, @RequestBody Offre offre) throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		return ResponseMaker.makeResponse(adminService.addOffre(offre), 200, "Ajout offre reussi", HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/admin/offres/{idOffre}")
-	public ResponseEntity<Map<String, Object>> updateOffreAddForfait(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("idOffre") String idOffre, @RequestBody Forfait forfait)throws Exception{
-		GestionToken.gererTokenAdmin(request, response);
-		return ResponseMaker.makeResponse(adminService.addForfaitToOffre(idOffre, forfait), 200, "forfait desormais valable", HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> updateOffre(HttpServletRequest request,
+			@PathVariable("idOffre") int idOffre,@RequestBody Offre offre) throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		offre.setIdOffre(idOffre);
+		adminService.updateOffre(offre);
+		return ResponseMaker.makeResponse( null , 200, "Mise ajour de l' offre reussi " , HttpStatus.OK);
 	}
 	
+//	
+//	@PostMapping("/admin/offres")
+//	public ResponseEntity<Map<String, Object>> ajoutOffre(HttpServletRequest request, @RequestBody Offre offre)throws Exception{
+//		GestionToken.gererTokenAdmin(request);
+//		adminService.insertOffre(offre);
+//		return ResponseMaker.makeResponse(null, 200, "offre desormais valable", HttpStatus.CREATED);
+//	}
+//	
+//	@PutMapping("/admin/offres/{idOffre}")
+//	public ResponseEntity<Map<String, Object>> updateOffreAddForfait(HttpServletRequest request,
+//			@PathVariable("idOffre") String idOffre, @RequestBody Forfait forfait)throws Exception{
+//		GestionToken.gererTokenAdmin(request);
+//		return ResponseMaker.makeResponse(adminService.addForfaitToOffre(idOffre, forfait), 200, "forfait desormais valable", HttpStatus.CREATED);
+//	}
+//	
 	
 	
 	private String generateToken(Admin admin){

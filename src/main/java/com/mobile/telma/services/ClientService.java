@@ -40,6 +40,7 @@ public class ClientService {
 	public void faireAction(Client client , Action action)throws EtBadRequestException{
 		try {
 		    client.faireAction(action);
+		    if(action.isAchatCredit()) clientRepository.updateSolde(client);
 			actionRepository.insertAction(action);
 		}catch(Exception e) {
 			throw e;
