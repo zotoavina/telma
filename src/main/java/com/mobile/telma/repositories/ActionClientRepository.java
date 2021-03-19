@@ -27,7 +27,7 @@ public class ActionClientRepository {
 		acl.setSolde(rs.getDouble("solde"));
 		acl.setCredit(rs.getDouble("credit"));
 		acl.setDateAdhesion(rs.getDate("dateadhesion"));
-		acl.setIdaction(rs.getInt( "idtypeaction"));
+		acl.setIdaction(rs.getInt( "idaction"));
 		acl.setMontantAction(rs.getDouble("montantaction"));
 		acl.setEtat( rs.getInt("etat"));
 		acl.setDateAction(rs.getDate("dateaction"));
