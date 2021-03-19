@@ -54,16 +54,17 @@ public class AdminController {
 	
 	@GetMapping("/admin/validations")
 	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		GestionToken.gererToken(request, response);
 		System.out.println("validate");
-		int idAdmin = Integer.parseInt( (String) request.getAttribute("idAdmin") );
+		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request, response) );
 		System.out.println("IdAdmin : " + idAdmin);
 		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
 				"selection des actions non valide reussi", HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/validations/{idAction}")
-	public ResponseEntity<Map<String, Object>> validerAction(@PathVariable("idAction") int idAction){
+	public ResponseEntity<Map<String, Object>> validerAction(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("idAction") int idAction)throws Exception{
+		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request, response) );
 		Action action = adminService.validerAction(idAction);
 		return ResponseMaker.makeResponse(action, 200, 
 				"Validation de " + action.getDescription(), HttpStatus.OK);
@@ -78,25 +79,29 @@ public class AdminController {
 	
 	
 	// ----------------------------------- Gestion Offres
-	@GetMapping("/api/offres")
+	@GetMapping("/admin/offres")
 	public ResponseEntity <Map<String, Object>> getListOffres(){
 			return ResponseMaker.makeResponse(adminService.getListOffres(), 200, 
 					"selection de la liste des offres reussi " , HttpStatus.OK);
 	}
 	
-	@GetMapping("/api/offres/{idOffre}")
+	@GetMapping("/admin/offres/{idOffre}")
 	public ResponseEntity<Map<String, Object>> getOffre(@PathVariable("idOffre") String idOffre){
 		return ResponseMaker.makeResponse( adminService.getOffre(idOffre), 200, "selection offre reussi " , HttpStatus.OK);
 	}
 	
-	@PostMapping("/api/offres")
-	public ResponseEntity<Map<String, Object>> ajoutOffre(@RequestBody Offre offre){
+	@PostMapping("/admin/offres")
+	public ResponseEntity<Map<String, Object>> ajoutOffre(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody Offre offre)throws Exception{
+		GestionToken.gererTokenAdmin(request, response);
 		adminService.insertOffre(offre);
 		return ResponseMaker.makeResponse(null, 200, "offre desormais valable", HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/api/offres/{idOffre}")
-	public ResponseEntity<Map<String, Object>> updateOffreAddForfait(@PathVariable("idOffre") String idOffre, @RequestBody Forfait forfait){
+	@PutMapping("/admin/offres/{idOffre}")
+	public ResponseEntity<Map<String, Object>> updateOffreAddForfait(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("idOffre") String idOffre, @RequestBody Forfait forfait)throws Exception{
+		GestionToken.gererTokenAdmin(request, response);
 		return ResponseMaker.makeResponse(adminService.addForfaitToOffre(idOffre, forfait), 200, "forfait desormais valable", HttpStatus.CREATED);
 	}
 	
