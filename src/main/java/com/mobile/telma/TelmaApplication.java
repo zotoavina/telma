@@ -41,17 +41,29 @@ public class TelmaApplication {
 		return filter;
 	}
 	
-	
+	@SuppressWarnings("deprecation")
+	@Bean
+	   public WebMvcConfigurer corsConfigurer() {
+	      return new WebMvcConfigurerAdapter() {
+	         @Override
+	         public void addCorsMappings(CorsRegistry registry) {
+	            // registry.addMapping("/api/clients/*").allowedOrigins("http://localhost:4200");
+	            // registry.addMapping("admin/*").allowedOrigins("http://localhost:4200").allowedHeaders("*");
+	        	 registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").
+	        	 allowedOrigins("*").allowedHeaders("*");
+	         }
+	      };
+	   }
 	
 	
 	@Bean
-    public CorsConfigurationSource corsConfigurationSource() { 
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); 
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

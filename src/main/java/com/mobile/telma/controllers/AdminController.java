@@ -46,6 +46,7 @@ public class AdminController {
 	@GetMapping("/admin/validations")
 	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request, HttpServletResponse response){
 		System.out.println(response.getStatus());
+		System.out.println("validate");
 		int idAdmin = Integer.parseInt( (String) request.getAttribute("idAdmin") );
 		System.out.println("IdAdmin : " + idAdmin);
 		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
