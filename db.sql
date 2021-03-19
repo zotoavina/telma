@@ -112,6 +112,8 @@ create unique index fknomtypeaction on typeactions (nomtypeaction);
 
 insert into typeactions values(1, 'depot');
 insert into typeactions values(2, 'retrait');
+insert into typeactions values(2, 'retrait');
+
 
 create table actions(
     idaction serial primary key not null,
