@@ -160,6 +160,8 @@ join typeactions ta on act.idtypeaction = ta.idtypeaction
 
 
 --------------------------------------------------------------- MONGO DB
+use telma
+
 db.offres.insert(
 	{
 		nomOffre : "Mora",
