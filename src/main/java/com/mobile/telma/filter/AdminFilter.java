@@ -26,7 +26,7 @@ public class AdminFilter extends GenericFilterBean{
 		// TODO Auto-generated method stub
 				HttpServletRequest srequest = (HttpServletRequest) request;
 				HttpServletResponse sresponse = (HttpServletResponse) response;
-				String authorization = srequest.getHeader("Authorization");
+				String authorization = srequest.getHeader("authorization");
 				if(authorization != null) {
 					String[] authArray = authorization.split("Bearer");
 					if(authArray.length > 1 && authArray[1] != null) {
@@ -42,7 +42,7 @@ public class AdminFilter extends GenericFilterBean{
 						}catch(Exception e) {
 							sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Token invalide ou expire");
 							return;
-						}
+						} 
 					}else {
 						sresponse.sendError(HttpStatus.FORBIDDEN.value(), "L' autorisation doit etre Bearer[token]");
 						return;
