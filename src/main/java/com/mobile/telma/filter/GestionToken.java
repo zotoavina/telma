@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.cors.CorsUtils;
-
+import com.mobile.telma.exceptions.*;
 import com.mobile.telma.Constants;
 
 import io.jsonwebtoken.Claims;
@@ -38,17 +38,12 @@ public class GestionToken {
 						       // return new AuthFilter() ; //whatever your token implementation class is - return an instance of it
 						    }
 						}catch(Exception e) {
-							sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Token invalide ou expire");
-							return;
+							throw new EtAuthException("Token invalide ou expire");
 						}
-					}else {
-						sresponse.sendError(HttpStatus.FORBIDDEN.value(), "L' autorisation doit etre Bearer[token]");
-						return;
-					}	
-				}else {
-					sresponse.sendError(HttpStatus.FORBIDDEN.value(), "Veuillez vous connectes pour obtenir une authorisation");
-					return;
+					}
+					else throw new EtAuthException("L' autorisation doit etre Bearer[token]");	
 				}
+				else throw new EtAuthException("Veuillez vous connectes pour obtenir une authorisation");
 				
 	}
 	
