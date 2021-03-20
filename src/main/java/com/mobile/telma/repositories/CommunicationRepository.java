@@ -32,7 +32,7 @@ public class CommunicationRepository {
 		Query query = new Query();
 		Criteria criteria = new Criteria().andOperator( Criteria.where("idClient").is(idClient), 
 				Criteria.where("activeEnvoyeur").is(ACTIVE) );
-		Criteria criteria1 = new Criteria().andOperator(  Criteria.where("numero").is(numero),
+		Criteria criteria1 = new Criteria().andOperator(  Criteria.where("receveur").is(numero),
 				Criteria.where("activeReceveur").is(ACTIVE)	);
 		query.addCriteria( new Criteria().orOperator(criteria, criteria1));
 		query.with(Sort.by(Sort.Direction.DESC, "date"));
@@ -51,7 +51,8 @@ public class CommunicationRepository {
 	
 	public List<Appel> getAppelClientEntrant(String numero){
 		Query query = new Query();
-		Criteria criteria = Criteria.where("numero").is(numero);
+		System.out.println(numero);
+		Criteria criteria = Criteria.where("receveur").is(numero);
 		Criteria criteria2 = Criteria.where("activeReceveur").is( ACTIVE );
 		query.addCriteria(criteria);
 		query.addCriteria(criteria2);
@@ -72,7 +73,7 @@ public class CommunicationRepository {
 	
 	public void SupprimerAppelEntrant(String numero) {
 		Query query = new Query();
-		Criteria criteria = Criteria.where("numero").is(numero);
+		Criteria criteria = Criteria.where("receveur").is(numero);
 		Criteria criteria2 = Criteria.where("activeReceveur").is( ACTIVE );
 		query.addCriteria(criteria);
 		query.addCriteria(criteria2);
@@ -97,7 +98,7 @@ public class CommunicationRepository {
 		Query query = new Query();
 		Criteria criteria = new Criteria().andOperator( Criteria.where("idClient").is(idClient), 
 				Criteria.where("activeEnvoyeur").is(ACTIVE) );
-		Criteria criteria1 = new Criteria().andOperator(  Criteria.where("numero").is(numero),
+		Criteria criteria1 = new Criteria().andOperator(  Criteria.where("receveur").is(numero),
 				Criteria.where("activeReceveur").is(ACTIVE)	);
 		query.addCriteria( new Criteria().orOperator(criteria, criteria1));
 		query.with(Sort.by(Sort.Direction.DESC, "date"));
@@ -117,7 +118,7 @@ public class CommunicationRepository {
 	
 	public void SupprimerSmsEntrant(String numero) {
 		Query query = new Query();
-		Criteria criteria = Criteria.where("numero").is(numero);
+		Criteria criteria = Criteria.where("receveur").is(numero);
 		Criteria criteria2 = Criteria.where("activeReceveur").is( ACTIVE );
 		query.addCriteria(criteria);
 		query.addCriteria(criteria2);
