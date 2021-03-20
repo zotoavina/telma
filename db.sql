@@ -164,7 +164,7 @@ create table forfaits(
 	idoffre int not null,
 	nomforfait varchar(15) not null,
 	code varchar(5) not null,
-	prix decimal(10,2) not null,
+	prix decimal(10,2) not null CHECK (price > 0),
 	validite int not null,
 	dateCreation timestamp not null default current_timestamp,
 	active int not null default 1,
@@ -195,6 +195,27 @@ create table forfaitdatas(
 );
 
 insert into forfaitdatas(idforfait,iddata,quantite) values(1,1,500);
+
+create table forfaitclients(
+	idforfaitclient serial primary key not null,
+	idclient int not null,
+	idforfait int not null,
+	appel decimal (8,2) not null default 0 check(appel >= 0),
+	sms int not null default 0 check(sms >= 0),
+	facebook decimal (8,2) not null default 0 check(facebook >= 0),
+	instagram decimal (8,2) not null default 0 check(instagram >= 0),
+	internet decimal (8,2) not null default 0 check(internet >= 0),
+	modepaiement varchar(8) not null check( modepaiement = 'mvola' or modepaiement = 'credit'),
+	dateachat timestamp not null default current_timestamp
+);
+alter table forfaitclients add constraint fk_clients foreign key (idclient) references clients(idclient);
+alter table forfaitclients add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
+
+insert into forfaitclients(idclient,idforfait,appel, sms, facebook,instagram,internet, modepaiement) values
+(1, 1, 10, 10, 10, 10, 10, 'mvola');
+
+update forfaitclients set appel = 20, sms = 20 ,facebook = 20, instagram = 20, internet = 20 where idforfaitclient = 1;
+
 
 
 create table credits(
@@ -241,6 +262,35 @@ db.offres.insert(
 		forfaits : []
 	}
 );
+
+db.appel.insert(
+	{
+		idClient : 1,
+		numero : "0340089189",
+		duree : 5     
+		dates : new Date()
+	}
+)
+
+db.message.insert(
+	{
+		idClient : 1,
+		numero : "",
+		message : "djhghjekjsenmsing", 
+		dates = new Date()
+	}
+)
+
+{
+        "_id" : ObjectId("60564d02d937f8584a8eb414"),
+        "duree" : 30,
+        "idClient" : 1,
+        "receveur" : "0340089189",
+        "activeEnvoyeur" : 0,
+        "activeReceveur" : 1,
+        "date" : ISODate("2021-03-20T19:29:06.257Z"),
+        "_class" : "com.mobile.telma.domains.Appel"
+}
 
 
 

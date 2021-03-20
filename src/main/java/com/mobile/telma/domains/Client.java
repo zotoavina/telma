@@ -108,15 +108,49 @@ public class Client {
 	}
 	
 	private void acheterCredit(double montant)throws EtBadRequestException {
-		String message = "Votre solde actuelle " + solde + " est insuffisant pour acheter une credit de :" + montant; 
+		String message = "Votre solde mvola actuelle " + solde + " est insuffisant pour acheter une credit de :" + montant; 
 		if(solde < montant) throw new EtBadRequestException(message);
-		setSolde(solde - montant);
+		setSolde( solde - montant );
+		setCredit( credit + montant );
 	}
+	
 	
 	public void faireAction(Action action) throws EtBadRequestException{
 		if(action.isDepot()) faireDepot(action.getMontant());
 		if(action.isRetrait()) faireRetrait(action.getMontant());
 		if(action.isAchatCredit()) acheterCredit(action.getMontant());
 	}
+	
+	private void achatForfaitParCredit(Forfait forfait)throws EtBadRequestException {
+		if( credit < forfait.getPrix()) 
+			throw new EtBadRequestException(" Votre credit actuelle " + credit +" est insuffisant pour acheter cette forfait ");
+		setCredit( credit - forfait.getPrix() );
+	}
+	
+	private void achatForfaitParSolde(Forfait forfait)throws EtBadRequestException {
+		if( solde < forfait.getPrix()) 
+			throw new EtBadRequestException(" Votre solde mvola actuelle " + solde +" est insuffisant pour acheter cette forfait ");
+		setSolde( solde - forfait.getPrix());
+	}
+	
+	public void achatForfait(Forfait forfait, boolean parSolde)throws EtBadRequestException{
+		if(parSolde) achatForfaitParSolde(forfait) ;
+		else achatForfaitParCredit(forfait);
+	}
+	
+	public void achatForfait(Forfait forfait, String mode)throws EtBadRequestException{
+		System.out.println(mode);
+		if(mode.compareTo("mvola") == 0) {
+			achatForfait(forfait, true);
+			return;
+		}
+		if(mode.compareTo("credit") == 0) {
+			achatForfait(forfait, false);
+			return;
+		}
+		throw new EtBadRequestException("Mode de paiement invalide");
+	}
+	
+	
 
 }

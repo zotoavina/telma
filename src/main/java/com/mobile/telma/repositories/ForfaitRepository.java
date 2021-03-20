@@ -87,7 +87,7 @@ public class ForfaitRepository {
 		return forfait;
 	}
 	
-	public int insertForfaitData(ForfaitData data) {
+	private int insertForfaitData(ForfaitData data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update( connection ->{ 
 			PreparedStatement ps = connection.prepareStatement(SQL_INSERT_FDATA, Statement.RETURN_GENERATED_KEYS);
@@ -115,6 +115,7 @@ public class ForfaitRepository {
 		}
 		return forfaits;
 	}
+	
 }
 
 

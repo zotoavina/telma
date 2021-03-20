@@ -5,7 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,10 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.mobile.telma.Constants;
 import com.mobile.telma.domains.Client;
+import com.mobile.telma.domains.ForfaitClient;
+import com.mobile.telma.domains.Sms;
 import com.mobile.telma.filter.GestionToken;
 import com.mobile.telma.services.ClientService;
 import com.mobile.telma.utils.ResponseMaker;
 import com.mobile.telma.domains.Action;
+import com.mobile.telma.domains.Appel;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -45,8 +52,7 @@ public class ClientController {
 		map.put("data", generateToken(client));
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
 	}
-	
-	
+		
 	
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> clientMap){
@@ -64,7 +70,83 @@ public class ClientController {
 		clientService.faireAction(client, action);
 		return ResponseMaker.makeResponse(null, 200, action.getDescriptionAttente(), HttpStatus.OK);
 	}
+	
+	@PostMapping("/forfaits/{idForfait}/achats/{mode}")
+	public ResponseEntity<Map<String,Object>> achatForfait(HttpServletRequest request,
+			@RequestBody Map<String, Object> map, @PathVariable("idForfait") int idForfait)throws Exception{
+		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
+		String mode = (String) map.get("modepaiement");
+		clientService.acheterForfait(idClient, idForfait, mode);
+		return ResponseMaker.makeResponse(null, 200, "Achat du forfait reussi", HttpStatus.OK);
+	}
 		
+	
+	
+	//------------------------ Appel et Sms
+	
+	   ////  APPEL 
+	
+	
+	@PostMapping("/appels")
+	public ResponseEntity<Map<String, Object>> appeler(HttpServletRequest request,
+			@RequestBody Appel appel)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		appel.setIdClient(idClient);
+		clientService.addAppel(appel);
+		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
+	}	
+	
+	@PutMapping("/appels")
+	public ResponseEntity<Map<String, Object>> supprimerHistoriqueAppel(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		clientService.supprimerHistoriqueAppel(idClient);
+		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
+	}
+	
+	@PutMapping("/appels/sortants")
+	public ResponseEntity<Map<String, Object>> supprimerAppelSortant(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		clientService.supprimerHistoriqueSortant(idClient);
+		return ResponseMaker.makeResponse(null, 200, "Suppression de l'historique des appels effectues reussie",  HttpStatus.OK);
+	}
+	
+	@PutMapping("/appels/entrants")
+	public ResponseEntity<Map<String, Object>> supprimerAppelEntrant(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		clientService.supprimerHistoriqueEntrant(idClient);
+		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/appels/entrants")
+	public ResponseEntity<Map<String, Object>> appelsEntrants(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		return ResponseMaker.makeResponse(clientService.listeAppelEntrant(idClient), 200, 
+				"Selection des appels recus effectuee",  HttpStatus.OK);
+	}	
+	
+	@GetMapping("/appels/sortants")
+	public ResponseEntity<Map<String, Object>> appelsSortants(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		return ResponseMaker.makeResponse(clientService.listeAppelSortant(idClient), 200, 
+				"Selection des appels sortants effectuee",  HttpStatus.OK);
+	}
+	
+	
+		////// SMS	
+	@PostMapping("/sms")
+	public ResponseEntity<Map<String, Object>> sms(HttpServletRequest request,
+			@RequestBody Sms sms)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		sms.setIdClient(idClient);
+		clientService.addSms(sms);
+		return ResponseMaker.makeResponse(null, 200, "Sms envoye",  HttpStatus.OK);
+	}	
+	
+	
+	
+	
+	
 	
 	private String generateToken(Client client){
 		long timestamp = System.currentTimeMillis(); 

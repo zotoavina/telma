@@ -25,6 +25,8 @@ public class ClientRepository {
 	
 	private static final String SQL_UPDATE_SOLDE = "update clients set solde = ? where idclient = ?";
 	
+	private static final String SQL_UPDATE_SOLDE_CREDIT = "update clients set solde = ? , credit = ? where idclient = ?";
+	
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -75,6 +77,11 @@ public class ClientRepository {
 	}
 	
 	@SuppressWarnings("deprecation")
+	public Client getClientByNumero(String numero)throws EtBadRequestException{
+		return jdbcTemplate.queryForObject(SQL_GET_BY_NUMERO, new Object[] {numero}, clientRowMapper);
+	}
+	
+	@SuppressWarnings("deprecation")
 	public Client getClientById(int idClient)throws EtBadRequestException{
 		try {
 			Client client = jdbcTemplate.queryForObject(SQL_GET_BY_ID, new Object[] {idClient},  clientRowMapper);
@@ -91,6 +98,18 @@ public class ClientRepository {
 			throw new EtBadRequestException("Une erreur est survenue lors du mise a jour de votre solde");
 		}
 	}
+	
+	public void updateSoldeEtCredit(Client client) throws EtBadRequestException{
+		try {
+			jdbcTemplate.update(SQL_UPDATE_SOLDE_CREDIT, new Object[] { 
+					client.getSolde(), client.getCredit(), client.getIdClient()
+					});
+		}catch(EtBadRequestException et) {
+			throw new EtBadRequestException("Une erreur est survenue lors du mise a jour de votre solde");
+		}
+	}
+	
+	
 	
 	
 }
