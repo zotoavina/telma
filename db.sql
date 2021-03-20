@@ -263,21 +263,21 @@ db.offres.insert(
 	}
 );
 
-db.appel.insert(
+db.appels.insert(
 	{
 		idClient : 1,
 		numero : "0340089189",
-		duree : 5     
+		duree : 5 ,    
 		dates : new Date()
 	}
 )
 
-db.message.insert(
+db.sms.insert(
 	{
 		idClient : 1,
 		numero : "",
 		message : "djhghjekjsenmsing", 
-		dates = new Date()
+		dates : new Date()
 	}
 )
 
