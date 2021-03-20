@@ -96,6 +96,13 @@ public class ClientController {
 		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
 	}	
 	
+	@GetMapping("/appels")
+	public ResponseEntity<Map<String, Object>> appels(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		return ResponseMaker.makeResponse(clientService.listeAppels(idClient), 200, 
+				"Selection des appels (effecutes et recus) terminee",  HttpStatus.OK);
+	}	
+	
 	@PutMapping("/appels")
 	public ResponseEntity<Map<String, Object>> supprimerHistoriqueAppel(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));

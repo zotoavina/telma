@@ -86,6 +86,11 @@ public class ClientService {
 		communicationRepository.insertAppel(appel);
 	}
 	
+	public List<Appel> listeAppels(int idClient) throws EtBadRequestException{
+		Client client = clientRepository.getClientById(idClient);
+		return communicationRepository.getAppelClient(client.getIdClient(), client.getNumero());
+	}
+	
 	public List<Appel> listeAppelSortant(int idClient)throws EtBadRequestException{
 		return communicationRepository.getAppelClientSortant(idClient);
 	}
