@@ -96,6 +96,23 @@ public class AdminController {
 		return ResponseMaker.makeResponse( null , 200, "Mise ajour de l' offre reussi " , HttpStatus.OK);
 	}
 	
+	
+	@GetMapping("/admin/offres/{idOffre}/forfaits")
+	public  ResponseEntity<Map<String, Object>> getForfaits(@PathVariable("idOffre") int idOffre){
+		return ResponseMaker.makeResponse( adminService.getOffreForfaits(idOffre) , 200, "Ajout du forfait realise " , HttpStatus.OK);
+	}
+	
+	@PostMapping("/admin/offres/{idOffre}/forfaits")
+	public  ResponseEntity<Map<String, Object>> ajoutForfait(HttpServletRequest request,@PathVariable("idOffre") int idOffre,
+			@RequestBody Forfait forfait)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		forfait.setIdOffre(idOffre);
+		Forfait f = adminService.addForfait(forfait);
+		return ResponseMaker.makeResponse(f , 200, "Ajout du forfait realise " , HttpStatus.OK);
+	}
+	
+	
+	
 //	
 //	@PostMapping("/admin/offres")
 //	public ResponseEntity<Map<String, Object>> ajoutOffre(HttpServletRequest request, @RequestBody Offre offre)throws Exception{

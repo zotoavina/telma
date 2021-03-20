@@ -1,5 +1,6 @@
 package com.mobile.telma.repositories;
 
+import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Offre;
 import com.mobile.telma.exceptions.EtBadRequestException;
 
@@ -27,6 +28,9 @@ public class OffreRepository {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private ForfaitRepository forfaitRepository;
 	
 	
 	private RowMapper<Offre> offreRowMapper = ( (rs, numRows) -> {
@@ -88,6 +92,10 @@ public class OffreRepository {
 		}catch(Exception e) {
 			throw new EtBadRequestException("Ajout de l' offre echoue");
 		}
+	}
+	
+	public List<Forfait> getForfaits(int idOffre){
+		return forfaitRepository.getOffreForfaits(idOffre);
 	}
 	
 	

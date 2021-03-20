@@ -159,6 +159,44 @@ update offres set nomoffre = 'yellow' , code ='#111#', interne = 0.5, autres = 1
 active = 1, description = 'sgh' where idoffre = 1;
 
 
+create table forfaits(
+	idforfait serial primary key not null,
+	idoffre int not null,
+	nomforfait varchar(15) not null,
+	code varchar(5) not null,
+	prix decimal(10,2) not null,
+	validite int not null,
+	dateCreation timestamp not null default current_timestamp,
+	active int not null default 1,
+	description varchar(50) not null
+);
+alter table forfaits add constraint fk_forfaits foreign key (idoffre) references offres(idoffre);
+
+insert into forfaits(idoffre, nomforfait, code, prix, validite, description)
+values(1, 'Be dimy', '224*5', 500, 1, 'dshgerrjh');
+
+create table datas(
+	iddata serial primary key not null,
+	nomdata varchar(30),
+	datecreation timestamp not null default current_timestamp
+);
+
+insert into datas values( 1, 'Appel', current_timestamp);
+insert into datas values( 2, 'Sms', current_timestamp);
+insert into datas values( 3, 'Facebook', current_timestamp);
+insert into datas values( 4, 'Instagram', current_timestamp);
+insert into datas values( 5, 'Internet', current_timestamp);
+
+create table forfaitdatas(
+	idfdata serial primary key not null,
+	idforfait int not null,
+	iddata int not null,
+	quantite decimal(8,2) not null
+);
+
+insert into forfaitdatas(idforfait,iddata,quantite) values(1,1,500);
+
+
 create table credits(
     idcredits serial primary key not null,
     valmin decimal 
@@ -175,6 +213,13 @@ act.montant as montantaction, act.etat,
 act.dateaction, ta.nomtypeaction
 from clients cl join actions act on cl.idclient = act.idclient
 join typeactions ta on act.idtypeaction = ta.idtypeaction
+
+-- forfaitdatas + datas
+create view forfaitdatasetdatas as
+select fd.* , d.nomdata from
+forfaitdatas fd join datas d on fd.iddata = d.iddata;
+
+select * from forfaitdatasetdatas where idforfait = 1;
 
 
 
@@ -210,4 +255,22 @@ db.offres.insert(
 		"autres" : 1.2,
 		"international" : 1.6
 	}
+	
+-----------------------  Ajout forfait a une offre	
+	
+	{
+            "nomforfait": "Be antsika",
+            "code": "224*6",
+            "prix": 1000.0,
+            "validite": 4,
+            "description": "dshgerrjh",
+            "datas": [
+                {
+                    "idData": 1,
+                    "quantite": 500.0,
+                    "nomData": "Appel"
+                }
+            ]
+        }
+	
  

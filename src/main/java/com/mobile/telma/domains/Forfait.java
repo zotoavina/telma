@@ -1,31 +1,45 @@
 package com.mobile.telma.domains;
 
-import org.springframework.data.annotation.Id;
+
 import java.util.Date;
+import java.util.List;
+
 
 public class Forfait {
-	@Id
-	private String id;
-	
-	private String nomForfait;
+	private int idForfait;
+	private int idOffre;
+	private String nomforfait;
+	private String code;
 	private double prix;
-	private Date dateCreation = new Date();
-	private int facebook;
-	private int internet;
-	private int instagram;
-	private int appel;
-	private int sms;
-	public String getId() {
-		return id;
+	private int  validite;
+	private Date datecreation;
+	private int active;
+	private String description;
+	private List<ForfaitData> datas;
+	
+	public int getIdForfait() {
+		return idForfait;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setIdForfait(int idForfait) {
+		this.idForfait = idForfait;
 	}
-	public String getNomForfait() {
-		return nomForfait;
+	public int getIdOffre() {
+		return idOffre;
 	}
-	public void setNomForfait(String nomForfait) {
-		this.nomForfait = nomForfait;
+	public void setIdOffre(int idOffre) {
+		this.idOffre = idOffre;
+	}
+	public String getNomforfait() {
+		return nomforfait;
+	}
+	public void setNomforfait(String nomforfait) {
+		this.nomforfait = nomforfait;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
 	}
 	public double getPrix() {
 		return prix;
@@ -33,42 +47,52 @@ public class Forfait {
 	public void setPrix(double prix) {
 		this.prix = prix;
 	}
-	public Date getDateCreation() {
-		return dateCreation;
+	public int getValidite() {
+		return validite;
 	}
-	public void setDateCreation(Date dateCreation) {
-		this.dateCreation = dateCreation;
+	public void setValidite(int validite) {
+		this.validite = validite;
 	}
-	public int getFacebook() {
-		return facebook;
+	public Date getDatecreation() {
+		return datecreation;
 	}
-	public void setFacebook(int facebook) {
-		this.facebook = facebook;
+	public void setDatecreation(Date datecreation) {
+		this.datecreation = datecreation;
 	}
-	public int getInternet() {
-		return internet;
+	public int getActive() {
+		return active;
 	}
-	public void setInternet(int internet) {
-		this.internet = internet;
+	public void setActive(int active) {
+		this.active = active;
 	}
-	public int getInstagram() {
-		return instagram;
+	public String getDescription() {
+		return description;
 	}
-	public void setInstagram(int instagram) {
-		this.instagram = instagram;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	public int getAppel() {
-		return appel;
+	
+	
+	public List<ForfaitData> getDatas() {
+		return datas;
 	}
-	public void setAppel(int appel) {
-		this.appel = appel;
+	public void setDatas(List<ForfaitData> datas) {
+		this.datas = datas;
 	}
-	public int getSms() {
-		return sms;
+	public Forfait(int idForfait, int idOffre, String nomforfait, String code, double prix, int validite,
+			Date datecreation, int active, String description) {
+		super();
+		this.idForfait = idForfait;
+		this.idOffre = idOffre;
+		this.nomforfait = nomforfait;
+		this.code = code;
+		this.prix = prix;
+		this.validite = validite;
+		this.datecreation = datecreation;
+		this.active = active;
+		this.description = description;
 	}
-	public void setSms(int sms) {
-		this.sms = sms;
-	}
+	
 	
 	public Forfait() {}
 	
