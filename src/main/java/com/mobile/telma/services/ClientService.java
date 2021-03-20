@@ -118,5 +118,25 @@ public class ClientService {
 		communicationRepository.insertMessage(sms);
 	}
 	
+	public List<Sms> listeSms(int idClient){
+		Client client = clientRepository.getClientById(idClient);
+		return communicationRepository.getSmsClient(client.getIdClient(), client.getNumero());
+	}
+	
+	public void supprimerSmsEntrant(int idClient) {
+		Client client = clientRepository.getClientById(idClient);
+		communicationRepository.SupprimerSmsEntrant(client.getNumero());
+	}
+	
+	public void supprimerSmsSortant(int idClient) {
+		Client client = clientRepository.getClientById(idClient);
+		communicationRepository.SupprimerSmsSortant(client.getIdClient());
+	}
+	
+	public void supprimerSms(int idClient) {
+		Client client = clientRepository.getClientById(idClient);
+		communicationRepository.SupprimerSms(client.getIdClient(), client.getNumero());
+	}
+	
 	
 }

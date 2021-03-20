@@ -142,7 +142,7 @@ public class ClientController {
 	
 		////// SMS	
 	@PostMapping("/sms")
-	public ResponseEntity<Map<String, Object>> sms(HttpServletRequest request,
+	public ResponseEntity<Map<String, Object>> envoyerSms(HttpServletRequest request,
 			@RequestBody Sms sms)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
 		sms.setIdClient(idClient);
@@ -150,7 +150,35 @@ public class ClientController {
 		return ResponseMaker.makeResponse(null, 200, "Sms envoye",  HttpStatus.OK);
 	}	
 	
+	@GetMapping("/sms")
+	public ResponseEntity<Map<String, Object>> sms(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		return ResponseMaker.makeResponse(clientService.listeSms(idClient), 200, 
+				"Selection des sms (envoyees et recus) terminee",  HttpStatus.OK);
+	}
 	
+	@PutMapping("/sms")
+	public ResponseEntity<Map<String, Object>> supprimerHistoriqueSms(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		clientService.supprimerSms(idClient);
+		return ResponseMaker.makeResponse(null, 200, "Suppression sms (envoyees et recus) terminee",  HttpStatus.OK);
+	}
+	
+	
+	
+	@PutMapping("/sms/sortants")
+	public ResponseEntity<Map<String, Object>> supprimerSmsSortant(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		clientService.supprimerSmsSortant(idClient);
+		return ResponseMaker.makeResponse(null, 200, "Suppression de l'historique des sms sortants effectues reussie",  HttpStatus.OK);
+	}
+	
+	@PutMapping("/sms/entrants")
+	public ResponseEntity<Map<String, Object>> supprimerSmsEntrant(HttpServletRequest request)throws Exception{
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		clientService.supprimerSmsEntrant(idClient);
+		return ResponseMaker.makeResponse(null, 200, "Suppression de l'historique des sms entrants effectues reussie",  HttpStatus.OK);
+	}
 	
 	
 	
