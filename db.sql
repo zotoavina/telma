@@ -164,26 +164,6 @@ create table dataclients(
 );
 
 
--- create table forfaitclients(
-	-- idforfaitclient serial primary key not null,
-	-- idclient int not null,
-	-- idforfait int not null,
-	-- appel decimal (8,2) not null default 0 check(appel >= 0),
-	-- sms int not null default 0 check(sms >= 0),
-	-- facebook decimal (8,2) not null default 0 check(facebook >= 0),
-	-- instagram decimal (8,2) not null default 0 check(instagram >= 0),
-	-- internet decimal (8,2) not null default 0 check(internet >= 0),
-	-- modepaiement varchar(8) not null check( modepaiement = 'mvola' or modepaiement = 'credit'),
-	-- dateachat timestamp not null default current_timestamp
--- );
--- alter table forfaitclients add constraint fk_clients foreign key (idclient) references clients(idclient);
--- alter table forfaitclients add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
-
--- insert into forfaitclients(idclient,idforfait,appel, sms, facebook,instagram,internet, modepaiement) values
--- (1, 1, 10, 10, 10, 10, 10, 'mvola');
-
--- update forfaitclients set appel = 20, sms = 20 ,facebook = 20, instagram = 20, internet = 20 where idforfaitclient = 1;
-
 
 
 create table credits(
@@ -209,16 +189,6 @@ forfaitdatas fd join datas d on fd.iddata = d.iddata;
 select * from forfaitdatasetdatas where idforfait = 1;
 
 
----- 
--- create view v_consommationforfaits as
- -- select fcl.*,  interne , autres , international,
- -- fcl.dateachat + forf.validite * interval '1 day' as expiration
- -- from forfaitclients fcl join  forfaits forf on
- -- fcl.idforfait = forf.idforfait join offres ofr on
- -- forf.idoffre = ofr.idoffre;
- 
- select * from v_consommationforfaits where idClient = 1
-  and expiration > current_timestamp;
 
 
 --------------------------------------------------------------- MONGO DB
