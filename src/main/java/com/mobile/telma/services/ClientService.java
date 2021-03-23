@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mobile.telma.domains.AchatForfait;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Client;
 import com.mobile.telma.domains.Forfait;
-import com.mobile.telma.domains.ForfaitClient;
 import com.mobile.telma.domains.Sms;
 import com.mobile.telma.domains.Appel;
 import com.mobile.telma.exceptions.EtAuthException;
@@ -16,7 +16,6 @@ import com.mobile.telma.exceptions.EtBadRequestException;
 import com.mobile.telma.repositories.ActionRepository;
 import com.mobile.telma.repositories.CommunicationRepository;
 import com.mobile.telma.repositories.ClientRepository;
-import com.mobile.telma.repositories.ForfaitClientRepository;
 import com.mobile.telma.repositories.ForfaitRepository;
 
 import java.util.List;
@@ -31,8 +30,6 @@ public class ClientService {
 	ActionRepository actionRepository;
 	@Autowired
 	CommunicationRepository communicationRepository;
-	@Autowired
-	ForfaitClientRepository forfaitClientRepository;
 	@Autowired
 	ForfaitRepository forfaitRepository;
 	
@@ -67,15 +64,13 @@ public class ClientService {
 	
 	
 	public void acheterForfait(int idClient, int idForfait,String mode) {
-		ForfaitClient fc = new ForfaitClient();
-		fc.setIdClient(idClient);
-		fc.setIdForfait(idForfait);
-		fc.setModePaiement(mode);
+		AchatForfait af = new AchatForfait();
 		Client client = clientRepository.getClientById(idClient);
 		Forfait forfait = forfaitRepository.getForfaitBId(idForfait);
+		af.synchronize(client, forfait);
+		af.setModePaiement(mode);
 		client.achatForfait(forfait, mode);
-		fc.synchronize(forfait);
-		forfaitClientRepository.insert(fc);
+		forfaitRepository.insertAchatForfait(af);
 		clientRepository.updateSoldeEtCredit(client);
 	}
 

@@ -11,20 +11,24 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.mobile.telma.domains.AchatForfait;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.ForfaitData;
 
 @Repository
 public class ForfaitRepository {
-	private final static String SQL_INSERT = "insert into forfaits(idoffre, nomforfait, code, prix, validite, description)\r\n"
-			+ "values(?, ?, ?, ?, ?, ?)" ;
+	private final static String SQL_INSERT = "insert into forfaits(idoffre, nomforfait, code, prix, validite, description)"
+			+ " values(?, ?, ?, ?, ?, ?)" ;
 	private final static String SQL_GET_BY_ID = "select * from forfaits where idforfait = ?";
 	
 	private final static String SQL_INSERT_FDATA = "insert into forfaitdatas(idforfait,iddata,quantite) values(?,?,?)";
 	
-	private final static String SQL_GET_FORFAITS_DATA = "select * from forfaitdatasetdatas where idforfait = ?";
+	private final static String SQL_GET_FORFAITS_DATA = "select * from v_forfaitdatas where idforfait = ?";
 	
 	private final static String SQL_GET_FORFAITS_OFFRE = "select * from forfaits where idoffre = ?";
+	
+	private final static String SQL_INSERT_ACHAT_FORFAIT = "insert into achatforfaits(idclient, idforfait, mode, dateachat) "
+			+ "values (?, ?, ?, ?)";
 	
 	@Autowired 
 	private JdbcTemplate jdbcTemplate ;
@@ -52,6 +56,8 @@ public class ForfaitRepository {
 						rs.getString("nomdata")
 					);
 	});
+	
+	
 	
 	private int insertForfait(Forfait forfait) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -87,6 +93,19 @@ public class ForfaitRepository {
 		return forfait;
 	}
 	
+	public int insertAchatForfait(AchatForfait af) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update( connection ->{
+			PreparedStatement ps = connection.prepareStatement(SQL_INSERT_FDATA, Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, af.getIdClient());
+			ps.setInt(2, af.getIdForfait());
+			ps.setString(3, af.getModePaiement());
+			ps.setDate(4, af.getDateAchat());
+			return ps;
+		});
+		return (Integer)keyHolder.getKeys().get("idachat");
+	}
+	
 	private int insertForfaitData(ForfaitData data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update( connection ->{ 
@@ -115,6 +134,8 @@ public class ForfaitRepository {
 		}
 		return forfaits;
 	}
+	
+	
 	
 }
 

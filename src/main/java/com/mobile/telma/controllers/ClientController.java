@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.mobile.telma.Constants;
 import com.mobile.telma.domains.Client;
-import com.mobile.telma.domains.ForfaitClient;
 import com.mobile.telma.domains.Sms;
 import com.mobile.telma.filter.GestionToken;
 import com.mobile.telma.services.ClientService;

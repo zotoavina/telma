@@ -73,6 +73,8 @@ public class Forfait {
 	}
 	
 	
+	
+	
 	public List<ForfaitData> getDatas() {
 		return datas;
 	}
@@ -90,7 +92,7 @@ public class Forfait {
 		this.validite = validite;
 		this.datecreation = datecreation;
 		this.active = active;
-		this.description = description;
+		this.description = description;	
 	}
 	
 	

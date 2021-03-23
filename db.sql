@@ -31,63 +31,6 @@ alter table admins add constraint fk_operateurs foreign key (idoperateur) refere
 insert into admins(idoperateur, nom, prenom, email, mdp) values(1, 'Rasoaharisoa', 'zotoavina', 'zotoavina@gmail.com', '123456');
 
 
------------ gestion offres  atao mongodb --------------- gestion offres ---------------
-
--- create table categories(
---     idcategolrie serial primary key not null,
---     nomcategorie varchar(30) not null,
---     description varchar() 
--- );
-
--- create table unites(
---     idunite serial primary key not null,
---     unite varchar(20)
--- );
-
--- -- ex offres : yellow
-
--- create table offres(
---     idoffre serial primary key not null,
---     nomoffre varchar(20),
---     description varchar(300)
--- );
-
--- -- ex forfait : yellow faceboobaka
--- create table forfaits(
---     idforfait serial primary key not null,
---     idoffre int not null,
---     nomforfait varchar(20) not null,
---     prix decimal not null,
---     validite int not null,
---     code varchar(20),
---     description varchar(300)
--- );
--- alter table forfaits add constraint fk_offres foreign key (idoffres) references offres(idoffres);
-
-
--- -- ex dataforfait appel /s    internet /mo
-
--- create table dataforfaits(
---     iddataforfait serial primary key not null,
---     nomdataforfait varchar(20),
---     idunite int not null,
--- );
--- alter table dataforfaits add constraint fk_unites foreign key (idunite) references unites(idunite);
-
--- create table detailforfaits(
---     iddetailforfait serial primary key not null,
---     idforfait int not null,
---     iddataforfait int not null,
---     quantite decimal not null,
---     priorite int not null default 0,
--- );
-
--- alter table detailforfait add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
--- alter table detailforfait add constraint fk_dataforfaits foreign key (iddataforfait) references dataforfaits(iddataforfait);
-
-
-	-- validation mobile money
-
 create table clients(
     idclient serial primary key not null,
     idoperateur int not null default 1,
@@ -154,6 +97,7 @@ create table offres(
 );
 insert into offres(idoffre, nomoffre, code, interne, autres, international, description) values 
 (1, 'Yellow', '#224#', 0.5, 1, 1.5, 'bla bal bla');
+alter table offres ADD priorite int check(priorite > 0)
 
 update offres set nomoffre = 'yellow' , code ='#111#', interne = 0.5, autres = 1, international = 1.5, 
 active = 1, description = 'sgh' where idoffre = 1;
@@ -172,20 +116,23 @@ create table forfaits(
 );
 alter table forfaits add constraint fk_forfaits foreign key (idoffre) references offres(idoffre);
 
+
 insert into forfaits(idoffre, nomforfait, code, prix, validite, description)
 values(1, 'Be dimy', '224*5', 500, 1, 'dshgerrjh');
 
 create table datas(
 	iddata serial primary key not null,
-	nomdata varchar(30),
+	nomdata varchar(30) not null,
+	active int not null check (active = 1 or active = 0),
 	datecreation timestamp not null default current_timestamp
 );
 
-insert into datas values( 1, 'Appel', current_timestamp);
-insert into datas values( 2, 'Sms', current_timestamp);
-insert into datas values( 3, 'Facebook', current_timestamp);
-insert into datas values( 4, 'Instagram', current_timestamp);
-insert into datas values( 5, 'Internet', current_timestamp);
+insert into datas values( 1, 'Appel', 1, current_timestamp);
+insert into datas values( 2, 'Sms', 1, current_timestamp);
+insert into datas values( 3, 'Facebook', 1, current_timestamp);
+insert into datas values( 4, 'Instagram', 1, current_timestamp);
+insert into datas values( 5, 'Internet', 1, current_timestamp);
+
 
 create table forfaitdatas(
 	idfdata serial primary key not null,
@@ -196,25 +143,46 @@ create table forfaitdatas(
 
 insert into forfaitdatas(idforfait,iddata,quantite) values(1,1,500);
 
-create table forfaitclients(
-	idforfaitclient serial primary key not null,
+create table achatforfaits(
+	idachat serial primary key ,
 	idclient int not null,
 	idforfait int not null,
-	appel decimal (8,2) not null default 0 check(appel >= 0),
-	sms int not null default 0 check(sms >= 0),
-	facebook decimal (8,2) not null default 0 check(facebook >= 0),
-	instagram decimal (8,2) not null default 0 check(instagram >= 0),
-	internet decimal (8,2) not null default 0 check(internet >= 0),
-	modepaiement varchar(8) not null check( modepaiement = 'mvola' or modepaiement = 'credit'),
+	modepaiement varchar(10) not null check( modepaiement = 'mvola' or modepaiement = 'credit'),
 	dateachat timestamp not null default current_timestamp
 );
-alter table forfaitclients add constraint fk_clients foreign key (idclient) references clients(idclient);
-alter table forfaitclients add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
+alter table achatforfaits add constraint fk_clients foreign key (idclient) references clients(idclient);
+insert into achatforfaits(idclient, idforfait, dateachat) values (1, 1, '2020-10-10 12:00:00');
 
-insert into forfaitclients(idclient,idforfait,appel, sms, facebook,instagram,internet, modepaiement) values
-(1, 1, 10, 10, 10, 10, 10, 'mvola');
+create table dataclients(
+	iddataclient serial primary key,
+	idclient int not null,
+	iddata int not null,
+	quantite double not null,
+	priorite int not null,
+	dateachat int not null,
+	expiration timestamp not null
+);
 
-update forfaitclients set appel = 20, sms = 20 ,facebook = 20, instagram = 20, internet = 20 where idforfaitclient = 1;
+
+-- create table forfaitclients(
+	-- idforfaitclient serial primary key not null,
+	-- idclient int not null,
+	-- idforfait int not null,
+	-- appel decimal (8,2) not null default 0 check(appel >= 0),
+	-- sms int not null default 0 check(sms >= 0),
+	-- facebook decimal (8,2) not null default 0 check(facebook >= 0),
+	-- instagram decimal (8,2) not null default 0 check(instagram >= 0),
+	-- internet decimal (8,2) not null default 0 check(internet >= 0),
+	-- modepaiement varchar(8) not null check( modepaiement = 'mvola' or modepaiement = 'credit'),
+	-- dateachat timestamp not null default current_timestamp
+-- );
+-- alter table forfaitclients add constraint fk_clients foreign key (idclient) references clients(idclient);
+-- alter table forfaitclients add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
+
+-- insert into forfaitclients(idclient,idforfait,appel, sms, facebook,instagram,internet, modepaiement) values
+-- (1, 1, 10, 10, 10, 10, 10, 'mvola');
+
+-- update forfaitclients set appel = 20, sms = 20 ,facebook = 20, instagram = 20, internet = 20 where idforfaitclient = 1;
 
 
 
@@ -222,8 +190,6 @@ create table credits(
     idcredits serial primary key not null,
     valmin decimal 
 );
-
-
 
 ------------------------ Vues
 
@@ -236,12 +202,23 @@ from clients cl join actions act on cl.idclient = act.idclient
 join typeactions ta on act.idtypeaction = ta.idtypeaction
 
 -- forfaitdatas + datas
-create view forfaitdatasetdatas as
-select fd.* , d.nomdata from
+create view v_forfaitdatas as
+select fd.* , d.nomdata  from
 forfaitdatas fd join datas d on fd.iddata = d.iddata;
 
 select * from forfaitdatasetdatas where idforfait = 1;
 
+
+---- 
+-- create view v_consommationforfaits as
+ -- select fcl.*,  interne , autres , international,
+ -- fcl.dateachat + forf.validite * interval '1 day' as expiration
+ -- from forfaitclients fcl join  forfaits forf on
+ -- fcl.idforfait = forf.idforfait join offres ofr on
+ -- forf.idoffre = ofr.idoffre;
+ 
+ select * from v_consommationforfaits where idClient = 1
+  and expiration > current_timestamp;
 
 
 --------------------------------------------------------------- MONGO DB
@@ -324,3 +301,71 @@ db.sms.insert(
         }
 	
  
+ --------------------------------------
+ 
+ ----------- gestion offres  atao mongodb --------------- gestion offres ---------------
+
+-- create table categories(
+--     idcategolrie serial primary key not null,
+--     nomcategorie varchar(30) not null,
+--     description varchar() 
+-- );
+
+-- create table unites(
+--     idunite serial primary key not null,
+--     unite varchar(20)
+-- );
+
+-- -- ex offres : yellow
+
+-- create table offres(
+--     idoffre serial primary key not null,
+--     nomoffre varchar(20),
+--     description varchar(300)
+-- );
+
+-- -- ex forfait : yellow faceboobaka
+-- create table forfaits(
+--     idforfait serial primary key not null,
+--     idoffre int not null,
+--     nomforfait varchar(20) not null,
+--     prix decimal not null,
+--     validite int not null,
+--     code varchar(20),
+--     description varchar(300)
+-- );
+-- alter table forfaits add constraint fk_offres foreign key (idoffres) references offres(idoffres);
+
+
+-- -- ex dataforfait appel /s    internet /mo
+
+-- create table dataforfaits(
+--     iddataforfait serial primary key not null,
+--     nomdataforfait varchar(20),
+--     idunite int not null,
+-- );
+-- alter table dataforfaits add constraint fk_unites foreign key (idunite) references unites(idunite);
+
+-- create table detailforfaits(
+--     iddetailforfait serial primary key not null,
+--     idforfait int not null,
+--     iddataforfait int not null,
+--     quantite decimal not null,
+--     priorite int not null default 0,
+-- );
+
+-- alter table detailforfait add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
+-- alter table detailforfait add constraint fk_dataforfaits foreign key (iddataforfait) references dataforfaits(iddataforfait);
+
+
+	-- validation mobile money
+	
+	
+------------------------------------------------------------------- Commande
+drop table forfaitdatas cascade;
+drop table forfaitdatas cascade;
+drop view v_consommationforfaits;
+drop table forfaitClients;
+drop table datas;
+
+localhost:8080/admin/datas

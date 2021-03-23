@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mobile.telma.domains.Admin;
 import com.mobile.telma.domains.Client;
+import com.mobile.telma.domains.Data;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Offre;
 import com.mobile.telma.domains.Action;
@@ -17,6 +18,7 @@ import com.mobile.telma.repositories.ActionClientRepository;
 import com.mobile.telma.repositories.ActionRepository;
 import com.mobile.telma.repositories.AdminRepository;
 import com.mobile.telma.repositories.ClientRepository;
+import com.mobile.telma.repositories.DataRepository;
 import com.mobile.telma.repositories.ForfaitRepository;
 import com.mobile.telma.repositories.OffreRepository;
 
@@ -41,6 +43,9 @@ public class AdminService {
 	
 	@Autowired
 	ForfaitRepository forfaitRepository;
+	
+	@Autowired
+	DataRepository dataRepository;
 	
 	public Admin getByEmailAndMdp(String email, String mdp) throws EtAuthException{
 		return adminRepository.findAdminByEmailAndMdp(email, mdp);
@@ -90,6 +95,11 @@ public class AdminService {
 	
 	public List<Forfait> getOffreForfaits(int idOffre){
 		return offreRepository.getForfaits(idOffre);
+	}
+	
+	
+	public List<Data> getDatas(){
+		return dataRepository.findDatas();
 	}
 	
 //	

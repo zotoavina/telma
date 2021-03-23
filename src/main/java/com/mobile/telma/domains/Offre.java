@@ -14,9 +14,24 @@ public class Offre {
 	private Date dateCreation;
 	private int active = 1;
 	private String description;
+	private int priorite;
 	
 	
 	
+	
+	
+	public int getPriorite() {
+		return priorite;
+	}
+
+
+
+	public void setPriorite(int priorite) {
+		this.priorite = priorite;
+	}
+
+
+
 	public int getIdOffre() {
 		return idOffre;
 	}
@@ -132,7 +147,7 @@ public class Offre {
 
 
 	public Offre(int idOffre, String nomOffre, String code, double interne, double autres, double international,
-			Date dateCreation, int active, String description) {
+			Date dateCreation, int active, String description, int priorite) {
 		super();
 		this.idOffre = idOffre;
 		this.nomOffre = nomOffre;
@@ -143,6 +158,7 @@ public class Offre {
 		this.dateCreation = dateCreation;
 		this.active = active;
 		this.description = description;
+		this.priorite = priorite;
 	}
 	
 	@Override

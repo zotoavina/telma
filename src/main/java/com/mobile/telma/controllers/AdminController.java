@@ -111,6 +111,12 @@ public class AdminController {
 		return ResponseMaker.makeResponse(f , 200, "Ajout du forfait realise " , HttpStatus.OK);
 	}
 	
+	//------------------------------------ Datas
+	@GetMapping("/admin/datas")
+	public ResponseEntity<Map<String, Object>> getDatas(HttpServletRequest request)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		return ResponseMaker.makeResponse( adminService.getDatas(), 200, "Liste des datas selectionnes", HttpStatus.OK);
+	}
 	
 	
 //	

@@ -21,10 +21,10 @@ public class OffreRepository {
 	private static final String SQL_FIND_ALL = "select * from offres";
 	private static final String SQL_FIND_BY_ID = "select * from offres where idoffre = ?";
 	private static final String SQL_UPDATE = "update offres set nomoffre = ? , code = ?, interne = ?,"
-			+ " autres = ?, international = ?, active = ?, description = ? where idoffre = ?";
+			+ " autres = ?, international = ?, active = ?, description = ?, priorite = ? where idoffre = ?";
 	
-	private static final String SQL_INSERT = "insert into offres( nomoffre, code, interne, autres, international, description) values "
-			+ "(?,  ?, ?, ?, ?, ?)";
+	private static final String SQL_INSERT = "insert into offres( nomoffre, code, interne, autres, international, description, priorite) values "
+			+ "(?,  ?, ?, ?, ?, ?, ?)";
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -43,7 +43,8 @@ public class OffreRepository {
 				rs.getDouble("international"),
 				rs.getDate("datecreation"),
 				rs.getInt("active"),
-				rs.getString("description")
+				rs.getString("description"),
+				rs.getInt("priorite")
 				);
 	} );
 	
@@ -71,7 +72,8 @@ public class OffreRepository {
 				offre.getNomOffre(), offre.getCode(),
 				offre.getInterne(), offre.getAutres(),
 				offre.getInternational(), offre.getActive(),
-				offre.getDescription(), offre.getIdOffre() 
+				offre.getDescription(), offre.getIdOffre(),
+				offre.getPriorite()
 				});
 	}
 	
@@ -86,6 +88,7 @@ public class OffreRepository {
 				ps.setDouble(4, offre.getAutres());
 				ps.setDouble(5, offre.getInternational());
 				ps.setString(6, offre.getDescription());
+				ps.setInt(7, offre.getPriorite());
 				return ps;
 			}, keyHolder);
 			return (Integer) keyHolder.getKeys().get("idoffre");
