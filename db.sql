@@ -439,3 +439,75 @@ drop table forfaitClients;
 drop table datas;
 
 localhost:8080/admin/datas
+
+
+
+
+
+
+
+
+
+-- ------------------------------------------STATISTIQUE---------------------------------------------------
+
+
+
+CREATE VIEW v_achatinfo AS
+SELECT idachat,idforfait,dateachat,count(*) nbrachat,
+EXTRACT(YEAR FROM dateachat) anne, EXTRACT(MONTH FROM dateachat) mois FROM achatforfaits
+GROUP BY idachat,idforfait,dateachat,anne,mois;
+
+CREATE VIEW v_statforfaits AS
+SELECT idforfait,coalesce(sum(nbrachat),0) nbrachat,anne,mois
+FROM  v_achatinfo GROUP BY idforfait,anne,mois;
+
+CREATE VIEW v_statoffres AS
+SELECT frt.idoffre,sum(frt.prix * st.nbrachat) montant ,
+sum(nbrachat) nbrachat,st.anne,st.mois
+FROM  forfaits frt JOIN  v_statforfaits st
+ON frt.idforfait = st.idforfait
+GROUP BY frt.idoffre,st.anne,st.mois;
+
+
+-- STATISTIQUE NBR ACHAT DE FORFAIT
+SELECT frt.idoffre,frt.idforfait,frt.nomforfait,coalesce(frt.prix * st.nbrachat,0) montant, 
+coalesce(st.nbrachat,0) nbrachat,coalesce(st.anne,2021) anne, coalesce(st.mois,2) mois
+FROM forfaits frt left JOIN v_statforfaits st
+ON frt.idforfait = st.idforfait AND anne = 2021 and mois= 2 WHERE frt.idoffre = 12;
+
+
+CREATE OR REPLACE FUNCTION f_statforfait(ido int,year int, month int)
+  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),nbrachat decimal(20,5)) AS
+$func$
+BEGIN
+   RETURN QUERY
+    SELECT frt.idforfait,frt.nomforfait,coalesce(frt.prix * st.nbrachat,0) montant, 
+    coalesce(st.nbrachat,0) nbrachat
+    FROM forfaits frt left JOIN v_statforfaits st
+    ON frt.idforfait = st.idforfait AND anne = year and mois= month WHERE frt.idoffre = ido;                   -- potential ambiguity 
+END
+$func$  LANGUAGE plpgsql;
+
+
+
+-- STATISTIQUE NBR ACHAT OFFRES
+SELECT frt.idoffre,frt.nomoffre,coalesce(st.montant,0) montant, 
+coalesce(st.nbrachat,0) nbrachat,coalesce(st.anne,2021) anne, coalesce(st.mois,1) mois
+FROM offres frt left JOIN v_statoffres st
+ON frt.idoffre = st.idoffre AND st.anne = 2021 and st.mois= 1
+
+
+
+CREATE OR REPLACE FUNCTION f_statoffre(year int, month int)
+  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),nbrachat decimal(20,5)) AS
+$func$
+BEGIN
+   RETURN QUERY
+   SELECT frt.idoffre,frt.nomoffre,coalesce(st.montant,0) montant, 
+   coalesce(st.nbrachat,0) nbrachat
+   FROM offres frt left JOIN v_statoffres st
+   ON frt.idoffre = st.idoffre AND st.anne = year and st.mois= month;                    -- potential ambiguity 
+END
+$func$  LANGUAGE plpgsql;
+
+
