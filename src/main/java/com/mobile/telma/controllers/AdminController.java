@@ -50,19 +50,14 @@ public class AdminController {
 	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
 	}
 	  
-	@GetMapping("/bonjour")
-	public String bonjour() {
-		return "Bonjour";
-	}
 	
 	@GetMapping("/admin/validations")
 	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request) throws Exception{
 		System.out.println("validate");
 		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request) );
 		System.out.println("IdAdmin : " + idAdmin);
-//		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
-//				"selection des actions non valide reussi", HttpStatus.OK);
-		return ResponseMaker.makeResponse(idAdmin, 200, "ca va", HttpStatus.ACCEPTED);
+		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
+				"selection des actions non valide reussi", HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/validations/{idAction}")
