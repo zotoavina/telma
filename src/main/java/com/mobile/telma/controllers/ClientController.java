@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +22,7 @@ import com.mobile.telma.domains.Client;
 import com.mobile.telma.domains.Sms;
 import com.mobile.telma.filter.GestionToken;
 import com.mobile.telma.services.ClientService;
+import com.mobile.telma.utils.DateUtils;
 import com.mobile.telma.utils.ResponseMaker;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Appel;
@@ -75,7 +75,8 @@ public class ClientController {
 			@RequestBody Map<String, Object> map, @PathVariable("idForfait") int idForfait)throws Exception{
 		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
 		String mode = (String) map.get("modepaiement");
-		clientService.acheterForfait(idClient, idForfait, mode);
+		Date achat = DateUtils.parse( (String) map.get("dateachat") );
+		clientService.acheterForfait(idClient, idForfait, mode, achat);
 		return ResponseMaker.makeResponse(null, 200, "Achat du forfait reussi", HttpStatus.OK);
 	}
 		

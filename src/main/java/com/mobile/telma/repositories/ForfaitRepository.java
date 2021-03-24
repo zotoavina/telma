@@ -27,8 +27,10 @@ public class ForfaitRepository {
 	
 	private final static String SQL_GET_FORFAITS_OFFRE = "select * from forfaits where idoffre = ?";
 	
-	private final static String SQL_INSERT_ACHAT_FORFAIT = "insert into achatforfaits(idclient, idforfait, mode, dateachat) "
+	private final static String SQL_INSERT_ACHAT_FORFAIT = "insert into achatforfaits(idclient, idforfait, modepaiement, dateachat) "
 			+ "values (?, ?, ?, ?)";
+	
+	
 	
 	@Autowired 
 	private JdbcTemplate jdbcTemplate ;
@@ -96,13 +98,14 @@ public class ForfaitRepository {
 	public int insertAchatForfait(AchatForfait af) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update( connection ->{
-			PreparedStatement ps = connection.prepareStatement(SQL_INSERT_FDATA, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = connection.prepareStatement(SQL_INSERT_ACHAT_FORFAIT, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, af.getIdClient());
 			ps.setInt(2, af.getIdForfait());
 			ps.setString(3, af.getModePaiement());
 			ps.setDate(4, af.getDateAchat());
+			System.out.println(ps.toString());
 			return ps;
-		});
+		}, keyHolder );
 		return (Integer)keyHolder.getKeys().get("idachat");
 	}
 	

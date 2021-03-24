@@ -72,7 +72,11 @@ public class OffreRepository {
 				offre.getNomOffre(), offre.getCode(),
 				offre.getInterne(), offre.getAutres(),
 				offre.getInternational(), offre.getActive(),
+<<<<<<< HEAD
 				offre.getDescription(),offre.getPriorite(),
+=======
+				offre.getDescription(), offre.getPriorite(),
+>>>>>>> c142a316f8c23ff726c0955df3f69e7cd12f5811
 				offre.getIdOffre()
 				});
 	}

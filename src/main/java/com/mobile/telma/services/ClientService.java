@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mobile.telma.domains.AchatForfait;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Client;
+import com.mobile.telma.domains.DataClient;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Sms;
 import com.mobile.telma.domains.Appel;
@@ -15,9 +16,12 @@ import com.mobile.telma.exceptions.EtAuthException;
 import com.mobile.telma.exceptions.EtBadRequestException;
 import com.mobile.telma.repositories.ActionRepository;
 import com.mobile.telma.repositories.CommunicationRepository;
+import com.mobile.telma.repositories.DataClientRepository;
 import com.mobile.telma.repositories.ClientRepository;
 import com.mobile.telma.repositories.ForfaitRepository;
+import com.mobile.telma.utils.DateUtils;
 
+import java.util.Date;
 import java.util.List;
 
 @Transactional
@@ -32,6 +36,8 @@ public class ClientService {
 	CommunicationRepository communicationRepository;
 	@Autowired
 	ForfaitRepository forfaitRepository;
+	@Autowired
+	DataClientRepository dataClientRepository;
 	
 	public Client createClient(String nom, String prenom, String numero, String mdp)throws EtBadRequestException{
 		int idClient =  clientRepository.insert(nom, prenom, numero, mdp);
@@ -63,7 +69,7 @@ public class ClientService {
 	}
 	
 	
-	public void acheterForfait(int idClient, int idForfait,String mode) {
+	public void acheterForfait(int idClient, int idForfait,String mode, Date achat) {
 		AchatForfait af = new AchatForfait();
 		Client client = clientRepository.getClientById(idClient);
 		Forfait forfait = forfaitRepository.getForfaitBId(idForfait);
@@ -72,6 +78,9 @@ public class ClientService {
 		client.achatForfait(forfait, mode);
 		forfaitRepository.insertAchatForfait(af);
 		clientRepository.updateSoldeEtCredit(client);
+		java.sql.Date da = DateUtils.utilToSql(achat);
+		List<DataClient> datas = DataClient.dataFromForfaitClient(forfait, client, da );
+		dataClientRepository.insertDataClient(datas); 
 	}
 
 	
