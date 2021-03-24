@@ -156,11 +156,25 @@ insert into achatforfaits(idclient, idforfait, dateachat) values (1, 1, '2020-10
 create table dataclients(
 	iddataclient serial primary key,
 	idclient int not null,
+	idforfait int not null,
 	iddata int not null,
-	quantite double not null,
-	priorite int not null,
-	dateachat int not null,
-	expiration timestamp not null
+	quantite decimal(10,2) not null,
+	dateachat timestamp not null default current_timestamp,
+	validite int not null
+);
+alter table dataclients add constraint fk_clients foreign key (idclient) references clients(idclient);
+alter table dataclients add constraint fk_datas foreign key (iddata) references datas(iddata);
+alter table dataclients add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
+
+insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , validite) values( 1, 1, 1, 500, current_timestamp, 3);
+
+create table consommationData(
+	idconsommation serial primary key,
+	idclient int not null,
+	iddata int null,
+	quantite decimal(10,2) not null check(quantite > 0),
+	modeconsommation varchar(10) not null check( modeconsommation = 'credit' or modeconsommation = 'forfait'),
+	dateconsommation timestamp not null default current_timestamp
 );
 
 

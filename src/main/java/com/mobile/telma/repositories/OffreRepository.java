@@ -72,8 +72,8 @@ public class OffreRepository {
 				offre.getNomOffre(), offre.getCode(),
 				offre.getInterne(), offre.getAutres(),
 				offre.getInternational(), offre.getActive(),
-				offre.getDescription(), offre.getIdOffre(),
-				offre.getPriorite()
+				offre.getDescription(), offre.getPriorite(),
+				offre.getIdOffre()
 				});
 	}
 	
