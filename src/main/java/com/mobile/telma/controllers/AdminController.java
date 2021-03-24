@@ -47,8 +47,10 @@ public class AdminController {
 //		String email = (String) adminMap.get("email");
 //		String mdp = (String) adminMap.get("mdp");
 //	    Admin admin = adminService.getByEmailAndMdp(email, mdp);
-//	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
-		return ResponseMaker.makeResponse(adminMap, 200, "Mpamitaka", HttpStatus.ACCEPTED);
+		Admin admin = new Admin(  1 ,           1 , "Rasoaharisoa" , "zotoavina","zotoavina@gmail.com", "123456");
+		
+	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
+		
 	}
 	  
 	@GetMapping("/bonjour")
