@@ -72,8 +72,8 @@ public class OffreRepository {
 				offre.getNomOffre(), offre.getCode(),
 				offre.getInterne(), offre.getAutres(),
 				offre.getInternational(), offre.getActive(),
-				offre.getDescription(), offre.getIdOffre(),
-				offre.getPriorite()
+				offre.getDescription(),offre.getPriorite(),
+				offre.getIdOffre()
 				});
 	}
 	
@@ -89,6 +89,7 @@ public class OffreRepository {
 				ps.setDouble(5, offre.getInternational());
 				ps.setString(6, offre.getDescription());
 				ps.setInt(7, offre.getPriorite());
+				System.out.println(ps.toString());
 				return ps;
 			}, keyHolder);
 			return (Integer) keyHolder.getKeys().get("idoffre");
