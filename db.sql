@@ -171,11 +171,15 @@ insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , valid
 create table consommationData(
 	idconsommation serial primary key,
 	idclient int not null,
+	idforfait int not null,
 	iddata int null,
 	quantite decimal(10,2) not null check(quantite > 0),
 	modeconsommation varchar(10) not null check( modeconsommation = 'credit' or modeconsommation = 'forfait'),
 	dateconsommation timestamp not null default current_timestamp
 );
+
+create view v_dataclients as
+ select 
 
 
 
