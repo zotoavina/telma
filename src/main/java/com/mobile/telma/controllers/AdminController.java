@@ -60,8 +60,9 @@ public class AdminController {
 		System.out.println("validate");
 		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request) );
 		System.out.println("IdAdmin : " + idAdmin);
-		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
-				"selection des actions non valide reussi", HttpStatus.OK);
+//		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
+//				"selection des actions non valide reussi", HttpStatus.OK);
+		return ResponseMaker.makeResponse(idAdmin, 200, "ca va", HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/admin/validations/{idAction}")
