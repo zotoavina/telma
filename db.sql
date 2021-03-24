@@ -202,7 +202,7 @@ create view v_consommationoffres as
 	and dco.iddata = co.iddata 
 	and dco.expiration > current_timestamp join datas d on
 	dco.iddata = d.iddata join offres o on 
-	dco.idoffre = o.idoffre
+	dco.idoffre = o.idoffre where dco.idclient = 1
 	group by dco.idoffre, dco.iddata, d.nomdata, o.nomoffre
 	
 

@@ -71,14 +71,15 @@ public class ClientService {
 	
 	public void acheterForfait(int idClient, int idForfait,String mode, Date achat) {
 		AchatForfait af = new AchatForfait();
+		java.sql.Date da = DateUtils.utilToSql(achat);
 		Client client = clientRepository.getClientById(idClient);
 		Forfait forfait = forfaitRepository.getForfaitBId(idForfait);
 		af.synchronize(client, forfait);
 		af.setModePaiement(mode);
+		af.setDateAchat(da);
 		client.achatForfait(forfait, mode);
 		forfaitRepository.insertAchatForfait(af);
 		clientRepository.updateSoldeEtCredit(client);
-		java.sql.Date da = DateUtils.utilToSql(achat);
 		List<DataClient> datas = DataClient.dataFromForfaitClient(forfait, client, da );
 		dataClientRepository.insertDataClient(datas); 
 	}
