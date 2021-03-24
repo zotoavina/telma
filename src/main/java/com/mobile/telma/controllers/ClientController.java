@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.mobile.telma.Constants;
 import com.mobile.telma.domains.Client;
+import com.mobile.telma.domains.Consommation;
 import com.mobile.telma.domains.Sms;
 import com.mobile.telma.filter.GestionToken;
 import com.mobile.telma.services.ClientService;
@@ -78,6 +79,17 @@ public class ClientController {
 		Date achat = DateUtils.parse( (String) map.get("dateachat") );
 		clientService.acheterForfait(idClient, idForfait, mode, achat);
 		return ResponseMaker.makeResponse(null, 200, "Achat du forfait reussi", HttpStatus.OK);
+	}
+	
+	@PostMapping("/consommer")
+	public ResponseEntity<Map<String,Object>> consommerData(HttpServletRequest request,@RequestBody Map<String, Object> map )
+			throws Exception{
+		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
+		Date date = DateUtils.parse( (String) map.get("dateconsommation"));
+		double quantite = (Double) map.get("quantite");
+		int idData = (Integer) map.get("iddata");
+		Consommation client= clientService.consommerData(idClient, idData, quantite, date);
+		return ResponseMaker.makeResponse(client, 200, "Achat du forfait reussi", HttpStatus.OK);
 	}
 		
 	

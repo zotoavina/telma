@@ -19,4 +19,11 @@ public class DateUtils {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
+	public static java.sql.Date addJour(java.sql.Date date, int jour){
+		java.sql.Date  da= new java.sql.Date(date.getTime());
+		da.setDate(da.getDate() + jour );
+		return da;
+	}
+	
 }

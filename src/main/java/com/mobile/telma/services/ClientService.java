@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mobile.telma.domains.AchatForfait;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Client;
+import com.mobile.telma.domains.Consommation;
 import com.mobile.telma.domains.DataClient;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Sms;
@@ -16,6 +17,7 @@ import com.mobile.telma.exceptions.EtAuthException;
 import com.mobile.telma.exceptions.EtBadRequestException;
 import com.mobile.telma.repositories.ActionRepository;
 import com.mobile.telma.repositories.CommunicationRepository;
+import com.mobile.telma.repositories.ConsommationRepository;
 import com.mobile.telma.repositories.DataClientRepository;
 import com.mobile.telma.repositories.ClientRepository;
 import com.mobile.telma.repositories.ForfaitRepository;
@@ -38,6 +40,8 @@ public class ClientService {
 	ForfaitRepository forfaitRepository;
 	@Autowired
 	DataClientRepository dataClientRepository;
+	@Autowired 
+	ConsommationRepository consommationRepository;
 	
 	public Client createClient(String nom, String prenom, String numero, String mdp)throws EtBadRequestException{
 		int idClient =  clientRepository.insert(nom, prenom, numero, mdp);
@@ -68,6 +72,14 @@ public class ClientService {
 		return clientRepository.getClientByNumero(numero);
 	}
 	
+	public void setDataActuel(Client client, int idData, java.sql.Date date) {
+		System.out.println("data : " +idData);  
+		client.setDataActuel( dataClientRepository.getDataActuel(client.getIdClient(), idData, date));
+	}
+	
+	public void setDataActuel(Client client, java.sql.Date date) {
+		client.setDataActuel( dataClientRepository.getDatasActuel(client.getIdClient(), date));
+	}
 	
 	public void acheterForfait(int idClient, int idForfait,String mode, Date achat) {
 		AchatForfait af = new AchatForfait();
@@ -82,6 +94,16 @@ public class ClientService {
 		clientRepository.updateSoldeEtCredit(client);
 		List<DataClient> datas = DataClient.dataFromForfaitClient(forfait, client, da );
 		dataClientRepository.insertDataClient(datas); 
+	}
+	
+	public Consommation consommerData(int idClient, int idData, double quantite , Date date) {
+		java.sql.Date da = DateUtils.utilToSql(date);
+		Client client = clientRepository.getClientById(idClient);
+		setDataActuel(client, idData, da);
+		Consommation consommation = new Consommation(idClient, idData, quantite, da);
+		if( client.consommerData(consommation) ) clientRepository.updateSoldeEtCredit(client);
+		consommationRepository.insertionConsommation(consommation);
+		return consommation;
 	}
 
 	

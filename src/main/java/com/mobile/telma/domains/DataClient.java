@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mobile.telma.utils.DateUtils;
+
 public class DataClient {
 	private int idDataclient;
 	private int idClient;
@@ -12,9 +14,20 @@ public class DataClient {
 	private double quantite;
 	private Date dateAchat = new Date(System.currentTimeMillis());
 	private int validite;
+	private Date expiration;
 	
 	
 	
+	public Date getExpiration() {
+		return expiration;
+	}
+
+	public void setExpiration(Date expiration) {
+		this.expiration = expiration;
+	}
+
+
+
 	public int getIdDataclient() {
 		return idDataclient;
 	}
@@ -105,6 +118,7 @@ public class DataClient {
 			DataClient tmp = new DataClient();
 			tmp.synchronize(client, forfait, forfait.getDatas().get(i));
 			tmp.setDateAchat(achat);
+			tmp.setExpiration( DateUtils.addJour(achat, tmp.getValidite() ));
 			data.add(tmp);
 		}
 		return data;

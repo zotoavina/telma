@@ -1,6 +1,8 @@
 package com.mobile.telma;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,14 +15,39 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.mobile.telma.filter.AdminFilter;
-import com.mobile.telma.filter.AuthFilter;
+import com.mobile.telma.domains.Client;
+import com.mobile.telma.domains.Consommation;
+import com.mobile.telma.domains.DataActuel;
+
 
 @SpringBootApplication
 public class TelmaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TelmaApplication.class, args);
+
+//		Client client = new Client();
+//		List<DataActuel> actuels = new ArrayList<>(3);
+//		DataActuel da = new DataActuel();
+//		da.setQuantite(50);
+//		DataActuel da1 = new DataActuel();
+//		da1.setQuantite(80);
+//		actuels.add(da );
+//		actuels.add(da1);
+//		client.setDataActuel(actuels);
+//		client.setCredit(50);
+//		
+//		Consommation cons = new Consommation();
+//		cons.setQuantite(160);
+//		client.consommerData(cons);
+//		for(int i = 0; i< cons.getDetails().size(); i++) {
+//			System.out.println(cons.getDetails().get(i).getQuantite());
+//		}
+//		System.out.println(cons.dataRestantAConsommer());
+//		System.out.println(client.getCredit());
+//		int a = 0; 
+		
+		
 	}
 	
 //	@Bean

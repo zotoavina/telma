@@ -1,0 +1,62 @@
+package com.mobile.telma.domains;
+
+import java.sql.Date;
+
+public class DetailCons {
+	private int idDetails;
+	private int idConsommation;
+	private int idDataClient;
+	private int idForfait;
+	private int idData;
+	private double quantite ;
+	private String modeConsommation;
+	
+	static final String FORFAIT = "forfait";
+	static final String CREDIT = "credit";
+	
+	
+	
+	public int getIdDataClient() {
+		return idDataClient;
+	}
+	public void setIdDataClient(int idDataClient) {
+		this.idDataClient = idDataClient;
+	}
+	public int getIdDetails() {
+		return idDetails;
+	}
+	public void setIdDetails(int idDetails) {
+		this.idDetails = idDetails;
+	}
+	public int getIdConsommation() {
+		return idConsommation;
+	}
+	public void setIdConsommation(int idConsommation) {
+		this.idConsommation = idConsommation;
+	}
+	public int getIdForfait() {
+		return idForfait;
+	}
+	public void setIdForfait(int idForfait) {
+		this.idForfait = idForfait;
+	}
+	public int getIdData() {
+		return idData;
+	}
+	public void setIdData(int idData) {
+		this.idData = idData;
+	}
+	public double getQuantite() {
+		return quantite;
+	}
+	public void setQuantite(double quantite) {
+		this.quantite = quantite;
+	}
+	public String getModeConsommation() {
+		return modeConsommation;
+	}
+	public void setModeConsommation(String modeConsommation) {
+		this.modeConsommation = modeConsommation;
+	}
+	public DetailCons() {}
+}

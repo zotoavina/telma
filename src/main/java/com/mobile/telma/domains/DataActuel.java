@@ -1,23 +1,25 @@
 package com.mobile.telma.domains;
 
 public class DataActuel {
-	private int idOffre;
-	private String nomOffre;
+	private int idForfait;
+	private String nomForfait;
 	private int idData;
 	private double quantite;
 	private String nomData;
 	
-	public int getIdOffre() {
-		return idOffre;
+	
+	public int getIdForfait() {
+		return idForfait;
 	}
-	public void setIdOffre(int idOffre) {
-		this.idOffre = idOffre;
+	public void setIdForfait(int idForfait) {
+		this.idForfait = idForfait;
 	}
-	public String getNomOffre() {
-		return nomOffre;
+	
+	public String getNomForfait() {
+		return nomForfait;
 	}
-	public void setNomOffre(String nomOffre) {
-		this.nomOffre = nomOffre;
+	public void setNomForfait(String nomForfait) {
+		this.nomForfait = nomForfait;
 	}
 	public int getIdData() {
 		return idData;
@@ -39,5 +41,25 @@ public class DataActuel {
 	}
 	
 	public DataActuel() {}
+	
+		
+	
+	public boolean consommer(Consommation consommation) {
+		DetailCons detail = new DetailCons();
+		System.out.println(quantite + " Vs " + consommation.dataRestantAConsommer() );
+		detail.setModeConsommation( DetailCons.FORFAIT);
+		detail.setIdForfait(idForfait);
+		if( quantite >= consommation.dataRestantAConsommer() ) {
+			detail.setQuantite( consommation.dataRestantAConsommer() );
+			consommation.addDetail(detail);
+			return false;
+		}
+		detail.setQuantite(quantite);
+		consommation.addDetail(detail);
+		return true;
+	}
+
+	
+	
 	
 }

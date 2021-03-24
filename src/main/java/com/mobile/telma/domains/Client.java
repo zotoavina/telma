@@ -1,5 +1,6 @@
 package com.mobile.telma.domains;
 import java.util.Date;
+import java.util.List;
 
 import com.mobile.telma.exceptions.EtBadRequestException;
 
@@ -13,6 +14,7 @@ public class Client {
 	private double solde;
 	private double credit;
 	private Date dateAdhesion;
+	private List<DataActuel> dataActuel;
 	
 	public int getIdClient() {
 		return idClient;
@@ -65,8 +67,12 @@ public class Client {
 	}
 	
 	
-	
-	
+	public List<DataActuel> getDataActuel() {
+		return dataActuel;
+	}
+	public void setDataActuel(List<DataActuel> dataActuel) {
+		this.dataActuel = dataActuel;
+	}
 	public String getNumero() {
 		return numero;
 	}
@@ -151,6 +157,26 @@ public class Client {
 		throw new EtBadRequestException("Mode de paiement invalide");
 	}
 	
+	private void consommerAvecCredit(Consommation consommation) {
+		DetailCons detail = new DetailCons();
+		detail.setModeConsommation("credit");
+		if( credit <= consommation.dataRestantAConsommer()) {
+			credit = 0;
+			detail.setQuantite(credit);
+			return;
+		}
+		detail.setQuantite( consommation.dataRestantAConsommer());
+		credit = credit - consommation.dataRestantAConsommer();
+	}
 	
-
+	public boolean consommerData(Consommation consommation) {
+		for(int i = 0; i < dataActuel.size(); i++ ) {
+			if(!dataActuel.get(i).consommer(consommation)) return false;  
+		}
+		consommerAvecCredit(consommation);
+		return true;
+	}
+	
+	
+	
 }

@@ -161,49 +161,101 @@ create table dataclients(
 	iddata int not null,
 	quantite decimal(10,2) not null,
 	dateachat timestamp not null default current_timestamp,
-	validite int not null
+	validite int not null,
+	expiration timestamp not null
 );
 alter table dataclients add constraint fk_clients foreign key (idclient) references clients(idclient);
 alter table dataclients add constraint fk_datas foreign key (iddata) references datas(iddata);
 alter table dataclients add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
 
-insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , validite) values( 1, 1, 1, 500, current_timestamp, 3);
+insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , validite, expiration)
+ values( 1, 1, 1, 500, current_timestamp, 3, '2021-03-27 12:00:00');
 
-create table consommation(
+create table consommations(
 	idconsommation serial primary key,
 	idclient int not null,
-	idforfait int not null,
-	iddata int null,
+	iddata int not null,
 	quantite decimal(10,2) not null check(quantite > 0),
-	modeconsommation varchar(10) not null check( modeconsommation = 'credit' or modeconsommation = 'forfait'),
 	dateconsommation timestamp not null default current_timestamp
 );
-alter table consommation add constraint fk_clients foreign key (idclient) references clients(idclient);
-alter table consommation add constraint fk_datas foreign key (iddata) references datas(iddata);
-alter table consommation add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
+alter table consommations add constraint fk_clients foreign key (idclient) references clients(idclient);
+alter table consommations add constraint fk_datas foreign key (iddata) references datas(iddata);
 
-insert into consommation(idclient, idforfait, iddata, quantite, modeconsommation, dateconsommation) values 
- (1 ,9 ,1 ,100, 'forfait', '2021-03-24 12:00:00');
+insert into consommations(idclient, iddata, quantite, dateconsommation) values 
+ (1 ,1 ,100, '2021-03-24 12:00:00');
+
+insert into consommations(idclient, iddata, quantite, dateconsommation) values 
+ (2 ,1 ,100, '2021-03-20 12:00:00');
+
+create table consommationdetails(
+	iddetails serial primary key,
+	idconsommation int not null,
+	iddataclient int,
+	idforfait int,
+	iddata int null,
+	quantite decimal(10,2) not null check(quantite > 0),
+	modeconsommation varchar(10) not null check( modeconsommation = 'credit' or modeconsommation = 'forfait')
+);
+alter table consommationdetails add constraint fk_cons foreign key (idconsommation) references consommations(idconsommation);
+alter table consommationdetails add constraint fk_datas foreign key (iddata) references datas(iddata);
+alter table consommationdetails add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
+alter table consommationdetails add constraint fk_dataclients foreign key (iddataclient) references dataclients(iddataclient);
+
+insert into consommationdetails (idconsommation, idforfait, iddata, quantite, modeconsommation) values
+ (1, 9, 1, 100, 'forfait');
+ 
+insert into consommationdetails (idconsommation, idforfait, iddata, quantite, modeconsommation) values
+ (2, 9, 1, 200, 'forfait');
 
 
-create view v_dataclientsoffres as
- select dc.* ,dc.dateachat + dc.validite * interval '1 day' as expiration ,forf.idoffre
+
+create view v_dataclients as
+ select dc.* 
  from dataclients dc join forfaits forf on	
  dc.idforfait = forf.idforfait order by expiration asc;
  
-create view v_consommationoffres as
- select c.* , forf.idoffre from consommation c join forfaits forf on	
- c.idforfait = forf.idforfait;
+create view v_consommations as
+ select c.idclient, c.dateconsommation, cd.* from consommations c 
+ join consommationdetails cd on 
+ c.idconsommation = cd.idconsommation;
+ 
+create view v_consommationforfaits as
+ select * from v_consommations where modeconsommation = 'forfait';
 
 --- Requete data client actuelle
- select dco.idoffre,  o.nomOffre,dco.iddata, 
-    sum(dco.quantite - coalesce(co.quantite, 0)) as quantite, d.nomdata
-	from v_dataclientsoffres dco left join v_consommationoffres co on  dco.idoffre = co.idoffre 
-	and dco.iddata = co.iddata 
-	and dco.expiration > current_timestamp join datas d on
-	dco.iddata = d.iddata join offres o on 
-	dco.idoffre = o.idoffre where dco.idclient = 1
-	group by dco.idoffre, dco.iddata, d.nomdata, o.nomoffre
+create or replace function f_dataclients( dateconsommation timestamp)
+ returns table( idforfait int, iddata int, quantite decimal(10,2),dateachat timestamp , expiration timestamp) as
+ $func$
+ Begin
+	return Query
+	select dc.idforfait,  dc.iddata,  sum(dc.quantite) as quantite, min (dc.dateachat) as dateachat, dc.expiration
+		from v_dataclients dc where ( dc.dateachat < dateconsommation and  dc.expiration > dateconsommation) 
+		group by dc.idforfait, dc.iddata, dc.expiration;
+	End
+	$func$ LANGUAGE plpgsql;
+		
+
+select dc.idforfait,  f.nomforfait, dc.iddata, 
+    sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata
+	from v_dataclients dc left join v_consommationforfaits c on  dc.idforfait = c.idforfait
+	and dc.iddata = c.iddata and ( dc.dateachat < current_timestamp and  dc.expiration > current_timestamp) 
+	and ( dc.dateachat < c.dateconsommation and  dc.expiration > c.dateconsommation) 
+	join datas d on dc.iddata = d.iddata join forfaits f on 
+	dc.idforfait = f.idforfait where dc.idclient = 1 
+	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait;
+	
+ 
+select dc.idforfait,  f.nomforfait, dc.iddata, 
+    sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata
+	from v_dataclients dc left join v_consommationforfaits c on  dc.idforfait = c.idforfait
+	and dc.iddata = c.iddata and ( dc.dateachat < current_timestamp and  dc.expiration > current_timestamp) 
+	and ( dc.dateachat < c.dateconsommation and  dc.expiration > c.dateconsommation) 
+	join datas d on dc.iddata = d.iddata join forfaits f on 
+	dc.idforfait = f.idforfait where dc.idclient = 1 and dc.iddata = 1
+	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait;
+	
+
+
 	
 
 
@@ -229,7 +281,6 @@ create view v_forfaitdatas as
 select fd.* , d.nomdata  from
 forfaitdatas fd join datas d on fd.iddata = d.iddata;
 
-select * from forfaitdatasetdatas where idforfait = 1;
 
 
 
@@ -372,6 +423,12 @@ db.sms.insert(
 
 
 	-- validation mobile money
+select dc.idforfait,  f.nomforfait, dc.iddata,  
+ sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata	
+ from v_dataclients dc left join v_consommationforfaits c on
+ dc.idforfait = c.idforfait	and dc.iddata = c.iddata	
+  and dc.expiration >  '2021-25-03 12:00:00' join datas d on dc.iddata = d.iddata join forfaits f on 	
+ dc.idforfait = f.idforfait where dc.idclient = 1 and dc.iddata = 1	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait
 	
 	
 ------------------------------------------------------------------- Commande
