@@ -44,10 +44,11 @@ public class AdminController {
 	//@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> adminMap) {
-		String email = (String) adminMap.get("email");
-		String mdp = (String) adminMap.get("mdp");
-	    Admin admin = adminService.getByEmailAndMdp(email, mdp);
-	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
+//		String email = (String) adminMap.get("email");
+//		String mdp = (String) adminMap.get("mdp");
+//	    Admin admin = adminService.getByEmailAndMdp(email, mdp);
+//	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
+		return ResponseMaker.makeResponse(adminMap, 200, "Mpamitaka", HttpStatus.ACCEPTED);
 	}
 	  
 	@GetMapping("/bonjour")
