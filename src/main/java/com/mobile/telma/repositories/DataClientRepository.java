@@ -33,11 +33,15 @@ public class DataClientRepository {
 	@Autowired 
 	private JdbcTemplate jdbcTemplate;
 	
-//	private RowMapper<DataActuel> dataActuelRowMapper = ( (rs, numRows) -> {
-//		DataActuel da = new DataActuel();
-//		da.setIdOffre(rs.getInt(1));
-//		da.setNomOffre(rs.getString(2));
-//	} )
+	private RowMapper<DataActuel> dataActuelRowMapper = ( (rs, numRows) -> {
+		DataActuel da = new DataActuel();
+		da.setIdOffre(rs.getInt(1));
+		da.setNomOffre(rs.getString(2));
+		da.setIdData(rs.getInt(3));
+		da.setQuantite(rs.getDouble(4));
+		da.setNomOffre(rs.getString(5));
+		return da;
+	} );
 	
 	
 	public int insert(DataClient data) {
@@ -62,7 +66,11 @@ public class DataClientRepository {
 		}
 	}
 	
-//	public List<DataActuel> getDataActuel(int idClient, Date date){
-//		return jdbcTemplate.query(SQL_DATA_ACTUEL, new Object[] { idClient, date }, dataActuelRowMapper);
-//	}
+	
+	@SuppressWarnings("deprecation")
+	public List<DataActuel> getDataActuel(int idClient, Date date){
+		return jdbcTemplate.query(SQL_DATA_ACTUEL, new Object[] { idClient, date }, dataActuelRowMapper);
+	}
+	
+	
 }
