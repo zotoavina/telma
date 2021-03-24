@@ -49,7 +49,7 @@ public class AdminController {
 	    Admin admin = adminService.getByEmailAndMdp(email, mdp);
 	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
 	}
-	
+	  
 	@GetMapping("")
 	public String bonjour() {
 		return "Bonjour";
