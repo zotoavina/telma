@@ -50,7 +50,7 @@ public class AdminController {
 	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
 	}
 	  
-	@GetMapping("")
+	@GetMapping("/bonjour")
 	public String bonjour() {
 		return "Bonjour";
 	}

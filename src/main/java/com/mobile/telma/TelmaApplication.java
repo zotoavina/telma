@@ -74,7 +74,7 @@ public class TelmaApplication {
 	      return new WebMvcConfigurerAdapter() {
 	         @Override
 	         public void addCorsMappings(CorsRegistry registry) {
-	            // registry.addMapping("/api/clients/*").allowedOrigins("http://localhost:4200");
+	             registry.addMapping("/api/clients/*").allowedOrigins("*");
 	            // registry.addMapping("admin/*").allowedOrigins("http://localhost:4200").allowedHeaders("*");
 	        	 registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").
 	        	 allowedOrigins("*").allowedHeaders("*");

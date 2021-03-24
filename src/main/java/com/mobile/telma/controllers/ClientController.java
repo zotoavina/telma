@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -33,13 +34,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @CrossOrigin
+@RestController
 @RequestMapping("/api/clients")
-@Controller
 public class ClientController {
 
 	@Autowired
 	ClientService clientService;
-	
 	
 	@PostMapping("")
 	public ResponseEntity<Map<String,Object>> inscription(@RequestBody Map<String, Object> clientMap){
@@ -50,7 +50,7 @@ public class ClientController {
 		Client client = clientService.createClient(nom, prenom, numero, mdp);
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", HttpStatus.OK.value());
-		map.put("message", "Inscription reussi");
+		map.put("message", "Inscription reussi");   
 		map.put("data", generateToken(client));
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
 	}
