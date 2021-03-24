@@ -52,6 +52,11 @@ public class ClientController {
 		map.put("data", generateToken(client));
 		return new ResponseEntity<>(map, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("")
+	public String bonjour() {
+		return "Bonjour";
+	}
 		
 	
 	@PostMapping("/login")

@@ -30,6 +30,7 @@ import com.mobile.telma.Constants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+@CrossOrigin
 @RestController
 @RequestMapping("")
 public class AdminController {
@@ -40,13 +41,18 @@ public class AdminController {
 	
 	
 	//@CrossOrigin(origins = "https://telmaproject.herokuapp.com/")
-	@CrossOrigin(origins = "http://localhost:4200")
+	//@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> adminMap) {
 		String email = (String) adminMap.get("email");
 		String mdp = (String) adminMap.get("mdp");
 	    Admin admin = adminService.getByEmailAndMdp(email, mdp);
 	    return ResponseMaker.makeResponse(generateToken(admin), 200, "Login admin reussi", HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping("")
+	public String bonjour() {
+		return "Bonjour";
 	}
 	
 	@GetMapping("/admin/validations")
