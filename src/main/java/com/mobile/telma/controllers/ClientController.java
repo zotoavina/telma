@@ -70,7 +70,7 @@ public class ClientController {
 		return ResponseMaker.makeResponse(null, 200, action.getDescriptionAttente(), HttpStatus.OK);
 	}
 	
-	@PostMapping("/forfaits/{idForfait}/achats/{mode}")
+	@PostMapping("/forfaits/{idForfait}/achats")
 	public ResponseEntity<Map<String,Object>> achatForfait(HttpServletRequest request,
 			@RequestBody Map<String, Object> map, @PathVariable("idForfait") int idForfait)throws Exception{
 		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));

@@ -95,6 +95,7 @@ create table offres(
 	active int not null default 1,
 	description varchar(50) not null
 );
+create unique index index_nomoffre on offres(nomoffre);
 insert into offres(idoffre, nomoffre, code, interne, autres, international, description) values 
 (1, 'Yellow', '#224#', 0.5, 1, 1.5, 'bla bal bla');
 alter table offres ADD priorite int check(priorite > 0)
@@ -115,7 +116,7 @@ create table forfaits(
 	description varchar(50) not null
 );
 alter table forfaits add constraint fk_forfaits foreign key (idoffre) references offres(idoffre);
-
+create unique index index_nomforfaits on forfaits(nomforfait);
 
 insert into forfaits(idoffre, nomforfait, code, prix, validite, description)
 values(1, 'Be dimy', '224*5', 500, 1, 'dshgerrjh');
@@ -168,7 +169,7 @@ alter table dataclients add constraint fk_forfaits foreign key (idforfait) refer
 
 insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , validite) values( 1, 1, 1, 500, current_timestamp, 3);
 
-create table consommationData(
+create table consommation(
 	idconsommation serial primary key,
 	idclient int not null,
 	idforfait int not null,
@@ -177,9 +178,33 @@ create table consommationData(
 	modeconsommation varchar(10) not null check( modeconsommation = 'credit' or modeconsommation = 'forfait'),
 	dateconsommation timestamp not null default current_timestamp
 );
+alter table consommation add constraint fk_clients foreign key (idclient) references clients(idclient);
+alter table consommation add constraint fk_datas foreign key (iddata) references datas(iddata);
+alter table consommation add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
 
-create view v_dataclients as
- select 
+insert into consommation(idclient, idforfait, iddata, quantite, modeconsommation, dateconsommation) values 
+ (1 ,9 ,1 ,100, 'forfait', '2021-03-24 12:00:00');
+
+
+create view v_dataclientsoffres as
+ select dc.* ,dc.dateachat + dc.validite * interval '1 day' as expiration ,forf.idoffre
+ from dataclients dc join forfaits forf on	
+ dc.idforfait = forf.idforfait order by expiration asc;
+ 
+create view v_consommationoffres as
+ select c.* , forf.idoffre from consommation c join forfaits forf on	
+ c.idforfait = forf.idforfait;
+
+--- Requete data client actuelle
+ select dco.idoffre,  o.nomOffre,dco.iddata, 
+    sum(dco.quantite - coalesce(co.quantite, 0)) as quantite, d.nomdata
+	from v_dataclientsoffres dco left join v_consommationoffres co on  dco.idoffre = co.idoffre 
+	and dco.iddata = co.iddata 
+	and dco.expiration > current_timestamp join datas d on
+	dco.iddata = d.iddata join offres o on 
+	dco.idoffre = o.idoffre
+	group by dco.idoffre, dco.iddata, d.nomdata, o.nomoffre
+	
 
 
 
