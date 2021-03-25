@@ -129,7 +129,7 @@ public class ClientController {
 		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
 	}
 	
-	@PutMapping("/appels/sortants/supprimer")
+	@GetMapping("/appels/sortants/supprimer")
 	public ResponseEntity<Map<String, Object>> supprimerAppelSortant(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
 		clientService.supprimerHistoriqueSortant(idClient);

@@ -21,8 +21,9 @@ insert into operateurs values(1, 'telma', '2010-01-01 12:00:00','034');
 create table interoperateurs(
 	idoperateur int not null,
 	idoperateur int not null,
-	
-)
+	iddata int not null,
+	tarif decimal(10,2) not null,
+);
 
 
 create table admins(
