@@ -18,6 +18,13 @@ create table operateurs(
 create unique index fkpredicat on operateurs (predicat);
 insert into operateurs values(1, 'telma', '2010-01-01 12:00:00','034');
 
+create table interoperateurs(
+	idoperateur int not null,
+	idoperateur int not null,
+	
+)
+
+
 create table admins(
     idadmin serial primary key not null,
     idoperateur int not null,
@@ -248,7 +255,7 @@ select  dc.idforfait, f.nomforfait ,dc.iddata,
  sum(dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata
  from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient
  and dc.expiration >current_timestamp join forfaits f on dc.idforfait = f.idforfait
- join datas d on dc.iddata = d.iddata where dc.idclient = 1 and dc.iddata = 1 
+ join datas d on dc.iddata = d.iddata where dc.idclient = 1 
  group by dc.idforfait , f.nomforfait, dc.iddata, d.nomdata;
 
  

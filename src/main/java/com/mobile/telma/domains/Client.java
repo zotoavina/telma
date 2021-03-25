@@ -157,9 +157,9 @@ public class Client {
 		throw new EtBadRequestException("Mode de paiement invalide");
 	}
 	
+	
 	private void consommerAvecCredit(Consommation consommation) {
 		if(credit == 0) return;
-		
 		DetailCons detail = new DetailCons();
 		detail.setModeConsommation("credit");
 		consommation.addDetail(detail);
@@ -168,8 +168,8 @@ public class Client {
 			credit = 0;
 			return;
 		}
-		detail.setQuantite( consommation.dataRestantAConsommer());
 		credit = credit - consommation.dataRestantAConsommer();
+		detail.setQuantite( consommation.dataRestantAConsommer());
 	}
 	
 	public boolean consommerData(Consommation consommation) {
