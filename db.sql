@@ -200,12 +200,26 @@ alter table consommationdetails add constraint fk_cons foreign key (idconsommati
 alter table consommationdetails add constraint fk_datas foreign key (iddata) references datas(iddata);
 alter table consommationdetails add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
 alter table consommationdetails add constraint fk_dataclients foreign key (iddataclient) references dataclients(iddataclient);
-
 insert into consommationdetails (idconsommation, idforfait, iddata, quantite, modeconsommation) values
- (1, 9, 1, 100, 'forfait');
- 
+ (1, 1, 1, 100, 'forfait');
 insert into consommationdetails (idconsommation, idforfait, iddata, quantite, modeconsommation) values
  (2, 9, 1, 200, 'forfait');
+ 
+ 
+ create table consommationdetails(
+	iddetails serial primary key,
+	idconsommation int not null,
+	iddataclient int,
+	quantite decimal(10,2) not null check(quantite > 0),
+	modeconsommation varchar(10) not null check( modeconsommation = 'credit' or modeconsommation = 'forfait')
+);
+alter table consommationdetails add constraint fk_cons foreign key (idconsommation) references consommations(idconsommation);
+alter table consommationdetails add constraint fk_dataclients foreign key (iddataclient) references dataclients(iddataclient);
+
+insert into consommationdetails (idconsommation, iddataclient, quantite, modeconsommation) values
+ (1, 2, 100, 'forfait');
+insert into consommationdetails (idconsommation, iddataclient, quantite, modeconsommation) values
+ (1, 2,  200, 'forfait');
 
 
 
@@ -220,7 +234,25 @@ create view v_consommations as
  c.idconsommation = cd.idconsommation;
  
 create view v_consommationforfaits as
- select * from v_consommations where modeconsommation = 'forfait';
+ select iddataclient, sum(quantite) as quantite from v_consommations 
+ where modeconsommation = 'forfait' group by iddataclient;
+ 
+ 
+select dc.iddataclient, dc.idforfait, f.nomforfait ,dc.iddata,
+ (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata
+ from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient
+ and dc.expiration >current_timestamp join forfaits f on dc.idforfait = f.idforfait
+ join datas d on dc.iddata = d.iddata where dc.idclient = 1 and dc.iddata = 1;
+ 
+select  dc.idforfait, f.nomforfait ,dc.iddata,
+ sum(dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata
+ from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient
+ and dc.expiration >current_timestamp join forfaits f on dc.idforfait = f.idforfait
+ join datas d on dc.iddata = d.iddata where dc.idclient = 1 and dc.iddata = 1 
+ group by dc.idforfait , f.nomforfait, dc.iddata, d.nomdata;
+
+ 
+
 
 --- Requete data client actuelle
 create or replace function f_dataclients( dateconsommation timestamp)
@@ -233,6 +265,8 @@ create or replace function f_dataclients( dateconsommation timestamp)
 		group by dc.idforfait, dc.iddata, dc.expiration;
 	End
 	$func$ LANGUAGE plpgsql;
+	
+
 		
 
 select dc.idforfait,  f.nomforfait, dc.iddata, 
@@ -254,12 +288,6 @@ select dc.idforfait,  f.nomforfait, dc.iddata,
 	dc.idforfait = f.idforfait where dc.idclient = 1 and dc.iddata = 1
 	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait;
 	
-
-
-	
-
-
-
 
 create table credits(
     idcredits serial primary key not null,
@@ -303,22 +331,6 @@ localhost:8080/admin/datas
 
 --------------------------------------------------------------- MONGO DB
 use telma
-
-db.offres.insert(
-	{
-		nomOffre : "Mora",
-		dateCreation : Date(),
-		code : "224*",
-		active : true,
-		description : "bla bla bla",
-		tarifs : {
-			telma : 0.6,
-			autres : 1,
-			international : 1.5
-		},
-		forfaits : []
-	}
-);
 
 db.appels.insert(
 	{

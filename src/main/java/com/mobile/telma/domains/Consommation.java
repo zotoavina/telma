@@ -53,7 +53,6 @@ public class Consommation {
 	
 	public void addDetail(DetailCons detail) {
 		detail.setIdConsommation(idConsommation);
-		detail.setIdData(idData);
 		details.add(detail);
 	}
 	

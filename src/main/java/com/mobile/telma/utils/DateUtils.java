@@ -12,6 +12,7 @@ public class DateUtils {
 	
 	public static java.util.Date parse(String date)throws EtBadRequestException{
 		try {
+			System.out.println("sgesghsa:  " + date);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			return sdf.parse(date);
 		}catch(Exception e) {

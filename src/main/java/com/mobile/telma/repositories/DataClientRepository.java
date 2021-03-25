@@ -21,34 +21,40 @@ public class DataClientRepository {
 	private static final String INSERT_DATA_CLIENT = "insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , validite, expiration) "
 			+ "values( ?, ?, ?, ?, ?, ?, ?)"; 
 	
-	private static final String SQL_DATAS_ACTUEL = " select dc.idforfait,  f.nomforfait, dc.iddata, "
-			+ "    sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata"
-			+ "	from v_dataclients dc left join v_consommationforfaits c on  dc.idforfait = c.idforfait"
-			+ "	and dc.iddata = c.iddata "
-			+ "	and dc.expiration > ? join datas d on"
-			+ "	dc.iddata = d.iddata join forfaits f on "
-			+ "	dc.idforfait = f.idforfait where dc.idclient = ? "
-			+ "	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait";
+	private static final String SQL_DATAS_ACTUEL = "select  dc.idforfait, f.nomforfait ,dc.iddata,"
+			+ " sum(dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata"
+			+ " from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient"
+			+ " and dc.expiration >? join forfaits f on dc.idforfait = f.idforfait"
+			+ " join datas d on dc.iddata = d.iddata where dc.idclient = ?"
+			+ " group by dc.idforfait , f.nomforfait, dc.iddata, d.nomdata";
 	
-	private static final String SQL_DATA_ACTUEL= "select dc.idforfait,  f.nomforfait, dc.iddata, "
-			+ " sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata"
-			+ "	from v_dataclients dc left join v_consommationforfaits c on  dc.idforfait = c.idforfait"
-			+ "	and dc.iddata = c.iddata "
-			+ "	and dc.expiration > ? join datas d on"
-			+ "	dc.iddata = d.iddata join forfaits f on "
-			+ "	dc.idforfait = f.idforfait where dc.idclient = ? and dc.iddata = ?"
-			+ "	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait";
+	private static final String SQL_DATA_ACTUEL= "select dc.iddataclient, dc.idforfait, f.nomforfait ,dc.iddata,"
+			+ " (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata"
+			+ " from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient"
+			+ " and dc.expiration >? join forfaits f on dc.idforfait = f.idforfait"
+			+ " join datas d on dc.iddata = d.iddata where dc.idclient = ? and dc.iddata = ?";
 	
 	@Autowired 
 	private JdbcTemplate jdbcTemplate;
 	
+	private RowMapper<DataActuel> datasActuelRowMapper = ( (rs, numRows) -> {
+		DataActuel da = new DataActuel();
+		da.setIdForfait(rs.getInt("idforfait"));
+		da.setNomForfait(rs.getString("nomforfait"));
+		da.setIdData(rs.getInt("iddata"));
+		da.setQuantite(rs.getDouble("quantite"));
+		da.setNomData(rs.getString("nomdata"));
+		return da;
+	} );
+	
 	private RowMapper<DataActuel> dataActuelRowMapper = ( (rs, numRows) -> {
 		DataActuel da = new DataActuel();
-		da.setIdForfait(rs.getInt(1));
-		da.setNomForfait(rs.getString(2));
-		da.setIdData(rs.getInt(3));
-		da.setQuantite(rs.getDouble(4));
-		da.setNomData(rs.getString(5));
+		da.setIdDataClient(rs.getInt("iddataclient"));
+		da.setIdForfait(rs.getInt("idforfait"));
+		da.setNomForfait(rs.getString("nomforfait"));
+		da.setIdData(rs.getInt("iddata"));
+		da.setQuantite(rs.getDouble("quantite"));
+		da.setNomData(rs.getString("nomdata"));
 		return da;
 	} );
 	
@@ -79,7 +85,7 @@ public class DataClientRepository {
 	
 	@SuppressWarnings("deprecation")
 	public List<DataActuel> getDatasActuel(int idClient, Date date){
-		return jdbcTemplate.query(SQL_DATAS_ACTUEL, new Object[] {  date , idClient}, dataActuelRowMapper);
+		return jdbcTemplate.query(SQL_DATAS_ACTUEL, new Object[] {  date , idClient}, datasActuelRowMapper);
 	}
 	
 	@SuppressWarnings("deprecation")

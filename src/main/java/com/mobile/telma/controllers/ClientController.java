@@ -140,7 +140,7 @@ public class ClientController {
 	public ResponseEntity<Map<String, Object>> supprimerAppelEntrant(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
 		clientService.supprimerHistoriqueEntrant(idClient);
-		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
+		return ResponseMaker.makeResponse(null, 200, "Suppression des appels entrants effectuees",  HttpStatus.OK);
 	}
 	
 	

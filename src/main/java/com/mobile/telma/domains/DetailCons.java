@@ -6,9 +6,7 @@ public class DetailCons {
 	private int idDetails;
 	private int idConsommation;
 	private int idDataClient;
-	private int idForfait;
-	private int idData;
-	private double quantite ;
+	private double quantite = 0;
 	private String modeConsommation;
 	
 	static final String FORFAIT = "forfait";
@@ -34,18 +32,6 @@ public class DetailCons {
 	public void setIdConsommation(int idConsommation) {
 		this.idConsommation = idConsommation;
 	}
-	public int getIdForfait() {
-		return idForfait;
-	}
-	public void setIdForfait(int idForfait) {
-		this.idForfait = idForfait;
-	}
-	public int getIdData() {
-		return idData;
-	}
-	public void setIdData(int idData) {
-		this.idData = idData;
-	}
 	public double getQuantite() {
 		return quantite;
 	}
@@ -59,4 +45,8 @@ public class DetailCons {
 		this.modeConsommation = modeConsommation;
 	}
 	public DetailCons() {}
+	
+	public boolean parCredit() {
+		return idDataClient == 0;
+	}
 }

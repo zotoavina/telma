@@ -41,9 +41,9 @@ public class TelmaApplication {
 //		cons.setQuantite(160);
 //		client.consommerData(cons);
 //		for(int i = 0; i< cons.getDetails().size(); i++) {
-//			System.out.println(cons.getDetails().get(i).getQuantite());
+//			System.out.println(cons.getDetails().get(i).getQuantite() + cons.getDetails().get(i).getModeConsommation());
 //		}
-//		System.out.println(cons.dataRestantAConsommer());
+//		System.out.println("dhs" + cons.dataRestantAConsommer());
 //		System.out.println(client.getCredit());
 //		int a = 0; 
 		

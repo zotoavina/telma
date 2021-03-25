@@ -101,6 +101,7 @@ public class ClientService {
 		Client client = clientRepository.getClientById(idClient);
 		setDataActuel(client, idData, da);
 		Consommation consommation = new Consommation(idClient, idData, quantite, da);
+		client.consommerData(consommation);
 		if( client.consommerData(consommation) ) clientRepository.updateSoldeEtCredit(client);
 		consommationRepository.insertionConsommation(consommation);
 		return consommation;

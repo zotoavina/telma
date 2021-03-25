@@ -1,6 +1,7 @@
 package com.mobile.telma.domains;
 
 public class DataActuel {
+	private int idDataClient;
 	private int idForfait;
 	private String nomForfait;
 	private int idData;
@@ -8,6 +9,13 @@ public class DataActuel {
 	private String nomData;
 	
 	
+	
+	public int getIdDataClient() {
+		return idDataClient;
+	}
+	public void setIdDataClient(int idDataClient) {
+		this.idDataClient = idDataClient;
+	}
 	public int getIdForfait() {
 		return idForfait;
 	}
@@ -48,7 +56,7 @@ public class DataActuel {
 		DetailCons detail = new DetailCons();
 		System.out.println(quantite + " Vs " + consommation.dataRestantAConsommer() );
 		detail.setModeConsommation( DetailCons.FORFAIT);
-		detail.setIdForfait(idForfait);
+		detail.setIdDataClient(idDataClient);
 		if( quantite >= consommation.dataRestantAConsommer() ) {
 			detail.setQuantite( consommation.dataRestantAConsommer() );
 			consommation.addDetail(detail);
