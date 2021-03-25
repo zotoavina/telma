@@ -54,8 +54,7 @@ public class AdminController {
 	@GetMapping("/admin/validations")
 	public ResponseEntity<Map<String , Object>> listeActions(HttpServletRequest request) throws Exception{
 		System.out.println("validate");
-		int idAdmin = Integer.parseInt( GestionToken.gererTokenAdmin(request) );
-		System.out.println("IdAdmin : " + idAdmin);
+		Integer.parseInt( GestionToken.gererTokenAdmin(request) );
 		return ResponseMaker.makeResponse(adminService.getActionNonValide(), 200, 
 				"selection des actions non valide reussi", HttpStatus.OK);
 	}
@@ -121,21 +120,27 @@ public class AdminController {
 	}
 	
 	
-//	
-//	@PostMapping("/admin/offres")
-//	public ResponseEntity<Map<String, Object>> ajoutOffre(HttpServletRequest request, @RequestBody Offre offre)throws Exception{
-//		GestionToken.gererTokenAdmin(request);
-//		adminService.insertOffre(offre);
-//		return ResponseMaker.makeResponse(null, 200, "offre desormais valable", HttpStatus.CREATED);
-//	}
-//	
-//	@PutMapping("/admin/offres/{idOffre}")
-//	public ResponseEntity<Map<String, Object>> updateOffreAddForfait(HttpServletRequest request,
-//			@PathVariable("idOffre") String idOffre, @RequestBody Forfait forfait)throws Exception{
-//		GestionToken.gererTokenAdmin(request);
-//		return ResponseMaker.makeResponse(adminService.addForfaitToOffre(idOffre, forfait), 200, "forfait desormais valable", HttpStatus.CREATED);
-//	}
-//	
+	//-------------------------------- Stats
+	@PostMapping("/admin/offres/stats")
+	public ResponseEntity<Map<String, Object>> getStatOffres(HttpServletRequest request,
+			@RequestBody Map<String, Object> map)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		int annee = (Integer) map.get("annee");
+		int mois = (Integer) map.get("mois");
+		return ResponseMaker.makeResponse(adminService.getStatOffre(annee, mois), 200,
+				"Selection des statistiques des offres reussi", HttpStatus.OK);
+	}
+	
+	@PostMapping("/admin/forfaits/stats")
+	public ResponseEntity<Map<String, Object>> getStatForfaits(HttpServletRequest request,
+			@RequestBody Map<String, Object> map)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		int idOffre = (Integer) map.get("idOffre");
+		int annee = (Integer) map.get("annee");
+		int mois = (Integer) map.get("mois");
+		return ResponseMaker.makeResponse(adminService.getStatForfait(idOffre, annee, mois), 200,
+				"Selection des statistiques des Forfaits reussi", HttpStatus.OK);
+	}
 	
 	
 	private String generateToken(Admin admin){

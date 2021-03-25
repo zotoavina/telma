@@ -5,23 +5,27 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 
 
+/**
+ * @author win
+ *
+ */
 public class Communication {
 	@Id
 	String id;
-	
-	
-	private int idClient;
+
+	private String envoyeur;
 	private String receveur;
 	private int activeEnvoyeur = 1;
 	private int activeReceveur = 1;
 	private Date date = new Date();
 	
 	
-	public int getIdClient() {
-		return idClient;
+	
+	public String getEnvoyeur() {
+		return envoyeur;
 	}
-	public void setIdClient(int idClient) {
-		this.idClient = idClient;
+	public void setEnvoyeur(String envoyeur) {
+		this.envoyeur = envoyeur;
 	}
 	public String getReceveur() {
 		return receveur;
@@ -59,16 +63,18 @@ public String getId() {
 	}
 	
 	
-	public Communication(String id, int idClient, String receveur, int activeEnvoyeur, int activeReceveur, Date date) {
-			super();
-			this.id = id;
-			this.idClient = idClient;
-			this.receveur = receveur;
-			this.activeEnvoyeur = activeEnvoyeur;
-			this.activeReceveur = activeReceveur;
-			this.date = date;
-	}
+	
 
+		public Communication(String id, String envoyeur, String receveur, int activeEnvoyeur, int activeReceveur,
+			Date date) {
+		super();
+		this.id = id;
+		this.envoyeur = envoyeur;
+		this.receveur = receveur;
+		this.activeEnvoyeur = activeEnvoyeur;
+		this.activeReceveur = activeReceveur;
+		this.date = date;
+	}
 		public Communication() {}
 		
 		

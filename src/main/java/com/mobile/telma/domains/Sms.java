@@ -19,8 +19,8 @@ public class Sms extends Communication{
 		super();
 	}
 
-	public Sms(String id, int idClient, String receveur, int activeEnvoyeur, int activeReceveur, Date date,String message) {
-		super(id, idClient, receveur, activeEnvoyeur, activeReceveur, date);
+	public Sms(String id, String envoyeur, String receveur, int activeEnvoyeur, int activeReceveur, Date date,String message) {
+		super(id, envoyeur, receveur, activeEnvoyeur, activeReceveur, date);
 		// TODO Auto-generated constructor stub
 		setMessage(message);
 	}

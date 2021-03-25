@@ -6,8 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "appels")
 public class Appel extends Communication{
-	
-	
 	private double duree;
 	
 	
@@ -25,8 +23,8 @@ public class Appel extends Communication{
 		super();
 	}
 
-	public Appel(String id, int idClient, String receveur, int activeEnvoyeur, int activeReceveur, Date date, double duree) {
-		super(id, idClient, receveur, activeEnvoyeur, activeReceveur, date);
+	public Appel(String id, String envoyeur, String receveur, int activeEnvoyeur, int activeReceveur, Date date, double duree) {
+		super(id, envoyeur, receveur, activeEnvoyeur, activeReceveur, date);
 		setDuree(duree);
 		// TODO Auto-generated constructor stub
 	}

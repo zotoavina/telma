@@ -471,7 +471,7 @@ GROUP BY frt.idoffre,st.anne,st.mois;
 
 -- STATISTIQUE NBR ACHAT DE FORFAIT
 SELECT frt.idoffre,frt.idforfait,frt.nomforfait,coalesce(frt.prix * st.nbrachat,0) montant, 
-coalesce(st.nbrachat,0) nbrachat,coalesce(st.anne,2021) anne, coalesce(st.mois,2) mois
+coalesce(st.nbrachat,0) nbrachat,coalesce(st.anne,2021) annee, coalesce(st.mois,2) mois
 FROM forfaits frt left JOIN v_statforfaits st
 ON frt.idforfait = st.idforfait AND anne = 2021 and mois= 2 WHERE frt.idoffre = 12;
 
@@ -492,7 +492,7 @@ $func$  LANGUAGE plpgsql;
 
 -- STATISTIQUE NBR ACHAT OFFRES
 SELECT frt.idoffre,frt.nomoffre,coalesce(st.montant,0) montant, 
-coalesce(st.nbrachat,0) nbrachat,coalesce(st.anne,2021) anne, coalesce(st.mois,1) mois
+coalesce(st.nbrachat,0) nbrachat,coalesce(st.anne,2021) anneE, coalesce(st.mois,1) mois
 FROM offres frt left JOIN v_statoffres st
 ON frt.idoffre = st.idoffre AND st.anne = 2021 and st.mois= 1
 

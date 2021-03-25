@@ -109,17 +109,20 @@ public class ClientService {
 	
 	//-------------------------------------------  Appel et Sms
 	
-	public void addAppel(Appel appel) {
+	public void addAppel(Appel appel, int idClient) {
+		Client client= clientRepository.getClientById(idClient);
+		appel.setEnvoyeur(client.getNumero());
 		communicationRepository.insertAppel(appel);
 	}
 	
 	public List<Appel> listeAppels(int idClient) throws EtBadRequestException{
 		Client client = clientRepository.getClientById(idClient);
-		return communicationRepository.getAppelClient(client.getIdClient(), client.getNumero());
+		return communicationRepository.getAppelClient(client.getNumero());
 	}
 	
 	public List<Appel> listeAppelSortant(int idClient)throws EtBadRequestException{
-		return communicationRepository.getAppelClientSortant(idClient);
+		Client client = clientRepository.getClientById(idClient);
+		return communicationRepository.getAppelClientSortant(client.getNumero());
 	}
 	
 	public List<Appel> listeAppelEntrant(int idClient)throws EtBadRequestException{
@@ -128,7 +131,8 @@ public class ClientService {
 	}
 	
 	public void supprimerHistoriqueSortant(int idClient)throws EtBadRequestException{
-		communicationRepository.SupprimerAppelSortant(idClient);
+		Client client = clientRepository.getClientById(idClient);
+		communicationRepository.SupprimerAppelSortant(client.getNumero());
 	}
 	
 	public void supprimerHistoriqueEntrant(int idClient)throws EtBadRequestException {
@@ -138,16 +142,18 @@ public class ClientService {
 	
 	public void supprimerHistoriqueAppel(int idClient)throws EtBadRequestException {
 		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerAppel(client.getIdClient(), client.getNumero());
+		communicationRepository.SupprimerAppel(client.getNumero());
 	}
 	
-	public void addSms(Sms sms) {
+	public void addSms(Sms sms, int idClient) {
+		Client client = clientRepository.getClientById(idClient);
+		sms.setEnvoyeur( client.getNumero() );
 		communicationRepository.insertMessage(sms);
 	}
 	
 	public List<Sms> listeSms(int idClient){
 		Client client = clientRepository.getClientById(idClient);
-		return communicationRepository.getSmsClient(client.getIdClient(), client.getNumero());
+		return communicationRepository.getSmsClient(client.getNumero());
 	}
 	
 	public void supprimerSmsEntrant(int idClient) {
@@ -157,12 +163,12 @@ public class ClientService {
 	
 	public void supprimerSmsSortant(int idClient) {
 		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerSmsSortant(client.getIdClient());
+		communicationRepository.SupprimerSmsSortant(client.getNumero());
 	}
 	
 	public void supprimerSms(int idClient) {
 		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerSms(client.getIdClient(), client.getNumero());
+		communicationRepository.SupprimerSms(client.getNumero());
 	}
 	
 	

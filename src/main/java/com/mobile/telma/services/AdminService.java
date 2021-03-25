@@ -11,6 +11,8 @@ import com.mobile.telma.domains.Client;
 import com.mobile.telma.domains.Data;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Offre;
+import com.mobile.telma.domains.stats.StatForfait;
+import com.mobile.telma.domains.stats.StatOffre;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.ActionClient;
 import com.mobile.telma.exceptions.EtAuthException;
@@ -21,6 +23,7 @@ import com.mobile.telma.repositories.ClientRepository;
 import com.mobile.telma.repositories.DataRepository;
 import com.mobile.telma.repositories.ForfaitRepository;
 import com.mobile.telma.repositories.OffreRepository;
+import com.mobile.telma.repositories.StatRepository;
 
 @Transactional
 @Service
@@ -47,13 +50,13 @@ public class AdminService {
 	@Autowired
 	DataRepository dataRepository;
 	
+	@Autowired
+	StatRepository statRepository;
+	
 	public Admin getByEmailAndMdp(String email, String mdp) throws EtAuthException{
 		return adminRepository.findAdminByEmailAndMdp(email, mdp);
 	}
 	
-	//public Admin validationAction(int idClient, int idAction)throws EtBadRequestException{
-		
-	//}
 	
 	public List<ActionClient> getActionNonValide()throws EtAuthException{
 		return actionClientRepository.findAllNonValide();
@@ -102,14 +105,15 @@ public class AdminService {
 		return dataRepository.findDatas();
 	}
 	
-//	
-//	public void insertOffre(Offre offre) {
-//		offreRepository.insert(offre);
-//	}
-//	
-//	public Offre addForfaitToOffre(String idOffre, Forfait forfait) {
-//		return offreRepository.updateAddForfaits(idOffre, forfait);
-//	}
+
+	//--------------------- Stat
+	public List<StatOffre> getStatOffre(int annee, int mois){
+		return statRepository.getStatOffre(annee, mois);
+	}
+	
+	public List<StatForfait> getStatForfait(int idOffre, int annee, int mois){
+		return statRepository.getStatForfait(idOffre, annee, mois);
+	}
 	
 	
 }

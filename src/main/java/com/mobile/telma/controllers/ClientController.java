@@ -110,8 +110,7 @@ public class ClientController {
 	public ResponseEntity<Map<String, Object>> appeler(HttpServletRequest request,
 			@RequestBody Appel appel)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		appel.setIdClient(idClient);
-		clientService.addAppel(appel);
+		clientService.addAppel(appel, idClient);
 		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
 	}	
 	
@@ -164,8 +163,7 @@ public class ClientController {
 	public ResponseEntity<Map<String, Object>> envoyerSms(HttpServletRequest request,
 			@RequestBody Sms sms)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		sms.setIdClient(idClient);
-		clientService.addSms(sms);
+		clientService.addSms(sms, idClient);
 		return ResponseMaker.makeResponse(null, 200, "Sms envoye",  HttpStatus.OK);
 	}	
 	

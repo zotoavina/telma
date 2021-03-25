@@ -28,9 +28,9 @@ public class CommunicationRepository {
 	}
 	
 	
-	public List<Appel> getAppelClient(int idClient, String numero){
+	public List<Appel> getAppelClient(String numero){
 		Query query = new Query();
-		Criteria criteria = new Criteria().andOperator( Criteria.where("idClient").is(idClient), 
+		Criteria criteria = new Criteria().andOperator( Criteria.where("envoyeur").is(numero), 
 				Criteria.where("activeEnvoyeur").is(ACTIVE) );
 		Criteria criteria1 = new Criteria().andOperator(  Criteria.where("receveur").is(numero),
 				Criteria.where("activeReceveur").is(ACTIVE)	);
@@ -39,9 +39,9 @@ public class CommunicationRepository {
 		return mongoTemplate.find(query, Appel.class);
 	}
 	
-	public List<Appel> getAppelClientSortant(int idClient) {
+	public List<Appel> getAppelClientSortant(String numero) {
 		Query query = new Query();
-		Criteria criteria1 = Criteria.where("idClient").is(idClient);
+		Criteria criteria1 = Criteria.where("envoyeur").is(numero);
 		Criteria criteria2 = Criteria.where("activeEnvoyeur").is( ACTIVE );
 		query.addCriteria(criteria1);
 		query.addCriteria(criteria2);
@@ -60,9 +60,9 @@ public class CommunicationRepository {
 		return mongoTemplate.find(query, Appel.class);
 	}
 	
-	public void SupprimerAppelSortant(int idClient) {
+	public void SupprimerAppelSortant(String numero) {
 		Query query = new Query();
-		Criteria criteria = Criteria.where("idClient").is(idClient);
+		Criteria criteria = Criteria.where("envoyeur").is(numero);
 		Criteria criteria2 = Criteria.where("activeEnvoyeur").is( ACTIVE );
 		query.addCriteria(criteria);
 		query.addCriteria(criteria2);
@@ -82,9 +82,9 @@ public class CommunicationRepository {
 		 mongoTemplate.updateMulti(query, update,  Appel.class);
 	}
 	
-	public void SupprimerAppel(int idClient, String numero) {
+	public void SupprimerAppel(String numero) {
 		SupprimerAppelEntrant(numero);
-		SupprimerAppelSortant(idClient);
+		SupprimerAppelSortant(numero);
 	}
 	
 	
@@ -94,9 +94,9 @@ public class CommunicationRepository {
 		mongoTemplate.save(sms);
 	}
 	
-	public List<Sms> getSmsClient(int idClient, String numero){
+	public List<Sms> getSmsClient(String numero){
 		Query query = new Query();
-		Criteria criteria = new Criteria().andOperator( Criteria.where("idClient").is(idClient), 
+		Criteria criteria = new Criteria().andOperator( Criteria.where("envoyeur").is(numero), 
 				Criteria.where("activeEnvoyeur").is(ACTIVE) );
 		Criteria criteria1 = new Criteria().andOperator(  Criteria.where("receveur").is(numero),
 				Criteria.where("activeReceveur").is(ACTIVE)	);
@@ -105,9 +105,9 @@ public class CommunicationRepository {
 		return mongoTemplate.find(query, Sms.class);
 	}
 	
-	public void SupprimerSmsSortant(int idClient) {
+	public void SupprimerSmsSortant(String numero) {
 		Query query = new Query();
-		Criteria criteria = Criteria.where("idClient").is(idClient);
+		Criteria criteria = Criteria.where("envoyeur").is(numero);
 		Criteria criteria2 = Criteria.where("activeEnvoyeur").is( ACTIVE );
 		query.addCriteria(criteria);
 		query.addCriteria(criteria2);
@@ -127,9 +127,9 @@ public class CommunicationRepository {
 		 mongoTemplate.updateMulti(query, update,  Sms.class);
 	}
 	
-	public void SupprimerSms(int idClient, String numero) {
+	public void SupprimerSms(String numero) {
 		SupprimerSmsEntrant(numero);
-		SupprimerSmsSortant(idClient);
+		SupprimerSmsSortant(numero);
 	}
 	
 	
