@@ -135,7 +135,7 @@ public class AdminController {
 	public ResponseEntity<Map<String, Object>> getStatForfaits(HttpServletRequest request,
 			@RequestBody Map<String, Object> map)throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		int idOffre = Integer.parseInt( (String) map.get("idOffre") );  
+		int idOffre = Integer.parseInt( (String) map.get("idoffre") );  
 		int annee = Integer.parseInt( (String)map.get("annee") );
 		int mois = Integer.parseInt( (String) map.get("mois") );
 		return ResponseMaker.makeResponse(adminService.getStatForfait(idOffre, annee, mois), 200,
