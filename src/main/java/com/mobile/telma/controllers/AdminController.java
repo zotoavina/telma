@@ -125,8 +125,8 @@ public class AdminController {
 	public ResponseEntity<Map<String, Object>> getStatOffres(HttpServletRequest request,
 			@RequestBody Map<String, Object> map)throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		int annee = (Integer) map.get("annee");
-		int mois = (Integer) map.get("mois");
+		int annee = Integer.parseInt( (String)map.get("annee") );
+		int mois = Integer.parseInt( (String) map.get("mois") );
 		return ResponseMaker.makeResponse(adminService.getStatOffre(annee, mois), 200,
 				"Selection des statistiques des offres reussi", HttpStatus.OK);
 	}
@@ -135,9 +135,9 @@ public class AdminController {
 	public ResponseEntity<Map<String, Object>> getStatForfaits(HttpServletRequest request,
 			@RequestBody Map<String, Object> map)throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		int idOffre = (Integer) map.get("idOffre");
-		int annee = (Integer) map.get("annee");
-		int mois = (Integer) map.get("mois");
+		int idOffre = Integer.parseInt( (String) map.get("idOffre") );
+		int annee = Integer.parseInt( (String)map.get("annee") );
+		int mois = Integer.parseInt( (String) map.get("mois") );
 		return ResponseMaker.makeResponse(adminService.getStatForfait(idOffre, annee, mois), 200,
 				"Selection des statistiques des Forfaits reussi", HttpStatus.OK);
 	}

@@ -281,8 +281,24 @@ create view v_forfaitdatas as
 select fd.* , d.nomdata  from
 forfaitdatas fd join datas d on fd.iddata = d.iddata;
 
+ 
+	-- validation mobile money
+select dc.idforfait,  f.nomforfait, dc.iddata,  
+ sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata	
+ from v_dataclients dc left join v_consommationforfaits c on
+ dc.idforfait = c.idforfait	and dc.iddata = c.iddata	
+  and dc.expiration >  '2021-25-03 12:00:00' join datas d on dc.iddata = d.iddata join forfaits f on 	
+ dc.idforfait = f.idforfait where dc.idclient = 1 and dc.iddata = 1	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait
+	
+	
+------------------------------------------------------------------- Commande
+drop table forfaitdatas cascade;
+drop table forfaitdatas cascade;
+drop view v_consommationforfaits;
+drop table forfaitClients;
+drop table datas;
 
-
+localhost:8080/admin/datas
 
 
 --------------------------------------------------------------- MONGO DB
@@ -364,81 +380,6 @@ db.sms.insert(
             ]
         }
 	
- 
- --------------------------------------
- 
- ----------- gestion offres  atao mongodb --------------- gestion offres ---------------
-
--- create table categories(
---     idcategolrie serial primary key not null,
---     nomcategorie varchar(30) not null,
---     description varchar() 
--- );
-
--- create table unites(
---     idunite serial primary key not null,
---     unite varchar(20)
--- );
-
--- -- ex offres : yellow
-
--- create table offres(
---     idoffre serial primary key not null,
---     nomoffre varchar(20),
---     description varchar(300)
--- );
-
--- -- ex forfait : yellow faceboobaka
--- create table forfaits(
---     idforfait serial primary key not null,
---     idoffre int not null,
---     nomforfait varchar(20) not null,
---     prix decimal not null,
---     validite int not null,
---     code varchar(20),
---     description varchar(300)
--- );
--- alter table forfaits add constraint fk_offres foreign key (idoffres) references offres(idoffres);
-
-
--- -- ex dataforfait appel /s    internet /mo
-
--- create table dataforfaits(
---     iddataforfait serial primary key not null,
---     nomdataforfait varchar(20),
---     idunite int not null,
--- );
--- alter table dataforfaits add constraint fk_unites foreign key (idunite) references unites(idunite);
-
--- create table detailforfaits(
---     iddetailforfait serial primary key not null,
---     idforfait int not null,
---     iddataforfait int not null,
---     quantite decimal not null,
---     priorite int not null default 0,
--- );
-
--- alter table detailforfait add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
--- alter table detailforfait add constraint fk_dataforfaits foreign key (iddataforfait) references dataforfaits(iddataforfait);
-
-
-	-- validation mobile money
-select dc.idforfait,  f.nomforfait, dc.iddata,  
- sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata	
- from v_dataclients dc left join v_consommationforfaits c on
- dc.idforfait = c.idforfait	and dc.iddata = c.iddata	
-  and dc.expiration >  '2021-25-03 12:00:00' join datas d on dc.iddata = d.iddata join forfaits f on 	
- dc.idforfait = f.idforfait where dc.idclient = 1 and dc.iddata = 1	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait
-	
-	
-------------------------------------------------------------------- Commande
-drop table forfaitdatas cascade;
-drop table forfaitdatas cascade;
-drop view v_consommationforfaits;
-drop table forfaitClients;
-drop table datas;
-
-localhost:8080/admin/datas
 
 
 
