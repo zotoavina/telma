@@ -56,8 +56,9 @@ public class ClientController {
 	}
 	
 	@GetMapping("")
-	public String bonjour() {
-		return "Bonjour";
+	public ResponseEntity<Map<String, Object>> getClientById(HttpServletRequest request)throws Exception {
+		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		return ResponseMaker.makeResponse(clientService.getClientById(idClient), 200, "Selection du client reussi",  HttpStatus.OK);
 	}
 		
 	
