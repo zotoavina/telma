@@ -96,13 +96,13 @@ public class ClientService {
 		dataClientRepository.insertDataClient(datas); 
 	}
 	
-	public Consommation consommerData(int idClient, int idData, double quantite , Date date) {
-		java.sql.Date da = DateUtils.utilToSql(date);
-		Client client = clientRepository.getClientById(idClient);
-		setDataActuel(client, idData, da);
-		Consommation consommation = new Consommation(idClient, idData, quantite, da);
-		if( client.consommerData(consommation) ) clientRepository.updateSoldeEtCredit(client);
-		consommationRepository.insertionConsommation(consommation);
+	public Consommation consommerData(Consommation consommation, String numero) {
+		//java.sql.Date da = DateUtils.utilToSql(date);
+		Client client = clientRepository.getClientById(consommation.getIdClient());
+		setDataActuel(client, consommation.getIdData(), consommation.getDateConsommation());
+		client.consommerData(consommation, numero);
+//		if( client.consommerData(consommation, numero) ) clientRepository.updateSoldeEtCredit(client);
+//		consommationRepository.insertionConsommation(consommation);
 		return consommation;
 	}
 

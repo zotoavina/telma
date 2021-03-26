@@ -26,6 +26,8 @@ public class OffreRepository {
 	private static final String SQL_INSERT = "insert into offres( nomoffre, code, interne, autres, international, description, priorite) values "
 			+ "(?,  ?, ?, ?, ?, ?, ?)";
 	
+	private static final String SQL_DELETE_OFFRE = "update offres set active = ? where idoffre = ?";
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
@@ -99,6 +101,14 @@ public class OffreRepository {
 	
 	public List<Forfait> getForfaits(int idOffre){
 		return forfaitRepository.getOffreForfaits(idOffre);
+	}
+	
+	public void deleteOffre(Offre offre) {
+		jdbcTemplate.update(SQL_UPDATE, new Object[] { Offre.INACTIVE, offre.getIdOffre() } );
+		List<Forfait> forfaits = getForfaits(offre.getIdOffre());
+		for(int i = 0; i < forfaits.size() ; i++) {
+			forfaitRepository.deleteForfait( forfaits.get(i) );
+		}
 	}
 	
 	

@@ -16,6 +16,9 @@ public class Offre {
 	private String description;
 	private int priorite;
 	
+	public final static int ACTIVE = 1;
+	public final static int INACTIVE = 0;
+	
 	
 	
 	
@@ -165,6 +168,7 @@ public class Offre {
 	public String toString() {
 		return idOffre + " " + nomOffre + " " + code + " " + interne + " " + autres + " " + international + " " + active; 
 	}
+	
 	
 	
 	

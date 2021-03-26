@@ -18,12 +18,28 @@ create table operateurs(
 create unique index fkpredicat on operateurs (predicat);
 insert into operateurs values(1, 'telma', '2010-01-01 12:00:00','034');
 
-create table interoperateurs(
-	idoperateur int not null,
-	idoperateur int not null,
-	iddata int not null,
-	tarif decimal(10,2) not null,
+create table datas(
+	iddata serial primary key not null,
+	nomdata varchar(30) not null,
+	active int not null check (active = 1 or active = 0),
+	datecreation timestamp not null default current_timestamp
 );
+insert into datas values( 1, 'Appel', 1, current_timestamp);
+insert into datas values( 2, 'Sms', 1, current_timestamp);
+insert into datas values( 3, 'Facebook', 1, current_timestamp);
+insert into datas values( 4, 'Instagram', 1, current_timestamp);
+insert into datas values( 5, 'Internet', 1, current_timestamp);
+
+
+create table tarifCredit(
+	idtarif serial primary key,
+	iddata int not null,
+	interne decimal(10, 2) not null check( interne > 0),
+	autres decimal(10, 2) check(autres > 0) ,
+	international decimal(10,2) check( international > 0 )
+);
+insert into tarifCredit values(1, 1, 0.3, 1 , 1.5);
+insert into tarifCredit values(2,2 , 50, 150 , 300);
 
 
 create table admins(
@@ -82,15 +98,7 @@ insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 3000, 0)
 insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 4000, 0); 
 
 
-create table appels(
-	idappel serial primary key not null,
-	idclient int not null,
-	numero varchar(15) not null,
-	duree int not null,
-	dateappel timestamp not null default current_timestamp
-);
-alter table appels add constraint fk_clients foreign key (idclient) references clients(idclient);
-insert into appels(idclient, numero, duree) values(1, 0340035600, 60);
+
 
 create table offres(
 	idoffre serial primary key not null,
@@ -138,7 +146,7 @@ create table datas(
 
 insert into datas values( 1, 'Appel', 1, current_timestamp);
 insert into datas values( 2, 'Sms', 1, current_timestamp);
-insert into datas values( 3, 'Facebook', 1, current_timestamp);
+insert into datas values( 3, 'Facebook', 1, current_timestamp);  
 insert into datas values( 4, 'Instagram', 1, current_timestamp);
 insert into datas values( 5, 'Internet', 1, current_timestamp);
 
@@ -191,28 +199,8 @@ alter table consommations add constraint fk_datas foreign key (iddata) reference
 
 insert into consommations(idclient, iddata, quantite, dateconsommation) values 
  (1 ,1 ,100, '2021-03-24 12:00:00');
-
 insert into consommations(idclient, iddata, quantite, dateconsommation) values 
  (2 ,1 ,100, '2021-03-20 12:00:00');
-
-create table consommationdetails(
-	iddetails serial primary key,
-	idconsommation int not null,
-	iddataclient int,
-	idforfait int,
-	iddata int null,
-	quantite decimal(10,2) not null check(quantite > 0),
-	modeconsommation varchar(10) not null check( modeconsommation = 'credit' or modeconsommation = 'forfait')
-);
-alter table consommationdetails add constraint fk_cons foreign key (idconsommation) references consommations(idconsommation);
-alter table consommationdetails add constraint fk_datas foreign key (iddata) references datas(iddata);
-alter table consommationdetails add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
-alter table consommationdetails add constraint fk_dataclients foreign key (iddataclient) references dataclients(iddataclient);
-insert into consommationdetails (idconsommation, idforfait, iddata, quantite, modeconsommation) values
- (1, 1, 1, 100, 'forfait');
-insert into consommationdetails (idconsommation, idforfait, iddata, quantite, modeconsommation) values
- (2, 9, 1, 200, 'forfait');
- 
  
  create table consommationdetails(
 	iddetails serial primary key,
@@ -247,10 +235,12 @@ create view v_consommationforfaits as
  
  
 select dc.iddataclient, dc.idforfait, f.nomforfait ,dc.iddata,
- (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata
+ (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata, offre.interne,
+ offre.autres, offre.international
  from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient
  and dc.expiration >current_timestamp join forfaits f on dc.idforfait = f.idforfait
- join datas d on dc.iddata = d.iddata where dc.idclient = 1 and dc.iddata = 1;
+ join datas d on dc.iddata = d.iddata join offres offre on
+ f.idoffre = offre.idoffre where dc.idclient = 1 and dc.iddata = 1;
  
 select  dc.idforfait, f.nomforfait ,dc.iddata,
  sum(dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata
@@ -295,6 +285,8 @@ select dc.idforfait,  f.nomforfait, dc.iddata,
 	join datas d on dc.iddata = d.iddata join forfaits f on 
 	dc.idforfait = f.idforfait where dc.idclient = 1 and dc.iddata = 1
 	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait;
+	
+update dataclients set dateexpiration < timestamp where idforfait = 1 and idclient = 1;
 	
 
 create table credits(

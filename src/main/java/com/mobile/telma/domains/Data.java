@@ -7,10 +7,7 @@ public class Data {
 	private String nomData;
 	private int active;
 	private Date dateCreation;
-	
-	
-	
-	
+
 	
 	public int getActive() {
 		return active;
@@ -71,8 +68,16 @@ public class Data {
 		return nom.compareToIgnoreCase(appel()) == 0 ;
 	}
 	
+	public static boolean estAppel(int id) {
+		return id == 1;
+	}
+	
 	public static boolean estSms(String nom) {
 		return nom.compareToIgnoreCase(sms()) == 0;
+	}
+	
+	public static boolean estSms(int id) {
+		return id == 2;
 	}
 	
 	public static boolean estFacebook(String nom) {

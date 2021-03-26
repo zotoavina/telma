@@ -25,11 +25,17 @@ public class ForfaitRepository {
 	
 	private final static String SQL_GET_FORFAITS_DATA = "select * from v_forfaitdatas where idforfait = ?";
 	
+	private final static String SQL_UPDATE_FORFAIT = "update forfaits set nomforfait = ?,  code = ? , "
+			+ " prix = ?, validite = ?,  description = ? where idforfait = ?";
+	
+	private final static String SQL_UPDATE_FDATA = "update forfaitdatas set quantite = ? where idfdata = ?";
+	
 	private final static String SQL_GET_FORFAITS_OFFRE = "select * from forfaits where idoffre = ?";
 	
 	private final static String SQL_INSERT_ACHAT_FORFAIT = "insert into achatforfaits(idclient, idforfait, modepaiement, dateachat) "
 			+ "values (?, ?, ?, ?)";
 	
+	private final static String SQL_DELETE_FORFAIT = "update forfaits set active = ? where idforfaits = ?";
 	
 	
 	@Autowired 
@@ -122,6 +128,10 @@ public class ForfaitRepository {
 		return (Integer)keyHolder.getKeys().get("idforfait");
 	}
 	
+	public void updateForfaitData(ForfaitData fdata) {
+		jdbcTemplate.update( SQL_UPDATE_FDATA, new Object[] { fdata.getQuantite(), fdata.getIdForfait() });
+	}
+	
 	
 	@SuppressWarnings("deprecation")
 	private void getForfaitDatas(Forfait forfait){
@@ -138,6 +148,25 @@ public class ForfaitRepository {
 		return forfaits;
 	}
 	
+	public void deleteForfait(Forfait forfait) {
+		jdbcTemplate.update( SQL_DELETE_FORFAIT, new Object[] { Forfait.INACTIVE, forfait.getIdForfait() } );
+	}
+	
+	
+	private void upForfait(Forfait forfait) {
+		jdbcTemplate.update(SQL_UPDATE_FORFAIT, new Object[] {
+				forfait.getNomforfait(), forfait.getCode(), forfait.getPrix(), 
+				forfait.getValidite(), forfait.getDescription()
+		});
+	}
+	
+	public void updateForfait(Forfait forfait) {
+		upForfait(forfait);
+		List<ForfaitData> datas = forfait.getDatas();
+		for(int i = 0; i< datas.size(); i++) {
+			updateForfaitData( datas.get(i) );
+		}
+	}
 	
 	
 }

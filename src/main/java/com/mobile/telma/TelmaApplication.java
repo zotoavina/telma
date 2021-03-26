@@ -25,6 +25,8 @@ public class TelmaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TelmaApplication.class, args);
+		
+	
 
 //		Client client = new Client();
 //		List<DataActuel> actuels = new ArrayList<>(3);

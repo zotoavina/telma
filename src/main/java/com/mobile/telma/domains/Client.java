@@ -157,6 +157,23 @@ public class Client {
 		throw new EtBadRequestException("Mode de paiement invalide");
 	}
 	
+	private String getPredicat() {
+		return numero.substring(0, 3);
+	}
+	
+	public boolean memeOperateur(String numero) {
+		return numero.startsWith( getPredicat() );	
+	}
+	
+	// Appel
+	public double tarifAUtiliser(DataActuel data, String numero) {
+		if(memeOperateur(numero)) return data.getInterne();
+		if(Operateur.autres(numero)) return data.getAutres();
+		return data.getInternational();
+	}
+	
+	
+	
 	
 	private void consommerAvecCredit(Consommation consommation) {
 		if(credit == 0) return;
@@ -168,17 +185,36 @@ public class Client {
 			credit = 0;
 			return;
 		}
+		System.out.println("consommation credit: " + consommation.dataRestantAConsommer());
 		credit = credit - consommation.dataRestantAConsommer();
 		detail.setQuantite( consommation.dataRestantAConsommer());
 	}
 	
-	public boolean consommerData(Consommation consommation) {
+	
+	public boolean consommerData(Consommation consommation, String numero) {
+		double tmp = 0;
 		for(int i = 0; i < dataActuel.size(); i++ ) {
-			if(!dataActuel.get(i).consommer(consommation)) return false;  
+			tmp = (numero == null)? 1 : tarifAUtiliser(dataActuel.get(i), numero);
+			System.out.println("tarif a utliser: " + tmp);
+			if(!dataActuel.get(i).consommer(consommation, tmp)) return false;  
 		}
 		consommerAvecCredit(consommation);
 		return true;
 	}
+	
+	
+	
+	
+//	public boolean autreOperateur(String numero) {
+//		
+//	}
+	
+//	
+//	public void consommerAppel(Consommation cons, String numero) {
+//			if()
+//	}
+	
+	
 	
 	
 	

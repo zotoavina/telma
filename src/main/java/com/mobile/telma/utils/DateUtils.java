@@ -10,11 +10,12 @@ public class DateUtils {
 		return new java.sql.Date( date.getTime() );
 	}
 	
-	public static java.util.Date parse(String date)throws EtBadRequestException{
+	public static java.sql.Date parse(String date)throws EtBadRequestException{
 		try {
 			System.out.println("sgesghsa:  " + date);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			return sdf.parse(date);
+			java.util.Date tmp = sdf.parse(date);
+			return new java.sql.Date( tmp.getTime() );
 		}catch(Exception e) {
 			throw new EtBadRequestException("Format de date non valide pour l' achat de forfait");
 		}

@@ -3,7 +3,6 @@ package com.mobile.telma.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,7 +95,9 @@ public class ClientController {
 		Date date = DateUtils.parse( (String) map.get("dateconsommation"));
 		double quantite = (Double) map.get("quantite");
 		int idData = (Integer) map.get("iddata");
-		Consommation client= clientService.consommerData(idClient, idData, quantite, date);
+		String numero = (String) map.get("numero");
+		Consommation client= new Consommation(idClient, idData, quantite, date);
+	    client = clientService.consommerData(client, numero);
 		return ResponseMaker.makeResponse(client, 200, "Achat du forfait reussi", HttpStatus.OK);
 	}
 		
@@ -197,8 +198,6 @@ public class ClientController {
 		clientService.supprimerSmsEntrant(idClient);
 		return ResponseMaker.makeResponse(null, 200, "Suppression de l'historique des sms entrants effectues reussie",  HttpStatus.OK);
 	}
-	
-	
 	
 	
 	private String generateToken(Client client){

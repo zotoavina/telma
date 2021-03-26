@@ -17,6 +17,9 @@ public class Forfait {
 	private String description;
 	private List<ForfaitData> datas;
 	
+	public static final int ACTIVE = 1;
+	public static final int INACTIVE = 1;
+	
 	public int getIdForfait() {
 		return idForfait;
 	}

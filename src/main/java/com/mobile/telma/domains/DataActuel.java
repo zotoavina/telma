@@ -7,6 +7,9 @@ public class DataActuel {
 	private int idData;
 	private double quantite;
 	private String nomData;
+	private double interne;
+	private double autres;
+	private double international;
 	
 	
 	
@@ -47,26 +50,59 @@ public class DataActuel {
 	public void setNomData(String nomData) {
 		this.nomData = nomData;
 	}
+	public double getInterne() {
+		return interne;
+	}
+	public void setInterne(double interne) {
+		this.interne = interne;
+	}
+	public double getAutres() {
+		return autres;
+	}
+	public void setAutres(double autres) {
+		this.autres = autres;
+	}
+	public double getInternational() {
+		return international;
+	}
+	public void setInternational(double international) {
+		this.international = international;
+	}
+	
 	
 	public DataActuel() {}
 	
-		
 	
-	public boolean consommer(Consommation consommation) {
+//	
+//	public boolean consommer(Consommation consommation) {
+//		DetailCons detail = new DetailCons();
+//		System.out.println(quantite + " Vs " + consommation.dataRestantAConsommer() );
+//		detail.setModeConsommation( DetailCons.FORFAIT);
+//		detail.setIdDataClient(idDataClient);
+//		if( quantite >= consommation.dataRestantAConsommer() ) {
+//			detail.setQuantite( consommation.dataRestantAConsommer() );
+//			consommation.addDetail(detail);
+//			return false;
+//		}
+//		detail.setQuantite(quantite);
+//		consommation.addDetail(detail);
+//		return true;
+//	}
+
+	public boolean consommer(Consommation consommation,double tarif) {
 		DetailCons detail = new DetailCons();
-		System.out.println(quantite + " Vs " + consommation.dataRestantAConsommer() );
+		double comp = quantite / tarif; 
 		detail.setModeConsommation( DetailCons.FORFAIT);
 		detail.setIdDataClient(idDataClient);
-		if( quantite >= consommation.dataRestantAConsommer() ) {
-			detail.setQuantite( consommation.dataRestantAConsommer() );
+		if( comp >= consommation.dataRestantAConsommer() ) {
+			detail.setQuantite( consommation.dataRestantAConsommer() * tarif );
 			consommation.addDetail(detail);
 			return false;
 		}
-		detail.setQuantite(quantite);
+		detail.setQuantite( comp );
 		consommation.addDetail(detail);
 		return true;
 	}
-
 	
 	
 	

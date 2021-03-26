@@ -29,10 +29,15 @@ public class DataClientRepository {
 			+ " group by dc.idforfait , f.nomforfait, dc.iddata, d.nomdata";
 	
 	private static final String SQL_DATA_ACTUEL= "select dc.iddataclient, dc.idforfait, f.nomforfait ,dc.iddata,"
-			+ " (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata"
+			+ " (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata, offre.interne,"
+			+ " offre.autres, offre.international"
 			+ " from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient"
-			+ " and dc.expiration >? join forfaits f on dc.idforfait = f.idforfait"
-			+ " join datas d on dc.iddata = d.iddata where dc.idclient = ? and dc.iddata = ?";
+			+ " and dc.expiration > ? join forfaits f on dc.idforfait = f.idforfait"
+			+ " join datas d on dc.iddata = d.iddata join offres offre on"
+			+ " f.idoffre = offre.idoffre where dc.idclient = ? and dc.iddata = ?";
+			
+	
+	
 	
 	@Autowired 
 	private JdbcTemplate jdbcTemplate;
@@ -55,6 +60,9 @@ public class DataClientRepository {
 		da.setIdData(rs.getInt("iddata"));
 		da.setQuantite(rs.getDouble("quantite"));
 		da.setNomData(rs.getString("nomdata"));
+		da.setInterne( rs.getDouble("interne"));
+		da.setAutres( rs.getDouble("autres") );
+		da.setInternational( rs.getDouble("international"));
 		return da;
 	} );
 	
