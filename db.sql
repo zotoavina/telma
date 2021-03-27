@@ -45,8 +45,8 @@ insert into tarifCredit values(2,2 , 50, 150 , 300);
 create table admins(
     idadmin serial primary key not null,
     idoperateur int not null,
-    nom varchar(50) not null,
-    prenom varchar(50),
+    nom varchar(30) not null,
+    prenom varchar(30),
     email varchar(50) not null,
     mdp VARCHAR(50) not null
 ); 
@@ -58,8 +58,8 @@ insert into admins(idoperateur, nom, prenom, email, mdp) values(1, 'Rasoaharisoa
 create table clients(
     idclient serial primary key not null,
     idoperateur int not null default 1,
-    nom varchar(50) not null,
-    prenom varchar(50),
+    nom varchar(30) not null,
+    prenom varchar(30),
     numero varchar(15) not null,
 	mdp varchar(20) not null,
     solde decimal not null default 0,
@@ -86,8 +86,8 @@ create table actions(
     idaction serial primary key not null,
     idtypeaction int not null,
     idclient int not null,
-    montant decimal not null chexck( montant > 0),
-    etat int not null check( etat = 0 or etat = 1),
+    montant decimal not null,
+    etat int not null ,
 	dateaction timestamp not null default current_timestamp
 );
 alter table actions add constraint fk_typeactions foreign key (idtypeaction) references typeactions(idtypeaction);
@@ -98,9 +98,12 @@ insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 3000, 0)
 insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 4000, 0); 
 
 
+
+
 create table offres(
 	idoffre serial primary key not null,
 	nomoffre varchar(15) not null,
+	code varchar(5) not null,
 	interne decimal(6,2) not null,
 	autres decimal(6,2) not null,
 	international decimal(6,2) not null,
@@ -109,11 +112,11 @@ create table offres(
 	description varchar(50) not null
 );
 create unique index index_nomoffre on offres(nomoffre);
-insert into offres(idoffre, nomoffre, interne, autres, international, description) values 
-(1, 'Yellow', 0.5, 1, 1.5, 'bla bal bla');
+insert into offres(idoffre, nomoffre, code, interne, autres, international, description) values 
+(1, 'Yellow', '#224#', 0.5, 1, 1.5, 'bla bal bla');
 alter table offres ADD priorite int check(priorite > 0)
 
-update offres set nomoffre = 'yellow' , interne = 0.5, autres = 1, international = 1.5, 
+update offres set nomoffre = 'yellow' , code ='#111#', interne = 0.5, autres = 1, international = 1.5, 
 active = 1, description = 'sgh' where idoffre = 1;
 
 
@@ -426,17 +429,21 @@ FROM forfaits frt left JOIN v_statforfaits st
 ON frt.idforfait = st.idforfait AND anne = 2021 and mois= 2 WHERE frt.idoffre = 12;
 
 
-CREATE OR REPLACE FUNCTION f_statforfait(ido int,year int, month int)
-  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),nbrachat decimal(20,5)) AS
+drop function f_statforfait;
+CREATE OR REPLACE FUNCTION f_statforfait(ido int,years int, months int)
+  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),value decimal(20,5), annee int, mois int) AS
 $func$
 BEGIN
    RETURN QUERY
     SELECT frt.idforfait,frt.nomforfait,coalesce(frt.prix * st.nbrachat,0) montant, 
-    coalesce(st.nbrachat,0) nbrachat
+    coalesce(st.nbrachat,0) as value,  round( coalesce(st.anne, years) )::integer annee,
+	   round ( coalesce(st.mois, months) )::integer mois
     FROM forfaits frt left JOIN v_statforfaits st
-    ON frt.idforfait = st.idforfait AND anne = year and mois= month WHERE frt.idoffre = ido;                   -- potential ambiguity 
+    ON frt.idforfait = st.idforfait AND st.anne = years and st.mois = months WHERE frt.idoffre = ido;                   
 END
 $func$  LANGUAGE plpgsql;
+
+select * from f_statforfait(1, 2021, 3);
 
 
 
@@ -447,19 +454,21 @@ FROM offres frt left JOIN v_statoffres st
 ON frt.idoffre = st.idoffre AND st.anne = 2021 and st.mois= 1
 
 
-
-CREATE OR REPLACE FUNCTION f_statoffre(year int, month int)
-  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),nbrachat decimal(20,5)) AS
+drop function f_statoffre;
+CREATE OR REPLACE FUNCTION f_statoffre(years int, months int)
+  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),value decimal(20,5), annee int, mois int) AS
 $func$
 BEGIN
    RETURN QUERY
-   SELECT frt.idoffre,frt.nomoffre,coalesce(st.montant,0) montant, 
-   coalesce(st.nbrachat,0) nbrachat
-   FROM offres frt left JOIN v_statoffres st
-   ON frt.idoffre = st.idoffre AND st.anne = year and st.mois= month;                    -- potential ambiguity 
+	   SELECT frt.idoffre,frt.nomoffre,coalesce(st.montant,0) montant, 
+	   coalesce(st.nbrachat,0) nbrachat, round( coalesce(st.anne,years) )::integer annee,
+	   round ( coalesce(st.mois,months) )::integer mois
+	   FROM offres frt left JOIN v_statoffres st
+	   ON frt.idoffre = st.idoffre AND st.anne = years and st.mois= months;                    -- potential ambiguity 
 END
 $func$  LANGUAGE plpgsql;
 
+select * from f_statoffre(2021, 3);
 
 
 -----------------------------------------------------------------------------------
@@ -477,29 +486,27 @@ INSERT INTO mois VALUES
 -- view consommation data par mois et annee
 DROP VIEW  v_consommationdata;
 CREATE VIEW v_consommationdata AS
-<<<<<<< Updated upstream
 SELECT con.iddata,SUM(con.quantite) quantite,
 EXTRACT(YEAR FROM con.dateconsommation) anne, EXTRACT(MONTH FROM con.dateconsommation) mois 
 FROM Consommations con
-GROUP BY con.iddata,anne,mois;   
-=======
- SELECT con.iddata,SUM(con.quantite) quantite,
- EXTRACT(YEAR FROM con.dateconsommation) anne, EXTRACT(MONTH FROM con.dateconsommation) mois 
- FROM Consommations con
- GROUP BY con.iddata,anne,mois;
->>>>>>> Stashed changes
+GROUP BY con.iddata,anne,mois;  
 
-
-create or replace function f_dataclients( dateconsommation timestamp)
- returns table( idforfait int, iddata int, quantite decimal(10,2),dateachat timestamp , expiration timestamp) as
+drop function f_consommationpardata;
+create or replace function f_consommationpardata(years int, months int)
+returns table( id int, name varchar(50), montant decimal(10,2),value decimal(10,2), annee int, mois int) as
  $func$
  Begin
 	return Query
-	select dc.idforfait,  dc.iddata,  sum(dc.quantite) as quantite, min (dc.dateachat) as dateachat, dc.expiration
-		from v_dataclients dc where ( dc.dateachat < dateconsommation and  dc.expiration > dateconsommation) 
-		group by dc.idforfait, dc.iddata, dc.expiration;
-	End
+	SELECT da.iddata as id,da.nomdata as name,coalesce(con.quantite,0) montant,coalesce(con.quantite,0)as value,
+		round( coalesce(con.anne, years) ):: integer annee, round( coalesce(con.mois, months) ) :: integer mois
+		FROM datas da left join v_consommationdata con 
+		ON da.iddata = con.iddata AND con.anne = years and con.mois = months ;
+	end
 	$func$ LANGUAGE plpgsql;
+	
+select * from f_consommationpardata(2021, 3);
+
+
 
 
 
@@ -508,22 +515,6 @@ SELECT da.iddata as id,da.nomdata as name,coalesce(con.quantite,0) montant,coale
 coalesce(con.anne,2021) anee,coalesce(con.mois,1) mois
 FROM datas da left join v_consommationdata con 
 ON da.iddata = con.iddata AND con.anne = 2021 and con.mois = 3 ;
-
-drop function consommationpardata;
-create or replace function consommationpardata(years int, months int)
- returns table( id int, name varchar(30), montant decimal(10,2), val decimal(10,2), annee int, mois int ) as
- $func$
- begin
-	return query
-	SELECT da.iddata as id,da.nomdata as name,coalesce(con.quantite,0) as montant,coalesce(con.quantite,0) as val,
-		round ( coalesce(con.anne, years) ) :: integer annee, round ( coalesce(con.mois, months) ) :: integer mois
-		FROM datas da left join v_consommationdata con 
-		ON da.iddata = con.iddata AND con.anne = years and con.mois = months ;
-	end
-	$func$ language plpgsql;
-
-select * from consommationpardata(2021, 4);
-
 
 -- SELECT POUR LA STATISTIQUE consommataion par data par an  entree: iddata,annee
 SELECT coalesce(con.iddata,1) id,m.nom  as name,coalesce(con.quantite,0) montant,coalesce(con.quantite,0) as value

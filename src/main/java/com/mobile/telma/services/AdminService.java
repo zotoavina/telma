@@ -111,7 +111,7 @@ public class AdminService {
 		return statRepository.getStatOffre(annee, mois);
 	}
 	
-	public List<StatForfait> getStatForfait(int idOffre, int annee, int mois){
+	public List<Stat> getStatForfait(int idOffre, int annee, int mois){
 		return statRepository.getStatForfait(idOffre, annee, mois);
 	}
 	
