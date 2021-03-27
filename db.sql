@@ -483,7 +483,7 @@ CREATE VIEW v_consommationdata AS
 SELECT con.iddata,SUM(con.quantite) quantite,
 EXTRACT(YEAR FROM con.dateconsommation) anne, EXTRACT(MONTH FROM con.dateconsommation) mois 
 FROM Consommations con
-GROUP BY con.iddata,anne,mois;
+GROUP BY con.iddata,anne,mois;   
 
 
 
