@@ -7,14 +7,12 @@ public class Offre {
 
 	private int idOffre;
 	private String nomOffre;
-	private String code;
 	private double interne;
 	private double autres;
 	private double international;
 	private Date dateCreation;
 	private int active = 1;
 	private String description;
-	private int priorite;
 	
 	public final static int ACTIVE = 1;
 	public final static int INACTIVE = 0;
@@ -23,16 +21,6 @@ public class Offre {
 	
 	
 	
-	public int getPriorite() {
-		return priorite;
-	}
-
-
-
-	public void setPriorite(int priorite) {
-		this.priorite = priorite;
-	}
-
 
 
 	public int getIdOffre() {
@@ -57,17 +45,6 @@ public class Offre {
 		this.nomOffre = nomOffre;
 	}
 
-
-
-	public String getCode() {
-		return code;
-	}
-
-
-
-	public void setCode(String code) {
-		this.code = code;
-	}
 
 
 
@@ -149,24 +126,23 @@ public class Offre {
 	public Offre() {}
 
 
-	public Offre(int idOffre, String nomOffre, String code, double interne, double autres, double international,
-			Date dateCreation, int active, String description, int priorite) {
+	public Offre(int idOffre, String nomOffre,  double interne, double autres, double international,
+			Date dateCreation, int active, String description) {
 		super();
 		this.idOffre = idOffre;
 		this.nomOffre = nomOffre;
-		this.code = code;
 		this.interne = interne;
 		this.autres = autres;
 		this.international = international;
 		this.dateCreation = dateCreation;
 		this.active = active;
 		this.description = description;
-		this.priorite = priorite;
 	}
+		
 	
 	@Override
 	public String toString() {
-		return idOffre + " " + nomOffre + " " + code + " " + interne + " " + autres + " " + international + " " + active; 
+		return idOffre + " " + nomOffre + " " + interne + " " + autres + " " + international + " " + active; 
 	}
 	
 	

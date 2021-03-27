@@ -1,6 +1,6 @@
 package com.mobile.telma.domains.stats;
 
-public class StatOffre {
+public class Stat {
 	private int id;
 	private String name;
 	private double montant;
@@ -46,5 +46,5 @@ public class StatOffre {
 		this.mois = mois;
 	}
 	
-	public StatOffre() {}
+	public Stat() {}
 }

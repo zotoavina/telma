@@ -1,6 +1,6 @@
 package com.mobile.telma.domains.stats;
 
-public class StatForfait extends StatOffre{
+public class StatForfait extends Stat{
 	private int idForfait;
 
 	public int getIdForfait() {
