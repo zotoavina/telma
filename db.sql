@@ -429,17 +429,21 @@ FROM forfaits frt left JOIN v_statforfaits st
 ON frt.idforfait = st.idforfait AND anne = 2021 and mois= 2 WHERE frt.idoffre = 12;
 
 
-CREATE OR REPLACE FUNCTION f_statforfait(ido int,year int, month int)
-  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),nbrachat decimal(20,5)) AS
+drop function f_statforfait;
+CREATE OR REPLACE FUNCTION f_statforfait(ido int,years int, months int)
+  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),value decimal(20,5), annee int, mois int) AS
 $func$
 BEGIN
    RETURN QUERY
     SELECT frt.idforfait,frt.nomforfait,coalesce(frt.prix * st.nbrachat,0) montant, 
-    coalesce(st.nbrachat,0) nbrachat
+    coalesce(st.nbrachat,0) as value,  round( coalesce(st.anne, years) )::integer annee,
+	   round ( coalesce(st.mois, months) )::integer mois
     FROM forfaits frt left JOIN v_statforfaits st
-    ON frt.idforfait = st.idforfait AND anne = year and mois= month WHERE frt.idoffre = ido;                   -- potential ambiguity 
+    ON frt.idforfait = st.idforfait AND st.anne = years and st.mois = months WHERE frt.idoffre = ido;                   
 END
 $func$  LANGUAGE plpgsql;
+
+select * from f_statforfait(1, 2021, 3);
 
 
 
@@ -450,19 +454,21 @@ FROM offres frt left JOIN v_statoffres st
 ON frt.idoffre = st.idoffre AND st.anne = 2021 and st.mois= 1
 
 
-
-CREATE OR REPLACE FUNCTION f_statoffre(year int, month int)
-  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),nbrachat decimal(20,5)) AS
+drop function f_statoffre;
+CREATE OR REPLACE FUNCTION f_statoffre(years int, months int)
+  RETURNS TABLE (id int, name varchar(20),montant decimal(20,5),value decimal(20,5), annee int, mois int) AS
 $func$
 BEGIN
    RETURN QUERY
-   SELECT frt.idoffre,frt.nomoffre,coalesce(st.montant,0) montant, 
-   coalesce(st.nbrachat,0) nbrachat
-   FROM offres frt left JOIN v_statoffres st
-   ON frt.idoffre = st.idoffre AND st.anne = year and st.mois= month;                    -- potential ambiguity 
+	   SELECT frt.idoffre,frt.nomoffre,coalesce(st.montant,0) montant, 
+	   coalesce(st.nbrachat,0) nbrachat, round( coalesce(st.anne,years) )::integer annee,
+	   round ( coalesce(st.mois,months) )::integer mois
+	   FROM offres frt left JOIN v_statoffres st
+	   ON frt.idoffre = st.idoffre AND st.anne = years and st.mois= months;                    -- potential ambiguity 
 END
 $func$  LANGUAGE plpgsql;
 
+select * from f_statoffre(2021, 3);
 
 
 -----------------------------------------------------------------------------------
@@ -485,8 +491,8 @@ EXTRACT(YEAR FROM con.dateconsommation) anne, EXTRACT(MONTH FROM con.dateconsomm
 FROM Consommations con
 GROUP BY con.iddata,anne,mois;  
 
-drop function consommationpardata;
-create or replace function consommationpardata(years int, months int)
+drop function f_consommationpardata;
+create or replace function f_consommationpardata(years int, months int)
 returns table( id int, name varchar(50), montant decimal(10,2),value decimal(10,2), annee int, mois int) as
  $func$
  Begin
@@ -498,7 +504,7 @@ returns table( id int, name varchar(50), montant decimal(10,2),value decimal(10,
 	end
 	$func$ LANGUAGE plpgsql;
 	
-select * from consommationpardata(2021, 3);
+select * from f_consommationpardata(2021, 3);
 
 
 
