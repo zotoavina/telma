@@ -464,3 +464,40 @@ END
 $func$  LANGUAGE plpgsql;
 
 
+
+
+-----------------------------------------------------------------------------------
+
+CREATE TABLE mois(
+    mois serial not null primary key,
+    nom varchar(15)
+);
+
+INSERT INTO mois VALUES
+(1,'Janvier'),(2,'Fevrier'),(3,'Mars'),(4,'Avril'),(5,'Mai'),(6,'Juin'),
+(7,'Juillet'),(8,'Aout'),(9,'Septembre'),(10,'Octobre'),(11,'Novembre'),(12,'Decembre');
+
+
+-- view consommation data par mois et annee
+DROP VIEW  v_consommationdata;
+CREATE VIEW v_consommationdata AS
+SELECT con.iddata,SUM(con.quantite) quantite,
+EXTRACT(YEAR FROM con.dateconsommation) anne, EXTRACT(MONTH FROM con.dateconsommation) mois 
+FROM Consommations con
+GROUP BY con.iddata,anne,mois;
+
+
+
+
+-- SELECT POUR LA STATISTIQUE consommataion par data entree : annee ,mois
+SELECT da.iddata as id,da.nomdata as name,coalesce(con.quantite,0) montant,coalesce(con.quantite,0)as value,
+coalesce(con.anne,2021) anee,coalesce(con.mois,1) mois
+FROM datas da left join v_consommationdata con 
+ON da.iddata = con.iddata AND con.anne = 2021 and con.mois = 3 ;
+
+-- SELECT POUR LA STATISTIQUE consommataion par data par an  entree: iddata,annee
+SELECT coalesce(con.iddata,1) id,m.nom  as name,coalesce(con.quantite,0) montant,coalesce(con.quantite,0) as value
+,coalesce(con.anne,2021) annee,m.mois as mois
+FROM mois m left join v_consommationdata con
+ON m.mois =  con.mois AND con.anne= 2021 AND iddata = 1;
+
