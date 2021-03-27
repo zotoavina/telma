@@ -30,10 +30,10 @@ public class StatRepository {
 	
 	private RowMapper<Stat> statOffreRowMapper = ( (rs, numRow) -> {
 		Stat so = new Stat();
-		so.setId(rs.getInt("idoffre"));   
-		so.setName(rs.getString("nomoffre"));
+		so.setId(rs.getInt("id"));   
+		so.setName(rs.getString("name"));
 		so.setMontant(rs.getDouble("montant"));
-		so.setValue(rs.getInt("nbrachat"));
+		so.setValue(rs.getInt("value"));
 		so.setAnnee(rs.getInt("annee"));
 		so.setMois(rs.getInt("mois"));
 		return so;
