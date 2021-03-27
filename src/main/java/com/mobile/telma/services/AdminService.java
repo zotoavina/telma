@@ -12,7 +12,7 @@ import com.mobile.telma.domains.Data;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Offre;
 import com.mobile.telma.domains.stats.StatForfait;
-import com.mobile.telma.domains.stats.StatOffre;
+import com.mobile.telma.domains.stats.Stat;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.ActionClient;
 import com.mobile.telma.exceptions.EtAuthException;
@@ -107,12 +107,16 @@ public class AdminService {
 	
 
 	//--------------------- Stat
-	public List<StatOffre> getStatOffre(int annee, int mois){
+	public List<Stat> getStatOffre(int annee, int mois){
 		return statRepository.getStatOffre(annee, mois);
 	}
 	
 	public List<StatForfait> getStatForfait(int idOffre, int annee, int mois){
 		return statRepository.getStatForfait(idOffre, annee, mois);
+	}
+	
+	public List<Stat> getStatConsommation(int annee, int mois){
+		return statRepository.getStatConsommationParData(annee, mois);
 	}
 	
 	

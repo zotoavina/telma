@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.mobile.telma.domains.stats.StatForfait;
-import com.mobile.telma.domains.stats.StatOffre;
+import com.mobile.telma.domains.stats.Stat;
 
 import java.util.List;
 
@@ -22,12 +22,14 @@ public class StatRepository {
 			+ " coalesce(st.nbrachat,0) nbrachat,coalesce(st.anne, ?) annee, coalesce(st.mois, ?) mois"
 			+ " FROM forfaits frt left JOIN v_statforfaits st"
 			+ " ON frt.idforfait = st.idforfait AND anne = ? and mois= ? WHERE frt.idoffre = ?";
+	
+	private static final String SQL_STAT_CONS_DATA = "select * from consommationpardata( ? , ? )";
  	
 	@Autowired 
 	private JdbcTemplate jdbcTemplate;
 	
-	private RowMapper<StatOffre> statOffreRowMapper = ( (rs, numRow) -> {
-		StatOffre so = new StatOffre();
+	private RowMapper<Stat> statOffreRowMapper = ( (rs, numRow) -> {
+		Stat so = new Stat();
 		so.setId(rs.getInt("idoffre"));   
 		so.setName(rs.getString("nomoffre"));
 		so.setMontant(rs.getDouble("montant"));
@@ -51,7 +53,7 @@ public class StatRepository {
 	
 	
 	@SuppressWarnings("deprecation")
-	public List<StatOffre> getStatOffre(int annee, int mois){
+	public List<Stat> getStatOffre(int annee, int mois){
 		return jdbcTemplate.query(SQL_STAT_OFFRE, new Object[] { annee, mois, annee, mois}, statOffreRowMapper);
 	}
 	
@@ -60,5 +62,11 @@ public class StatRepository {
 		return jdbcTemplate.query(SQL_STAT_FORFAIT, new Object[] { annee, mois, annee, mois, idOffre}, 
 				statForfaitRowMapper);
 	}
+	
+	@SuppressWarnings("deprecation")
+	public List<Stat> getStatConsommationParData(int annee, int mois){
+		return jdbcTemplate.query(SQL_STAT_CONS_DATA, new Object[] { annee, mois }, statOffreRowMapper );
+	}
+	
 	
 }

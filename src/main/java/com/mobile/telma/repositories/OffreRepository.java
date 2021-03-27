@@ -18,13 +18,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class OffreRepository {
-	private static final String SQL_FIND_ALL = "select * from offres";
+	private static final String SQL_FIND_ALL = "select * from offres where active = 1";
 	private static final String SQL_FIND_BY_ID = "select * from offres where idoffre = ?";
-	private static final String SQL_UPDATE = "update offres set nomoffre = ? , code = ?, interne = ?,"
-			+ " autres = ?, international = ?, active = ?, description = ?, priorite = ? where idoffre = ?";
+	private static final String SQL_UPDATE = "update offres set nomoffre = ? , interne = ?,"
+			+ " autres = ?, international = ?, active = ?, description = ?  where idoffre = ?";
 	
-	private static final String SQL_INSERT = "insert into offres( nomoffre, code, interne, autres, international, description, priorite) values "
-			+ "(?,  ?, ?, ?, ?, ?, ?)";
+	private static final String SQL_INSERT = "insert into offres( nomoffre, interne, autres, international, description) values "
+			+ "(?, ?, ?, ?, ?)";
 	
 	private static final String SQL_DELETE_OFFRE = "update offres set active = ? where idoffre = ?";
 	
@@ -39,14 +39,12 @@ public class OffreRepository {
 		return new Offre(
 				rs.getInt("idoffre"),
 				rs.getString("nomoffre"),
-				rs.getString("code"),
 				rs.getDouble("interne"),
 				rs.getDouble("autres"),
 				rs.getDouble("international"),
 				rs.getDate("datecreation"),
 				rs.getInt("active"),
-				rs.getString("description"),
-				rs.getInt("priorite")
+				rs.getString("description")
 				);
 	} );
 	
@@ -71,11 +69,10 @@ public class OffreRepository {
 	public void updateOffre(Offre offre) {
 		System.out.println(offre.toString());
 		jdbcTemplate.update(SQL_UPDATE, new Object[] { 
-				offre.getNomOffre(), offre.getCode(),
+				offre.getNomOffre(), 
 				offre.getInterne(), offre.getAutres(),
 				offre.getInternational(), offre.getActive(),
-				offre.getDescription(), offre.getPriorite(),
-				offre.getIdOffre()
+				offre.getDescription(), offre.getIdOffre()
 				});
 	}
 	
@@ -85,12 +82,10 @@ public class OffreRepository {
 			jdbcTemplate.update( connection ->{ 
 				PreparedStatement ps = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, offre.getNomOffre());
-				ps.setString(2, offre.getCode());
-				ps.setDouble(3, offre.getInterne());
-				ps.setDouble(4, offre.getAutres());
-				ps.setDouble(5, offre.getInternational());
-				ps.setString(6, offre.getDescription());
-				ps.setInt(7, offre.getPriorite());
+				ps.setDouble(2, offre.getInterne());
+				ps.setDouble(3, offre.getAutres());
+				ps.setDouble(4, offre.getInternational());
+				ps.setString(5, offre.getDescription());
 				return ps;
 			}, keyHolder);
 			return (Integer) keyHolder.getKeys().get("idoffre");
@@ -104,7 +99,7 @@ public class OffreRepository {
 	}
 	
 	public void deleteOffre(Offre offre) {
-		jdbcTemplate.update(SQL_UPDATE, new Object[] { Offre.INACTIVE, offre.getIdOffre() } );
+		jdbcTemplate.update(SQL_DELETE_OFFRE, new Object[] { Offre.INACTIVE, offre.getIdOffre() } );
 		List<Forfait> forfaits = getForfaits(offre.getIdOffre());
 		for(int i = 0; i < forfaits.size() ; i++) {
 			forfaitRepository.deleteForfait( forfaits.get(i) );
