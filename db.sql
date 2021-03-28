@@ -491,6 +491,15 @@ EXTRACT(YEAR FROM con.dateconsommation) anne, EXTRACT(MONTH FROM con.dateconsomm
 FROM Consommations con
 GROUP BY con.iddata,anne,mois;  
 
+
+
+
+-- SELECT POUR LA STATISTIQUE consommataion par data entree : annee ,mois
+SELECT da.iddata as id,da.nomdata as name,coalesce(con.quantite,0) montant,coalesce(con.quantite,0)as value,
+coalesce(con.anne,2021) anee,coalesce(con.mois,1) mois
+FROM datas da left join v_consommationdata con 
+ON da.iddata = con.iddata AND con.anne = 2021 and con.mois = 3 ;
+
 drop function f_consommationpardata;
 create or replace function f_consommationpardata(years int, months int)
 returns table( id int, name varchar(50), montant decimal(10,2),value decimal(10,2), annee int, mois int) as
@@ -506,19 +515,26 @@ returns table( id int, name varchar(50), montant decimal(10,2),value decimal(10,
 	
 select * from f_consommationpardata(2021, 3);
 
-
-
-
-
--- SELECT POUR LA STATISTIQUE consommataion par data entree : annee ,mois
-SELECT da.iddata as id,da.nomdata as name,coalesce(con.quantite,0) montant,coalesce(con.quantite,0)as value,
-coalesce(con.anne,2021) anee,coalesce(con.mois,1) mois
-FROM datas da left join v_consommationdata con 
-ON da.iddata = con.iddata AND con.anne = 2021 and con.mois = 3 ;
-
 -- SELECT POUR LA STATISTIQUE consommataion par data par an  entree: iddata,annee
 SELECT coalesce(con.iddata,1) id,m.nom  as name,coalesce(con.quantite,0) montant,coalesce(con.quantite,0) as value
 ,coalesce(con.anne,2021) annee,m.mois as mois
 FROM mois m left join v_consommationdata con
 ON m.mois =  con.mois AND con.anne= 2021 AND iddata = 1;
+
+drop function f_consommationdataparmois;
+create or replace function f_consommationdataparmois(iddatas int , years int)
+returns table( id int, name varchar(50), montant decimal(10,2),value decimal(10,2), annee int, mois int) as
+ $func$
+ Begin
+	return query
+	SELECT coalesce(con.iddata,iddatas) id,m.nom  as name,coalesce(con.quantite,0) montant,coalesce(con.quantite,0) as value
+		, round ( coalesce(con.anne,years) ) :: integer annee,m.mois as mois
+		FROM mois m left join v_consommationdata con
+		ON m.mois =  con.mois AND con.anne= years AND iddata = iddatas;
+	end
+	$func$ Language plpgsql;
+	
+select * from f_consommationdataparmois(3, 2021);	
+
+	
 

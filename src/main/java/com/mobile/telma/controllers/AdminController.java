@@ -148,6 +148,17 @@ public class AdminController {
 				"Selection des statistique de consommation reussi", HttpStatus.OK);
 	}
 	
+	@PostMapping("/admin/consommation/datas/stats")
+	public ResponseEntity<Map<String, Object>> getStatConsommationData(HttpServletRequest request, 
+			@RequestBody Map<String, Object> map)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		int idData = Integer.parseInt( (String) map.get("idData"));
+		int annee = Integer.parseInt( (String) map.get("annee"));   
+		return ResponseMaker.makeResponse(adminService.getStatConsommationData(idData, annee), 200, 
+				"Selection des statistique de consommation reussi", HttpStatus.OK);
+	}
+	
+	
 	
 	
 	private String generateToken(Admin admin){
