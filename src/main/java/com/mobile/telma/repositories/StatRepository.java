@@ -18,6 +18,8 @@ public class StatRepository {
 	private static final String SQL_STAT_FORFAIT = "select * from f_statforfait(?, ?, ?)";
 	
 	private static final String SQL_STAT_CONS_DATA = "select * from f_consommationpardata( ? , ? )";
+	
+	private static final String SQL_STAT_CONS_DATA_MOIS = "select * from f_consommationdataparmois( ? , ?)";
  	
 	@Autowired 
 	private JdbcTemplate jdbcTemplate;
@@ -51,5 +53,9 @@ public class StatRepository {
 		return jdbcTemplate.query(SQL_STAT_CONS_DATA, new Object[] { annee, mois }, statOffreRowMapper );
 	}
 	
+	@SuppressWarnings("deprecation")
+	public List<Stat> getStatConsommationDataParMois(int idData, int annee){
+		return jdbcTemplate.query(SQL_STAT_CONS_DATA_MOIS , new Object[] {idData, annee}, statOffreRowMapper );
+	}
 	
 }

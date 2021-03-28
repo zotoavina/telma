@@ -119,5 +119,9 @@ public class AdminService {
 		return statRepository.getStatConsommationParData(annee, mois);
 	}
 	
+	public List<Stat> getStatConsommationData(int idData, int years){
+		return statRepository.getStatConsommationDataParMois(idData, years);
+	}
+	
 	
 }
