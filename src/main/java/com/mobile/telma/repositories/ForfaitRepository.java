@@ -160,7 +160,7 @@ public class ForfaitRepository {
 	private void upForfait(Forfait forfait) {
 		jdbcTemplate.update(SQL_UPDATE_FORFAIT, new Object[] {
 				forfait.getNomforfait(), forfait.getCode(), forfait.getPrix(), 
-				forfait.getValidite(), forfait.getDescription()
+				forfait.getValidite(), forfait.getDescription(), forfait.getIdForfait()
 		});
 	}
 	
