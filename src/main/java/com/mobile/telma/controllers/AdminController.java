@@ -84,11 +84,11 @@ public class AdminController {
 		return ResponseMaker.makeResponse(adminService.addOffre(offre), 200, "Ajout offre reussi", HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/admin/offres/{idOffre}/delete")
+	@PutMapping("/admin/offres/delete")
 	public ResponseEntity<Map<String, Object>> supprimerOffre(HttpServletRequest request,
-			@PathVariable("idOffre") int idOffre) throws Exception{
+			@RequestBody Offre offre) throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		adminService.deleteOffre(idOffre);
+		adminService.deleteOffre(offre.getIdOffre());
 		return ResponseMaker.makeResponse( null , 200, "Suppression de l' offre reussi", HttpStatus.OK);
 	}
 	
