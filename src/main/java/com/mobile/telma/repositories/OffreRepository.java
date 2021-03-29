@@ -76,8 +76,7 @@ public class OffreRepository {
 				});
 	}
 	
-	public int insertOffre(Offre offre){
-		
+	public int insertOffre(Offre offre){	
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			jdbcTemplate.update( connection ->{ 
 				PreparedStatement ps = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
