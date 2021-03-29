@@ -136,7 +136,7 @@ public class AdminController {
 	
 	@PutMapping("/admin/forfaits/{idForfait}")
 	public  ResponseEntity<Map<String, Object>> updateForfait(HttpServletRequest request,
-			@RequestBody Forfait forfait, @PathVariable("idFrofait") int idForfait )throws Exception{
+			@RequestBody Forfait forfait, @PathVariable("idForfait") int idForfait )throws Exception{
 		GestionToken.gererTokenAdmin(request);
 		forfait.setIdForfait(idForfait);
 		adminService.updateForfait(forfait);
