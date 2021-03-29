@@ -156,10 +156,7 @@ public class AdminController {
 		int annee = Integer.parseInt( (String) map.get("annee"));   
 		return ResponseMaker.makeResponse(adminService.getStatConsommationData(idData, annee), 200, 
 				"Selection des statistique de consommation reussi", HttpStatus.OK);
-	}
-	
-	
-	
+	}	
 	
 	private String generateToken(Admin admin){
 		long timestamp = System.currentTimeMillis();

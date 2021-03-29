@@ -76,8 +76,8 @@ public class OffreRepository {
 				});
 	}
 	
-	public int insertOffre(Offre offre)throws EtBadRequestException {
-		try {
+	public int insertOffre(Offre offre){
+		
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			jdbcTemplate.update( connection ->{ 
 				PreparedStatement ps = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -89,9 +89,7 @@ public class OffreRepository {
 				return ps;
 			}, keyHolder);
 			return (Integer) keyHolder.getKeys().get("idoffre");
-		}catch(Exception e) {
-			throw new EtBadRequestException("Ajout de l' offre echoue");
-		}
+		
 	}
 	
 	public List<Forfait> getForfaits(int idOffre){
