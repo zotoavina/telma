@@ -18,29 +18,6 @@ create table operateurs(
 create unique index fkpredicat on operateurs (predicat);
 insert into operateurs values(1, 'telma', '2010-01-01 12:00:00','034');
 
-create table datas(
-	iddata serial primary key not null,
-	nomdata varchar(30) not null,
-	active int not null check (active = 1 or active = 0),
-	datecreation timestamp not null default current_timestamp
-);
-insert into datas values( 1, 'Appel', 1, current_timestamp);
-insert into datas values( 2, 'Sms', 1, current_timestamp);
-insert into datas values( 3, 'Facebook', 1, current_timestamp);
-insert into datas values( 4, 'Instagram', 1, current_timestamp);
-insert into datas values( 5, 'Internet', 1, current_timestamp);
-
-
-create table tarifCredit(
-	idtarif serial primary key,
-	iddata int not null,
-	interne decimal(10, 2) not null check( interne > 0),
-	autres decimal(10, 2) check(autres > 0) ,
-	international decimal(10,2) check( international > 0 )
-);
-insert into tarifCredit values(1, 1, 0.3, 1 , 1.5);
-insert into tarifCredit values(2,2 , 50, 150 , 300);
-
 
 create table admins(
     idadmin serial primary key not null,
@@ -69,6 +46,30 @@ create table clients(
 alter table clients add constraint fk_operateur foreign key (idoperateur) references operateurs(idoperateur);
 create unique index numtelephone on clients (numero);
 insert into clients (nom, prenom, numero, mdp) values('Rahalinjanahary','martinah','8818232','123456');
+
+
+create table datas(
+	iddata serial primary key not null,
+	nomdata varchar(30) not null,
+	active int not null check (active = 1 or active = 0),
+	datecreation timestamp not null default current_timestamp
+);
+insert into datas values( 1, 'Appel', 1, current_timestamp);
+insert into datas values( 2, 'Sms', 1, current_timestamp);
+insert into datas values( 3, 'Facebook', 1, current_timestamp);
+insert into datas values( 4, 'Instagram', 1, current_timestamp);
+insert into datas values( 5, 'Internet', 1, current_timestamp);
+
+
+create table tarifCredit(
+	idtarif serial primary key,
+	iddata int not null,
+	interne decimal(10, 2) not null check( interne > 0),
+	autres decimal(10, 2) check(autres > 0) ,
+	international decimal(10,2) check( international > 0 )
+);
+insert into tarifCredit values(1, 1, 0.3, 1 , 1.5);
+insert into tarifCredit values(2,2 , 50, 150 , 300);
 
 
 create table typeactions(
@@ -103,7 +104,6 @@ insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 4000, 0)
 create table offres(
 	idoffre serial primary key not null,
 	nomoffre varchar(15) not null,
-	code varchar(5) not null,
 	interne decimal(6,2) not null,
 	autres decimal(6,2) not null,
 	international decimal(6,2) not null,
@@ -112,9 +112,9 @@ create table offres(
 	description varchar(50) not null
 );
 create unique index index_nomoffre on offres(nomoffre);
-insert into offres(idoffre, nomoffre, code, interne, autres, international, description) values 
-(1, 'Yellow', '#224#', 0.5, 1, 1.5, 'bla bal bla');
-alter table offres ADD priorite int check(priorite > 0)
+insert into offres(idoffre, nomoffre,  interne, autres, international, description) values 
+(1, 'Yellow',  0.5, 1, 1.5, 'bla bal bla');
+
 
 update offres set nomoffre = 'yellow' , code ='#111#', interne = 0.5, autres = 1, international = 1.5, 
 active = 1, description = 'sgh' where idoffre = 1;
@@ -125,7 +125,7 @@ create table forfaits(
 	idoffre int not null,
 	nomforfait varchar(15) not null,
 	code varchar(5) not null,
-	prix decimal(10,2) not null CHECK (price > 0),
+	prix decimal(10,2) not null CHECK (prix > 0),
 	validite int not null,
 	dateCreation timestamp not null default current_timestamp,
 	active int not null default 1,
@@ -150,7 +150,7 @@ insert into datas values( 3, 'Facebook', 1, current_timestamp);
 insert into datas values( 4, 'Instagram', 1, current_timestamp);
 insert into datas values( 5, 'Internet', 1, current_timestamp);
 
-
+drop table forfaitdatas cascade;
 create table forfaitdatas(
 	idfdata serial primary key not null,
 	idforfait int not null,
@@ -160,6 +160,7 @@ create table forfaitdatas(
 
 insert into forfaitdatas(idforfait,iddata,quantite) values(1,1,500);
 
+drop table achatforfaits cascade;
 create table achatforfaits(
 	idachat serial primary key ,
 	idclient int not null,
@@ -168,8 +169,9 @@ create table achatforfaits(
 	dateachat timestamp not null default current_timestamp
 );
 alter table achatforfaits add constraint fk_clients foreign key (idclient) references clients(idclient);
-insert into achatforfaits(idclient, idforfait, dateachat) values (1, 1, '2020-10-10 12:00:00');
+insert into achatforfaits(idclient, idforfait,modepaiement, dateachat) values (1, 1, 'mvola', '2020-10-10 12:00:00');
 
+drop table dataclients cascade;
 create table dataclients(
 	iddataclient serial primary key,
 	idclient int not null,
