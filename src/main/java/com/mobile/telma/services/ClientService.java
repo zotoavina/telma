@@ -85,7 +85,7 @@ public class ClientService {
 		AchatForfait af = new AchatForfait();
 		java.sql.Date da = DateUtils.utilToSql(achat);
 		Client client = clientRepository.getClientById(idClient);
-		Forfait forfait = forfaitRepository.getForfaitBId(idForfait);
+		Forfait forfait = forfaitRepository.getForfaitById(idForfait);
 		af.synchronize(client, forfait);
 		af.setModePaiement(mode);
 		af.setDateAchat(da);

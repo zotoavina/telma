@@ -95,7 +95,7 @@ public class ForfaitRepository {
 	
 	
 	@SuppressWarnings("deprecation")
-	public Forfait getForfaitBId(int idForfait) {
+	public Forfait getForfaitById(int idForfait) {
 		Forfait forfait = jdbcTemplate.queryForObject(SQL_GET_BY_ID, new Object[] {idForfait}, forfaitRowMapper);
 		getForfaitDatas(forfait);
 		return forfait;
@@ -150,6 +150,10 @@ public class ForfaitRepository {
 	
 	public void deleteForfait(Forfait forfait) {
 		jdbcTemplate.update( SQL_DELETE_FORFAIT, new Object[] { Forfait.INACTIVE, forfait.getIdForfait() } );
+	}
+	
+	public void deleteForfait(int idForfait) {
+		jdbcTemplate.update( SQL_DELETE_FORFAIT, new Object[] { Forfait.INACTIVE, idForfait } );
 	}
 	
 	
