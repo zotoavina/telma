@@ -96,14 +96,19 @@ public class AdminService {
 		return offreRepository.findById(idOffre);
 	}
 	
+	public List<Forfait> getOffreForfaits(int idOffre){
+		return offreRepository.getForfaits(idOffre);
+	}
+	
 	public Forfait addForfait(Forfait forfait) {
 		int idForfait = forfaitRepository.createForfait(forfait);
 		return forfaitRepository.getForfaitBId(idForfait);
 	}
 	
-	public List<Forfait> getOffreForfaits(int idOffre){
-		return offreRepository.getForfaits(idOffre);
+	public Forfait getForfait(Forfait forfait) {
+		return forfaitRepository.getForfaitBId(forfait.getIdForfait());
 	}
+	
 	
 	
 	public List<Data> getDatas(){
