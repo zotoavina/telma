@@ -35,7 +35,7 @@ public class ForfaitRepository {
 	private final static String SQL_INSERT_ACHAT_FORFAIT = "insert into achatforfaits(idclient, idforfait, modepaiement, dateachat) "
 			+ "values (?, ?, ?, ?)";
 	
-	private final static String SQL_DELETE_FORFAIT = "update forfaits set active = ? where idforfaits = ?";
+	private final static String SQL_DELETE_FORFAIT = "update forfaits set active = ? where idforfait = ?";
 	
 	
 	@Autowired 
