@@ -102,11 +102,20 @@ public class AdminService {
 	
 	public Forfait addForfait(Forfait forfait) {
 		int idForfait = forfaitRepository.createForfait(forfait);
-		return forfaitRepository.getForfaitBId(idForfait);
+		return forfaitRepository.getForfaitById(idForfait);
 	}
 	
 	public Forfait getForfait(int forfait) {
-		return forfaitRepository.getForfaitBId(forfait);
+		return forfaitRepository.getForfaitById(forfait);
+	}
+	
+	public void deleteForfait(int forfait) {
+	     forfaitRepository.deleteForfait(forfait);
+	}
+	
+	
+	public void updateForfait(Forfait forfait) {
+		forfaitRepository.updateForfait(forfait);
 	}
 	
 	
