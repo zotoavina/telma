@@ -117,11 +117,11 @@ public class AdminController {
 		return ResponseMaker.makeResponse(f , 200, "Ajout du forfait realise " , HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/forfaits/{idforfaits}")
+	@GetMapping("/admin/forfaits/{idforfait}")
 	public  ResponseEntity<Map<String, Object>> getForfait(HttpServletRequest request,
-			@RequestBody Forfait forfait)throws Exception{
+			@PathVariable("idforfait") int idForfait)throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		Forfait f = adminService.getForfait(forfait);
+		Forfait f = adminService.getForfait(idForfait);
 		return ResponseMaker.makeResponse(f , 200, "Selection du forfait reussie " , HttpStatus.OK);
 	}
 	
