@@ -105,8 +105,8 @@ public class AdminService {
 		return forfaitRepository.getForfaitBId(idForfait);
 	}
 	
-	public Forfait getForfait(Forfait forfait) {
-		return forfaitRepository.getForfaitBId(forfait.getIdForfait());
+	public Forfait getForfait(int forfait) {
+		return forfaitRepository.getForfaitBId(forfait);
 	}
 	
 	
