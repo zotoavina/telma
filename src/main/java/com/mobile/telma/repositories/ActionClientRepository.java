@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public class ActionClientRepository {
-	public static final String SQL_FIND_ALL_NON_VALIDE = "select * from actionclient where etat = 0";
+	public static final String SQL_FIND_ALL_NON_VALIDE = "select * from v_actionclient where etat = 0";
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

@@ -47,7 +47,7 @@ alter table clients add constraint fk_operateur foreign key (idoperateur) refere
 create unique index numtelephone on clients (numero);
 insert into clients (nom, prenom, numero, mdp) values('Rahalinjanahary','martinah','8818232','123456');
 
-
+drop table datas;
 create table datas(
 	iddata serial primary key not null,
 	nomdata varchar(30) not null,
@@ -59,6 +59,7 @@ insert into datas values( 2, 'Sms', 1, current_timestamp);
 insert into datas values( 3, 'Facebook', 1, current_timestamp);
 insert into datas values( 4, 'Instagram', 1, current_timestamp);
 insert into datas values( 5, 'Internet', 1, current_timestamp);
+
 
 
 create table tarifCredit(
@@ -93,14 +94,13 @@ create table actions(
 );
 alter table actions add constraint fk_typeactions foreign key (idtypeaction) references typeactions(idtypeaction);
 alter table actions add constraint fk_clients foreign key (idclient) references clients(idclient);
-
 insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 2000, 0); 
 insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 3000, 0); 
 insert into actions(idtypeaction, idclient, montant ,etat) values(1, 1, 4000, 0); 
 
 
 
-
+drop table offres cascade;
 create table offres(
 	idoffre serial primary key not null,
 	nomoffre varchar(15) not null,
@@ -120,6 +120,7 @@ update offres set nomoffre = 'yellow' , code ='#111#', interne = 0.5, autres = 1
 active = 1, description = 'sgh' where idoffre = 1;
 
 
+drop table forfaits cascade;
 create table forfaits(
 	idforfait serial primary key not null,
 	idoffre int not null,
@@ -137,18 +138,6 @@ create unique index index_nomforfaits on forfaits(nomforfait);
 insert into forfaits(idoffre, nomforfait, code, prix, validite, description)
 values(1, 'Be dimy', '224*5', 500, 1, 'dshgerrjh');
 
-create table datas(
-	iddata serial primary key not null,
-	nomdata varchar(30) not null,
-	active int not null check (active = 1 or active = 0),
-	datecreation timestamp not null default current_timestamp
-);
-
-insert into datas values( 1, 'Appel', 1, current_timestamp);
-insert into datas values( 2, 'Sms', 1, current_timestamp);
-insert into datas values( 3, 'Facebook', 1, current_timestamp);  
-insert into datas values( 4, 'Instagram', 1, current_timestamp);
-insert into datas values( 5, 'Internet', 1, current_timestamp);
 
 drop table forfaitdatas cascade;
 create table forfaitdatas(
@@ -157,7 +146,7 @@ create table forfaitdatas(
 	iddata int not null,
 	quantite decimal(8,2) not null
 );
-
+alter table forfaitdatas add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
 insert into forfaitdatas(idforfait,iddata,quantite) values(1,1,500);
 
 drop table achatforfaits cascade;
@@ -170,6 +159,7 @@ create table achatforfaits(
 );
 alter table achatforfaits add constraint fk_clients foreign key (idclient) references clients(idclient);
 insert into achatforfaits(idclient, idforfait,modepaiement, dateachat) values (1, 1, 'mvola', '2020-10-10 12:00:00');
+
 
 drop table dataclients cascade;
 create table dataclients(
@@ -188,7 +178,9 @@ alter table dataclients add constraint fk_forfaits foreign key (idforfait) refer
 
 insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , validite, expiration)
  values( 1, 1, 1, 500, current_timestamp, 3, '2021-03-27 12:00:00');
-
+ 
+ 
+drop table consommation cascade;
 create table consommations(
 	idconsommation serial primary key,
 	idclient int not null,
@@ -204,6 +196,8 @@ insert into consommations(idclient, iddata, quantite, dateconsommation) values
 insert into consommations(idclient, iddata, quantite, dateconsommation) values 
  (2 ,1 ,100, '2021-03-20 12:00:00');
  
+ 
+ drop table consommationdetails cascade;
  create table consommationdetails(
 	iddetails serial primary key,
 	idconsommation int not null,
@@ -236,6 +230,7 @@ create view v_consommationforfaits as
  where modeconsommation = 'forfait' group by iddataclient;
  
  
+------------------------ Selection du  data client sur un iddata 
 select dc.iddataclient, dc.idforfait, f.nomforfait ,dc.iddata,
  (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata, offre.interne,
  offre.autres, offre.international
@@ -244,62 +239,59 @@ select dc.iddataclient, dc.idforfait, f.nomforfait ,dc.iddata,
  join datas d on dc.iddata = d.iddata join offres offre on
  f.idoffre = offre.idoffre where dc.idclient = 1 and dc.iddata = 1;
  
+drop function f_getDataClientActuel;
+create or replace function f_getDataClientActuel(idClients int, idDatas int , dates timestamp)
+returns table ( iddataclient int, idforfait int, nomforfait varchar(50), iddata int, 
+    quantite decimal(10,2), nomdata varchar(20), interne decimal(10, 2), autres decimal(10, 2), international decimal(10, 2) ) as
+	$func$
+	Begin 
+		return query
+			select dc.iddataclient, dc.idforfait, f.nomforfait ,dc.iddata,
+			 (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata, offre.interne,
+			 offre.autres, offre.international
+			 from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient
+			 and dc.expiration > dates join forfaits f on dc.idforfait = f.idforfait
+			 join datas d on dc.iddata = d.iddata join offres offre on
+			 f.idoffre = offre.idoffre where dc.idclient = idClients and dc.iddata = idDatas
+			 order by dc.expiration asc;
+	End
+	$func$ LANGUAGE plpgsql; 
+	
+	select * from f_getDataClientActuel(1, 1, '2021-03-28 12:00:00');
+			
+---------------- Selection de tous les datas actuel du client 
 select  dc.idforfait, f.nomforfait ,dc.iddata,
- sum(dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata
+ sum(dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata, dc.expiration as expiration
  from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient
  and dc.expiration >current_timestamp join forfaits f on dc.idforfait = f.idforfait
  join datas d on dc.iddata = d.iddata where dc.idclient = 1 
- group by dc.idforfait , f.nomforfait, dc.iddata, d.nomdata;
-
- 
+ group by dc.idforfait , f.nomforfait, dc.iddata, d.nomdata, dc.expiration order by dc.expiration;
 
 
---- Requete data client actuelle
-create or replace function f_dataclients( dateconsommation timestamp)
- returns table( idforfait int, iddata int, quantite decimal(10,2),dateachat timestamp , expiration timestamp) as
- $func$
- Begin
-	return Query
-	select dc.idforfait,  dc.iddata,  sum(dc.quantite) as quantite, min (dc.dateachat) as dateachat, dc.expiration
-		from v_dataclients dc where ( dc.dateachat < dateconsommation and  dc.expiration > dateconsommation) 
-		group by dc.idforfait, dc.iddata, dc.expiration;
-	End
-	$func$ LANGUAGE plpgsql;
-	
+drop function f_getDatasClientActuel;
+create or replace function f_getDatasClientActuel(client int, dates timestamp)
+returns table ( idforfait int, nomforfait varchar(30), iddata int, quantite decimal(10,2) , 
+	nomdata varchar(30), expiration timestamp) as 
+	$func$
+	Begin
+		return query
+			select  dc.idforfait, f.nomforfait ,dc.iddata,
+				 sum(dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata, dc.expiration as expiration
+				 from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient
+				 and dc.expiration > dates join forfaits f on dc.idforfait = f.idforfait
+				 join datas d on dc.iddata = d.iddata where dc.idclient = client
+				 group by dc.idforfait , f.nomforfait, dc.iddata, d.nomdata, dc.expiration order by dc.expiration;
+		End
+	$func$ LANGUAGE plpgsql; 
+			
+ select * from f_getDatasClientActuel(1, '2021-03-28 12:00:00');
 
-		
 
-select dc.idforfait,  f.nomforfait, dc.iddata, 
-    sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata
-	from v_dataclients dc left join v_consommationforfaits c on  dc.idforfait = c.idforfait
-	and dc.iddata = c.iddata and ( dc.dateachat < current_timestamp and  dc.expiration > current_timestamp) 
-	and ( dc.dateachat < c.dateconsommation and  dc.expiration > c.dateconsommation) 
-	join datas d on dc.iddata = d.iddata join forfaits f on 
-	dc.idforfait = f.idforfait where dc.idclient = 1 
-	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait;
-	
- 
-select dc.idforfait,  f.nomforfait, dc.iddata, 
-    sum(dc.quantite - coalesce(c.quantite, 0)) as quantite, d.nomdata
-	from v_dataclients dc left join v_consommationforfaits c on  dc.idforfait = c.idforfait
-	and dc.iddata = c.iddata and ( dc.dateachat < current_timestamp and  dc.expiration > current_timestamp) 
-	and ( dc.dateachat < c.dateconsommation and  dc.expiration > c.dateconsommation) 
-	join datas d on dc.iddata = d.iddata join forfaits f on 
-	dc.idforfait = f.idforfait where dc.idclient = 1 and dc.iddata = 1
-	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait;
-	
-update dataclients set dateexpiration < timestamp where idforfait = 1 and idclient = 1;
-	
-
-create table credits(
-    idcredits serial primary key not null,
-    valmin decimal 
-);
 
 ------------------------ Vues
 
 --- Action + clients
-create view actionclient as
+create view v_actionclient as
 select cl.* , act.idAction, act.idtypeaction,
 act.montant as montantaction, act.etat,
 act.dateaction, ta.nomtypeaction
@@ -321,17 +313,7 @@ select dc.idforfait,  f.nomforfait, dc.iddata,
  dc.idforfait = f.idforfait where dc.idclient = 1 and dc.iddata = 1	group by dc.idforfait, dc.iddata, d.nomdata, f.nomforfait
 	
 	
-------------------------------------------------------------------- Commande
-drop table forfaitdatas cascade;
-drop table forfaitdatas cascade;
-drop view v_consommationforfaits;
-drop table forfaitClients;
-drop table datas;
-
-localhost:8080/admin/datas
-
-
---------------------------------------------------------------- MONGO DB
+--------------------------------------------------------------- MONGO DBv_
 use telma
 
 db.appels.insert(
@@ -466,7 +448,7 @@ BEGIN
 	   coalesce(st.nbrachat,0) nbrachat, round( coalesce(st.anne,years) )::integer annee,
 	   round ( coalesce(st.mois,months) )::integer mois
 	   FROM offres frt left JOIN v_statoffres st
-	   ON frt.idoffre = st.idoffre AND st.anne = years and st.mois= months;                    -- potential ambiguity 
+	   ON frt.idoffre = st.idoffre AND st.anne = years and st.mois= months;                    
 END
 $func$  LANGUAGE plpgsql;
 
