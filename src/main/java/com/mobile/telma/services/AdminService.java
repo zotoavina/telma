@@ -86,6 +86,11 @@ public class AdminService {
 		offreRepository.updateOffre(offre);
 	}
 	
+	public void deleteOffre(int idOffre) {
+		Offre offre = offreRepository.findById(idOffre);
+		offreRepository.deleteOffre(offre);
+	}
+	
 	public Offre addOffre(Offre offre) {
 		int idOffre = offreRepository.insertOffre(offre);
 		return offreRepository.findById(idOffre);
