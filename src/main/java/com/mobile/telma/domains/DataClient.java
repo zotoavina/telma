@@ -1,6 +1,6 @@
 package com.mobile.telma.domains;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,107 +12,82 @@ public class DataClient {
 	private int idForfait;
 	private int  idData;
 	private double quantite;
-	private Date dateAchat = new Date(System.currentTimeMillis());
+	private Timestamp dateAchat = new Timestamp(System.currentTimeMillis());
 	private int validite;
-	private Date expiration;
+	private Timestamp expiration;
 	
 	
 	
-	public Date getExpiration() {
-		return expiration;
-	}
-
-	public void setExpiration(Date expiration) {
-		this.expiration = expiration;
-	}
-
+	
 
 
 	public int getIdDataclient() {
 		return idDataclient;
 	}
 
-
-
 	public void setIdDataclient(int idDataclient) {
 		this.idDataclient = idDataclient;
 	}
-
-
 
 	public int getIdClient() {
 		return idClient;
 	}
 
-
-
 	public void setIdClient(int idClient) {
 		this.idClient = idClient;
 	}
-
-
 
 	public int getIdForfait() {
 		return idForfait;
 	}
 
-
-
 	public void setIdForfait(int idForfait) {
 		this.idForfait = idForfait;
 	}
-
-
 
 	public int getIdData() {
 		return idData;
 	}
 
-
-
 	public void setIdData(int idData) {
 		this.idData = idData;
 	}
-
-
 
 	public double getQuantite() {
 		return quantite;
 	}
 
-
-
 	public void setQuantite(double quantite) {
 		this.quantite = quantite;
 	}
 
-
-
-	public Date getDateAchat() {
+	public Timestamp getDateAchat() {
 		return dateAchat;
 	}
 
-
-
-	public void setDateAchat(Date dateAchat) {
+	public void setDateAchat(Timestamp dateAchat) {
 		this.dateAchat = dateAchat;
 	}
-
-
 
 	public int getValidite() {
 		return validite;
 	}
 
-
-
 	public void setValidite(int validite) {
 		this.validite = validite;
 	}
 
+	public Timestamp getExpiration() {
+		return expiration;
+	}
+
+	public void setExpiration(Timestamp expiration) {
+		this.expiration = expiration;
+	}
+
 	public DataClient() {}
 	
-	public static List<DataClient> dataFromForfaitClient(Forfait forfait, Client client, Date achat){
+	public static List<DataClient> dataFromForfaitClient(Forfait forfait, Client client, Timestamp achat){
 		List<DataClient> data = new ArrayList<>( forfait.getDatas().size());
 		for(int i = 0 ; i < forfait.getDatas().size(); i++) {
 			DataClient tmp = new DataClient();

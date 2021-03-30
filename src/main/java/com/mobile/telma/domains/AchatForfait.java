@@ -1,13 +1,13 @@
 package com.mobile.telma.domains;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class AchatForfait {
 	private int idAchat;
 	private int idClient;
 	private int idForfait;
 	private String modePaiement;
-	private Date dateAchat = new Date(System.currentTimeMillis());
+	private Timestamp dateAchat = new Timestamp(System.currentTimeMillis());
 	public int getIdAchat() {
 		return idAchat;
 	}
@@ -26,15 +26,16 @@ public class AchatForfait {
 	public void setIdForfait(int idForfait) {
 		this.idForfait = idForfait;
 	}
-	public Date getDateAchat() {
+	
+	
+	
+	
+	public Timestamp getDateAchat() {
 		return dateAchat;
 	}
-	public void setDateAchat(Date dateAchat) {
+	public void setDateAchat(Timestamp dateAchat) {
 		this.dateAchat = dateAchat;
 	}
-	
-	
-	
 	public String getModePaiement() {
 		return modePaiement;
 	}

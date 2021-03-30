@@ -108,7 +108,7 @@ public class ForfaitRepository {
 			ps.setInt(1, af.getIdClient());
 			ps.setInt(2, af.getIdForfait());
 			ps.setString(3, af.getModePaiement());
-			ps.setDate(4, af.getDateAchat());
+			ps.setTimestamp(4, af.getDateAchat());
 			System.out.println(ps.toString());
 			return ps;
 		}, keyHolder );

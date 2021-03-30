@@ -35,7 +35,7 @@ public class ConsommationRepository {
 			ps.setInt(1, cons.getIdClient());
 			ps.setInt(2, cons.getIdData());
 			ps.setDouble(3, cons.getQuantite());
-			ps.setDate(4, cons.getDateConsommation());
+			ps.setTimestamp(4, cons.getDateConsommation());
 			System.out.println(ps.toString());
 			return ps;
 		}, keyHolder); 

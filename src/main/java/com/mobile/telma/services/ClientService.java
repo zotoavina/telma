@@ -1,6 +1,7 @@
 package com.mobile.telma.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import java.sql.Timestamp;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,18 +73,18 @@ public class ClientService {
 		return clientRepository.getClientByNumero(numero);
 	}
 	
-	public void setDataActuel(Client client, int idData, java.sql.Date date) {
+	public void setDataActuel(Client client, int idData, java.sql.Timestamp date) {
 		System.out.println("data : " +idData);  
 		client.setDataActuel( dataClientRepository.getDataActuel(client.getIdClient(), idData, date));
 	}
 	
-	public void setDataActuel(Client client, java.sql.Date date) {
+	public void setDataActuel(Client client, java.sql.Timestamp date) {
 		client.setDataActuel( dataClientRepository.getDatasActuel(client.getIdClient(), date));
 	}
 	
 	public void acheterForfait(int idClient, int idForfait,String mode, Date achat) {
 		AchatForfait af = new AchatForfait();
-		java.sql.Date da = DateUtils.utilToSql(achat);
+		java.sql.Timestamp da = DateUtils.utilToSql(achat);
 		Client client = clientRepository.getClientById(idClient);
 		Forfait forfait = forfaitRepository.getForfaitById(idForfait);
 		af.synchronize(client, forfait);
