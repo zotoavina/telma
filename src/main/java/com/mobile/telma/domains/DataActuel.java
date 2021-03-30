@@ -94,6 +94,7 @@ public class DataActuel {
 		double comp = quantite / tarif; 
 		detail.setModeConsommation( DetailCons.FORFAIT);
 		detail.setIdDataClient(idDataClient);
+		detail.setTarif(tarif);
 		if( comp >= consommation.dataRestantAConsommer() ) {
 			detail.setQuantite( consommation.dataRestantAConsommer() * tarif );
 			consommation.addDetail(detail);

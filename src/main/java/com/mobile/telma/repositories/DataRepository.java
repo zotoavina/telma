@@ -39,7 +39,7 @@ public class DataRepository {
 	public int insertData(Data data) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update( connection ->{ 
-			PreparedStatement ps = connection.prepareStatement(SQL_FIND_ALL_ACTIVE, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, data.getNomData());
 			ps.setInt(2, data.getActive());
 			ps.setDate(3, data.getDateCreation());

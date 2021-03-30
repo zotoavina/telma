@@ -178,6 +178,7 @@ public class Client {
 	private void consommerAvecCredit(Consommation consommation) {
 		if(credit == 0) return;
 		DetailCons detail = new DetailCons();
+		detail.setTarif(1);
 		detail.setModeConsommation("credit");
 		consommation.addDetail(detail);
 		if( credit <= consommation.dataRestantAConsommer()) {
