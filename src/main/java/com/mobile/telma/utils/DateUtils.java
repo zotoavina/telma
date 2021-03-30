@@ -15,7 +15,10 @@ public class DateUtils {
 			System.out.println("sgesghsa:  " + date);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			java.util.Date tmp = sdf.parse(date);
-			return new java.sql.Date( tmp.getTime() );
+			System.out.println("Utils : " + tmp.toString());
+			java.sql.Date ret = new java.sql.Date( tmp.getTime() );
+			System.out.println("Sql : " + ret.toString());
+			return ret;
 		}catch(Exception e) {
 			throw new EtBadRequestException("Format de date non valide pour l' achat de forfait");
 		}
