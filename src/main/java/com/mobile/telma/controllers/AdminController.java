@@ -35,9 +35,6 @@ public class AdminController {
 	AdminService adminService;
 	
 	
-	
-	//@CrossOrigin(origins = "https://telmaproject.herokuapp.com/")
-	//@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> adminMap) {
 		String email = (String) adminMap.get("email");
@@ -67,13 +64,13 @@ public class AdminController {
 	
 	
 	// ----------------------------------- Gestion Offres
-	@GetMapping("/admin/offres")
+	@GetMapping("/offres")
 	public ResponseEntity <Map<String, Object>> getListOffres(){
 			return ResponseMaker.makeResponse(adminService.getListOffres(), 200, 
 					"selection de la liste des offres reussi " , HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/offres/{idOffre}")
+	@GetMapping("/offres/{idOffre}")
 	public ResponseEntity<Map<String, Object>> getOffre(@PathVariable("idOffre") int idOffre){
 		return ResponseMaker.makeResponse( adminService.getOffre(idOffre), 200, "selection offre reussi " , HttpStatus.OK);
 	}
@@ -103,12 +100,12 @@ public class AdminController {
 	}
 	
 	
-	@GetMapping("/admin/offres/{idOffre}/forfaits")
+	@GetMapping("/offres/{idOffre}/forfaits")
 	public  ResponseEntity<Map<String, Object>> getForfaits(@PathVariable("idOffre") int idOffre){
-		return ResponseMaker.makeResponse( adminService.getOffreForfaits(idOffre) , 200, "Ajout du forfait realise " , HttpStatus.OK);
+		return ResponseMaker.makeResponse( adminService.getOffreForfaits(idOffre) , 200, "Selection des forfaits reussie " , HttpStatus.OK);
 	}
 	
-	@PostMapping("/admin/offres/{idOffre}/forfaits")
+	@PostMapping("/offres/{idOffre}/forfaits")
 	public  ResponseEntity<Map<String, Object>> ajoutForfait(HttpServletRequest request,@PathVariable("idOffre") int idOffre,
 			@RequestBody Forfait forfait)throws Exception{
 		GestionToken.gererTokenAdmin(request);
@@ -117,10 +114,9 @@ public class AdminController {
 		return ResponseMaker.makeResponse(f , 200, "Ajout du forfait realise " , HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/forfaits/{idforfait}")
+	@GetMapping("/forfaits/{idforfait}")
 	public  ResponseEntity<Map<String, Object>> getForfait(HttpServletRequest request,
 			@PathVariable("idforfait") int idForfait)throws Exception{
-		GestionToken.gererTokenAdmin(request);
 		Forfait f = adminService.getForfait(idForfait);
 		return ResponseMaker.makeResponse(f , 200, "Selection du forfait reussie " , HttpStatus.OK);
 	}

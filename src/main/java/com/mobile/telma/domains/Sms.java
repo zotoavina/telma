@@ -1,6 +1,6 @@
 package com.mobile.telma.domains;
 
-import java.util.Date;
+import java.sql.Date;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "sms")

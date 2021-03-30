@@ -112,8 +112,10 @@ public class ClientController {
 	public ResponseEntity<Map<String, Object>> appeler(HttpServletRequest request,
 			@RequestBody Appel appel)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
+		Consommation con= new Consommation(idClient, 1, appel.getDuree(), appel.getDate());
+		con = clientService.consommerData(con, appel.getReceveur());
 		clientService.addAppel(appel, idClient);
-		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
+		return ResponseMaker.makeResponse(con, 200, "Appel effectue",  HttpStatus.OK);
 	}	
 	
 	@GetMapping("/appels")
