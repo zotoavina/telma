@@ -101,7 +101,6 @@ public class ClientService {
 		//java.sql.Date da = DateUtils.utilToSql(date);
 		Client client = clientRepository.getClientById(consommation.getIdClient());
 		setDataActuel(client, consommation.getIdData(), consommation.getDateConsommation());
-		client.consommerData(consommation, numero);
 		if( client.consommerData(consommation, numero) ) clientRepository.updateSoldeEtCredit(client);
 		consommationRepository.insertionConsommation(consommation);
 		return consommation;
