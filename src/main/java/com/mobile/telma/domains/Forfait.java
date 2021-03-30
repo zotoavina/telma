@@ -84,6 +84,7 @@ public class Forfait {
 	public void setDatas(List<ForfaitData> datas) {
 		this.datas = datas;
 	}
+	
 	public Forfait(int idForfait, int idOffre, String nomforfait, String code, double prix, int validite,
 			Date datecreation, int active, String description) {
 		super();
