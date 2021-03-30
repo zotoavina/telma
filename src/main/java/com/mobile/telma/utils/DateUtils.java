@@ -1,5 +1,6 @@
 package com.mobile.telma.utils;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 import com.mobile.telma.exceptions.EtBadRequestException;
@@ -16,7 +17,7 @@ public class DateUtils {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			java.util.Date tmp = sdf.parse(date);
 			System.out.println("Utils : " + tmp.toString());
-			java.sql.Date ret = new java.sql.Date( tmp.getTime() );
+			java.sql.Date ret = Date.valueOf(date);
 			System.out.println("Sql : " + ret.toString());
 			return ret;
 		}catch(Exception e) {
