@@ -6,20 +6,18 @@ import com.mobile.telma.exceptions.EtBadRequestException;
 
 public class DateUtils {
 
-	public static java.sql.Date utilToSql( java.util.Date date){
-		return new java.sql.Date( date.getTime() );
+	public static java.sql.Timestamp utilToSql( java.util.Date date){
+		return new java.sql.Timestamp( date.getTime() );
 	}
 	
-	@SuppressWarnings("deprecation")
-	public static java.sql.Date parse(String date)throws EtBadRequestException{
+
+	public static java.sql.Timestamp parse(String date)throws EtBadRequestException{
 		try {
 			System.out.println("sgesghsa:  " + date);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			java.util.Date tmp = sdf.parse(date);
 			System.out.println("Utils : " + tmp.toString());
-			java.sql.Date ret = new java.sql.Date( tmp.getTime() );
-			ret.setHours(tmp.getHours()); ret.setMinutes(tmp.getMinutes());
-			ret.setSeconds(tmp.getSeconds());
+			java.sql.Timestamp ret = new java.sql.Timestamp( tmp.getTime() );
 			System.out.println("Sql : " + ret.toString());
 			return ret;
 		}catch(Exception e) {
@@ -28,8 +26,8 @@ public class DateUtils {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static java.sql.Date addJour(java.sql.Date date, int jour){
-		java.sql.Date  da= new java.sql.Date(date.getTime());
+	public static java.sql.Timestamp addJour(java.sql.Timestamp date, int jour){
+		java.sql.Timestamp  da= new java.sql.Timestamp(date.getTime());
 		da.setDate(da.getDate() + jour );
 		return da;
 	}

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,7 +84,7 @@ public class ClientController {
 			@RequestBody Map<String, Object> map, @PathVariable("idForfait") int idForfait)throws Exception{
 		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
 		String mode = (String) map.get("modepaiement");
-		Date achat = DateUtils.parse( (String) map.get("dateachat") );
+		Timestamp achat = DateUtils.parse( (String) map.get("dateachat") );
 		clientService.acheterForfait(idClient, idForfait, mode, achat);
 		return ResponseMaker.makeResponse(null, 200, "Achat du forfait reussi", HttpStatus.OK);
 	}
@@ -92,11 +93,11 @@ public class ClientController {
 	public ResponseEntity<Map<String,Object>> consommerData(HttpServletRequest request,@RequestBody Map<String, Object> map )
 			throws Exception{
 		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
-		Date date = DateUtils.parse( (String) map.get("dateconsommation"));
+		Timestamp date = DateUtils.parse( (String) map.get("dateconsommation"));
 		double quantite = (Double) map.get("quantite");
 		int idData = (Integer) map.get("iddata");
 		String numero = (String) map.get("numero");
-		Consommation client= new Consommation(idClient, idData, quantite, date);
+		Consommation client= new Consommation(idClient, idData, quantite, date);  
 	    client = clientService.consommerData(client, numero);
 		return ResponseMaker.makeResponse(client, 200, "Achat du forfait reussi", HttpStatus.OK);
 	}

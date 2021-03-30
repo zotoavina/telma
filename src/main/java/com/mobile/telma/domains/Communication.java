@@ -1,6 +1,6 @@
 package com.mobile.telma.domains;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import org.springframework.data.annotation.Id;
 
@@ -17,7 +17,7 @@ public class Communication {
 	private String receveur;
 	private int activeEnvoyeur = 1;
 	private int activeReceveur = 1;
-	private Date date = new Date( System.currentTimeMillis() );
+	private Timestamp date = new Timestamp( System.currentTimeMillis() );
 	
 	
 	
@@ -33,17 +33,18 @@ public class Communication {
 	public void setReceveur(String receveur) {
 		this.receveur = receveur;
 	}
-	public Date getDate() {
+	
+	
+	
+	
+	
+   public Timestamp getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
-	
-	
-	
-	
-   public int getActiveEnvoyeur() {
+public int getActiveEnvoyeur() {
 		return activeEnvoyeur;
 	}
 	public void setActiveEnvoyeur(int activeEnvoyeur) {
@@ -66,7 +67,7 @@ public String getId() {
 	
 
 		public Communication(String id, String envoyeur, String receveur, int activeEnvoyeur, int activeReceveur,
-			Date date) {
+			Timestamp date) {
 		super();
 		this.id = id;
 		this.envoyeur = envoyeur;

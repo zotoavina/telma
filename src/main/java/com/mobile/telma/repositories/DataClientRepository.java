@@ -3,6 +3,7 @@ package com.mobile.telma.repositories;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,12 +76,12 @@ public class DataClientRepository {
 			ps.setInt(2, data.getIdForfait());
 			ps.setInt(3, data.getIdData());
 			ps.setDouble(4, data.getQuantite());
-			ps.setDate(5, data.getDateAchat());
+			ps.setTimestamp(5, data.getDateAchat());
 			ps.setInt(6, data.getValidite());
-			ps.setDate(7, data.getExpiration());
+			ps.setTimestamp(7, data.getExpiration());
 			System.out.println(ps.toString());
 			return ps;
-		}, keyHolder);
+		}, keyHolder);  
 		return (Integer)keyHolder.getKeys().get("iddataclient");
 	} 
 	
@@ -92,12 +93,12 @@ public class DataClientRepository {
 	
 	
 	@SuppressWarnings("deprecation")
-	public List<DataActuel> getDatasActuel(int idClient, Date date){
+	public List<DataActuel> getDatasActuel(int idClient, Timestamp date){
 		return jdbcTemplate.query(SQL_DATAS_ACTUEL, new Object[] {  date , idClient}, datasActuelRowMapper);
 	}
 	
 	@SuppressWarnings("deprecation")
-	public List<DataActuel> getDataActuel(int idClient, int idData, Date date){
+	public List<DataActuel> getDataActuel(int idClient, int idData,Timestamp date){
 		System.out.println(SQL_DATA_ACTUEL);
 		return jdbcTemplate.query(SQL_DATA_ACTUEL, new Object[] {  date , idClient, idData}, dataActuelRowMapper);
 	}

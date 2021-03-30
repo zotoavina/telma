@@ -1,6 +1,7 @@
 package com.mobile.telma.domains;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class Consommation {
 	 private int idClient;
 	 private int idData;
 	 private double quantite;
-	 private Date dateConsommation;
+	 private Timestamp dateConsommation;
 	 private List<DetailCons> details = new ArrayList<>(3);
 	 
 	public int getIdConsommation() {
@@ -36,14 +37,15 @@ public class Consommation {
 	public void setQuantite(double quantite) {
 		this.quantite = quantite;
 	}
-	public Date getDateConsommation() {
+	
+	 
+	 public Timestamp getDateConsommation() {
 		return dateConsommation;
 	}
-	public void setDateConsommation(Date dateConsommation) {
+	public void setDateConsommation(Timestamp dateConsommation) {
 		this.dateConsommation = dateConsommation;
 	}
-	 
-	 public List<DetailCons> getDetails() {
+	public List<DetailCons> getDetails() {
 		return details;
 	}
 	 
@@ -70,7 +72,7 @@ public class Consommation {
 	
 	public Consommation() {}
 	
-	public Consommation(int idClient,int idData , double quantite,  Date da) {
+	public Consommation(int idClient,int idData , double quantite,  Timestamp da) {
 		setIdClient(idClient);
 		setDateConsommation(da);
 		setQuantite(quantite);

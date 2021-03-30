@@ -1,5 +1,5 @@
 package com.mobile.telma.domains;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,7 +22,7 @@ public class Appel extends Communication{
 		super();
 	}
 
-	public Appel(String id, String envoyeur, String receveur, int activeEnvoyeur, int activeReceveur, Date date, double duree) {
+	public Appel(String id, String envoyeur, String receveur, int activeEnvoyeur, int activeReceveur, Timestamp date, double duree) {
 		super(id, envoyeur, receveur, activeEnvoyeur, activeReceveur, date);
 		setDuree(duree);
 		// TODO Auto-generated constructor stub
