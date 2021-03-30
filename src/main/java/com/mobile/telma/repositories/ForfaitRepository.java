@@ -30,7 +30,7 @@ public class ForfaitRepository {
 	
 	private final static String SQL_UPDATE_FDATA = "update forfaitdatas set quantite = ? where idfdata = ?";
 	
-	private final static String SQL_GET_FORFAITS_OFFRE = "select * from forfaits where idoffre = ?";
+	private final static String SQL_GET_FORFAITS_OFFRE = "select * from forfaits where idoffre = ? and active = 1";
 	
 	private final static String SQL_INSERT_ACHAT_FORFAIT = "insert into achatforfaits(idclient, idforfait, modepaiement, dateachat) "
 			+ "values (?, ?, ?, ?)";
