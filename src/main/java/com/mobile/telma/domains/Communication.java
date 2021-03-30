@@ -1,6 +1,6 @@
 package com.mobile.telma.domains;
 
-import java.util.Date;
+import java.sql.Date;
 
 import org.springframework.data.annotation.Id;
 
@@ -17,7 +17,7 @@ public class Communication {
 	private String receveur;
 	private int activeEnvoyeur = 1;
 	private int activeReceveur = 1;
-	private Date date = new Date();
+	private Date date = new Date( System.currentTimeMillis() );
 	
 	
 	
