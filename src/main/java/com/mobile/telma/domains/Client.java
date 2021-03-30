@@ -193,6 +193,7 @@ public class Client {
 	
 	public boolean consommerData(Consommation consommation, String numero) {
 		double tmp = 0;
+		System.out.println("Taille data actulee" + dataActuel.size());
 		for(int i = 0; i < dataActuel.size(); i++ ) {
 			tmp = (numero == null)? 1 : tarifAUtiliser(dataActuel.get(i), numero);
 			System.out.println("tarif a utliser: " + tmp);
