@@ -127,9 +127,9 @@ public class AdminController {
 	
 	@PutMapping("/admin/forfaits/delete")
 	public  ResponseEntity<Map<String, Object>> deleteForfait(HttpServletRequest request,
-			@RequestBody Forfait forfait)throws Exception{
+			@RequestBody Map<String, Object> map)throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		adminService.deleteForfait( forfait.getIdForfait() );
+		adminService.deleteForfait( Integer.parseInt( (String) map.get("idForfait")  ) );
 		return ResponseMaker.makeResponse(null , 200, "Selection du forfait reussie " , HttpStatus.OK);
 	}
 	
