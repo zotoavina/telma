@@ -129,8 +129,8 @@ public class AdminController {
 	public  ResponseEntity<Map<String, Object>> deleteForfait(HttpServletRequest request,
 			@RequestBody Map<String, Object> map)throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		adminService.deleteForfait( Integer.parseInt( (String) map.get("idForfait")  ) );
-		return ResponseMaker.makeResponse(null , 200, "Selection du forfait reussie " , HttpStatus.OK);
+		adminService.deleteForfait( (Integer) map.get("idForfait") );
+		return ResponseMaker.makeResponse(null , 200, "Suppression du forfait reussie " , HttpStatus.OK);
 	}
 	
 	
@@ -140,7 +140,7 @@ public class AdminController {
 		GestionToken.gererTokenAdmin(request);
 		forfait.setIdForfait(idForfait);
 		adminService.updateForfait(forfait);
-		return ResponseMaker.makeResponse(null, 200, "Selection du forfait reussie " , HttpStatus.OK);
+		return ResponseMaker.makeResponse(null, 200, "Mise a jour du forfait reussie " , HttpStatus.OK);
 	}
 	
 	
