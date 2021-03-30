@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Admin;
+import com.mobile.telma.domains.Data;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Offre;
 import com.mobile.telma.filter.GestionToken;
@@ -146,6 +147,22 @@ public class AdminController {
 		GestionToken.gererTokenAdmin(request);
 		return ResponseMaker.makeResponse( adminService.getDatas(), 200, "Liste des datas selectionnes", HttpStatus.OK);
 	}
+	
+	@PostMapping("/admin/datas")
+	public ResponseEntity<Map<String, Object>> addData(HttpServletRequest request,
+			@RequestBody Data data)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		return ResponseMaker.makeResponse( adminService.insertData(data), 200, "Ajout du nouvelle service reussie", HttpStatus.OK);
+	}
+	
+	@PutMapping("/admin/datas/{idData}")
+	public ResponseEntity<Map<String, Object>> deleteData(HttpServletRequest request,
+			@RequestBody Data data)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		return ResponseMaker.makeResponse( adminService.insertData(data), 200, "Ajout du nouvelle service reussie", HttpStatus.OK);
+	}
+	
+	
 	
 	
 	//-------------------------------- Stats

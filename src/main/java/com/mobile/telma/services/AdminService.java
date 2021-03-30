@@ -118,12 +118,19 @@ public class AdminService {
 		forfaitRepository.updateForfait(forfait);
 	}
 	
-	
-	
+		
 	public List<Data> getDatas(){
 		return dataRepository.findDatas();
 	}
 	
+	public Data insertData(Data data) {
+		int idData = dataRepository.insertData(data);
+		return dataRepository.getDataById(idData);
+	}
+	
+	public void deleteData(int idData) {
+		dataRepository.deleteData(idData);
+	}
 
 	//--------------------- Stat
 	public List<Stat> getStatOffre(int annee, int mois){
