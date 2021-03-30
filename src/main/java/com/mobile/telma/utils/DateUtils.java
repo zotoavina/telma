@@ -1,6 +1,5 @@
 package com.mobile.telma.utils;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 import com.mobile.telma.exceptions.EtBadRequestException;
@@ -11,13 +10,16 @@ public class DateUtils {
 		return new java.sql.Date( date.getTime() );
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static java.sql.Date parse(String date)throws EtBadRequestException{
 		try {
 			System.out.println("sgesghsa:  " + date);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			java.util.Date tmp = sdf.parse(date);
 			System.out.println("Utils : " + tmp.toString());
-			java.sql.Date ret = Date.valueOf(date);
+			java.sql.Date ret = new java.sql.Date( tmp.getTime() );
+			ret.setHours(tmp.getHours()); ret.setMinutes(tmp.getMinutes());
+			ret.setSeconds(tmp.getSeconds());
 			System.out.println("Sql : " + ret.toString());
 			return ret;
 		}catch(Exception e) {
