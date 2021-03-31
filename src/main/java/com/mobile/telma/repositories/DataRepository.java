@@ -51,7 +51,7 @@ public class DataRepository {
 			ps.setInt(2, data.getActive());
 			ps.setTimestamp(3, data.getDateCreation());
 			return ps;
-		});
+		}, keyHolder);
 		return (Integer) keyHolder.getKeys().get("iddata");
 	}
 	

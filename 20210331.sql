@@ -1,4 +1,4 @@
-alter table forfaits add column types varchar(20) check( types = 'heure' or types = 'jour');
+alter table forfaits add column typeduree varchar(20) check( typeduree = 'heure' or typeduree = 'jour');
 alter table forfaitdatas add valmin time not null default '00:00:01';
 alter table forfaitdatas add valmax time not null default '23:59:59';
 
