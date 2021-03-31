@@ -172,12 +172,6 @@ public class AdminController {
 		return ResponseMaker.makeResponse( adminService.getAllTarifs(), 200, "Liste des tarifs selectionnes", HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/tarifs/{idData}")
-	public ResponseEntity<Map<String, Object>> getTarif(HttpServletRequest request, 
-			@PathVariable("idData") int idData)throws Exception{
-		GestionToken.gererTokenAdmin(request);
-		return ResponseMaker.makeResponse( adminService.getTarif(idData), 200, "Selection tarif reussie", HttpStatus.OK);
-	}
 	
 	@GetMapping("/admin/tarifs/{idTarif}")
 	public ResponseEntity<Map<String, Object>> getTarifById(HttpServletRequest request, 
