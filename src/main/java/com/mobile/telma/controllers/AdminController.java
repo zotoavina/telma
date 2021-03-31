@@ -159,7 +159,7 @@ public class AdminController {
 	public ResponseEntity<Map<String, Object>> deleteData(HttpServletRequest request,
 			@RequestBody Data data)throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		return ResponseMaker.makeResponse( adminService.insertData(data), 200, "Ajout du nouvelle service reussie", HttpStatus.OK);
+		return ResponseMaker.makeResponse( adminService.insertData(data), 200, "Suppression du service reussie", HttpStatus.OK);
 	}
 	
 	

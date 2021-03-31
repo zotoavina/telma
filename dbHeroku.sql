@@ -176,6 +176,13 @@ alter table consommationdetails add constraint fk_dataclients foreign key (iddat
 
 
 
+----------------------------- Forfait et dataforfaits
+-- forfaitdatas + datas
+create view v_forfaitdatas as
+select fd.* , d.nomdata  from
+forfaitdatas fd join datas d on fd.iddata = d.iddata;
+
+
 
 ------------------------- Action + clients  (Depot, retrait, ...)
 create view v_actionclient as
