@@ -156,12 +156,15 @@ public class AdminController {
 		return ResponseMaker.makeResponse( adminService.insertData(data), 200, "Ajout du nouvelle service reussie", HttpStatus.OK);
 	}
 	
+	
 	@PutMapping("/admin/datas")
 	public ResponseEntity<Map<String, Object>> deleteData(HttpServletRequest request,
 			@RequestBody Data data)throws Exception{
 		GestionToken.gererTokenAdmin(request);
-		return ResponseMaker.makeResponse( adminService.insertData(data), 200, "Suppression du service reussie", HttpStatus.OK);
+		adminService.deleteData(data.getIdData());
+		return ResponseMaker.makeResponse(null, 200, "Suppression du service reussie", HttpStatus.OK);
 	}
+	
 	
 	@GetMapping("/admin/tarifs")
 	public ResponseEntity<Map<String, Object>> getTarifs(HttpServletRequest request)throws Exception{
