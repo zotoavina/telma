@@ -156,7 +156,7 @@ public class AdminController {
 		return ResponseMaker.makeResponse( adminService.insertData(data), 200, "Ajout du nouvelle service reussie", HttpStatus.OK);
 	}
 	
-	@PutMapping("/admin/datas/{idData}")
+	@PutMapping("/admin/datas")
 	public ResponseEntity<Map<String, Object>> deleteData(HttpServletRequest request,
 			@RequestBody Data data)throws Exception{
 		GestionToken.gererTokenAdmin(request);
@@ -174,6 +174,13 @@ public class AdminController {
 			@PathVariable("idData") int idData)throws Exception{
 		GestionToken.gererTokenAdmin(request);
 		return ResponseMaker.makeResponse( adminService.getTarif(idData), 200, "Selection tarif reussie", HttpStatus.OK);
+	}
+	
+	@GetMapping("/admin/tarifs/{idTarif}")
+	public ResponseEntity<Map<String, Object>> getTarifById(HttpServletRequest request, 
+			@PathVariable("idTarif") int idTarif)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		return ResponseMaker.makeResponse( adminService.getTarifById(idTarif), 200, "Selection tarif reussie", HttpStatus.OK);
 	}
 	
 	
