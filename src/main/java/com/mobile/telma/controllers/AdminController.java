@@ -19,6 +19,7 @@ import com.mobile.telma.domains.Admin;
 import com.mobile.telma.domains.Data;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Offre;
+import com.mobile.telma.domains.Tarif;
 import com.mobile.telma.filter.GestionToken;
 import com.mobile.telma.services.AdminService;
 import com.mobile.telma.utils.ResponseMaker;
@@ -168,6 +169,14 @@ public class AdminController {
 		return ResponseMaker.makeResponse( adminService.getAllTarifs(), 200, "Liste des tarifs selectionnes", HttpStatus.OK);
 	}
 	
+	@PutMapping("/admin/tarifs/{idTarif}")
+	public ResponseEntity<Map<String, Object>> updateTarif(HttpServletRequest request,
+			@PathVariable("idTarif") int idTarif, @RequestBody Tarif tarif)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		tarif.setIdTarif(idTarif);
+		adminService.updateTarif(tarif);
+		return ResponseMaker.makeResponse( null, 200, "Mise a jour du tarif reussie", HttpStatus.OK);
+	}
 	
 	
 	//-------------------------------- Stats

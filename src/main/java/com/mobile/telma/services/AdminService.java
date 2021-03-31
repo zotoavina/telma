@@ -140,6 +140,10 @@ public class AdminService {
 	public List<Tarif> getAllTarifs(){
 		return tarifRepository.getTarifs();
 	}
+	
+	public void updateTarif(Tarif tarif) {
+		tarifRepository.updateTarif(tarif);
+	}
 
 	//--------------------- Stat
 	public List<Stat> getStatOffre(int annee, int mois){

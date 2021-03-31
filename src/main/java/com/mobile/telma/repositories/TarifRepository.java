@@ -13,6 +13,9 @@ import com.mobile.telma.domains.Tarif;
 public class TarifRepository {
 	private static final String SQL_GET_TARIFS = "select * from v_tarifpardefaut";
 	private static final String SQL_GET_TARIF_BY_DATA = "select * from v_tarifpardefaut where iddata = ?";
+	private static final String SQL_UPDATE_TARIF = "update tarifcredit set interne = ? , autres = ? , "
+			+ "international = ? where idtarif = ?";
+	
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -35,6 +38,11 @@ public class TarifRepository {
 	@SuppressWarnings("deprecation")
 	public Tarif getTarifByIdData(int idData){
 		return jdbcTemplate.queryForObject(SQL_GET_TARIF_BY_DATA, new Object[] {idData}, tarifRowMapper);
+	}
+	
+	public void updateTarif(Tarif tarif) {
+		jdbcTemplate.update( SQL_UPDATE_TARIF, new Object[] {
+				tarif.getInterne(), tarif.getAutres(), tarif.getInternational(), tarif.getIdTarif(), });
 	}
 	
 	
