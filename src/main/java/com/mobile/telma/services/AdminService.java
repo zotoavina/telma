@@ -141,6 +141,10 @@ public class AdminService {
 		return tarifRepository.getTarifs();
 	}
 	
+	public Tarif getTarif(int idData) {
+		return tarifRepository.getTarifByIdData(idData);
+	}
+	
 	public void updateTarif(Tarif tarif) {
 		tarifRepository.updateTarif(tarif);
 	}
