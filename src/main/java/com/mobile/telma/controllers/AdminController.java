@@ -162,6 +162,11 @@ public class AdminController {
 		return ResponseMaker.makeResponse( adminService.insertData(data), 200, "Suppression du service reussie", HttpStatus.OK);
 	}
 	
+	@GetMapping("/admin/tarifs")
+	public ResponseEntity<Map<String, Object>> getTarifs(HttpServletRequest request)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		return ResponseMaker.makeResponse( adminService.getAllTarifs(), 200, "Liste des tarifs selectionnes", HttpStatus.OK);
+	}
 	
 	
 	
