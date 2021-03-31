@@ -6,6 +6,7 @@ public class DetailCons {
 	private int idDetails;
 	private int idConsommation;
 	private int idDataClient;
+	private double tarif;
 	private double quantite = 0;
 	private String modeConsommation;
 	
@@ -14,6 +15,14 @@ public class DetailCons {
 	
 	
 	
+	
+	
+	public double getTarif() {
+		return tarif;
+	}
+	public void setTarif(double tarif) {
+		this.tarif = tarif;
+	}
 	public int getIdDataClient() {
 		return idDataClient;
 	}

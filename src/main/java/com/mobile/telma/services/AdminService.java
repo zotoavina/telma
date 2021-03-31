@@ -11,6 +11,7 @@ import com.mobile.telma.domains.Client;
 import com.mobile.telma.domains.Data;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Offre;
+import com.mobile.telma.domains.Tarif;
 import com.mobile.telma.domains.stats.StatForfait;
 import com.mobile.telma.domains.stats.Stat;
 import com.mobile.telma.domains.Action;
@@ -24,6 +25,7 @@ import com.mobile.telma.repositories.DataRepository;
 import com.mobile.telma.repositories.ForfaitRepository;
 import com.mobile.telma.repositories.OffreRepository;
 import com.mobile.telma.repositories.StatRepository;
+import com.mobile.telma.repositories.TarifRepository;
 
 @Transactional
 @Service
@@ -52,6 +54,9 @@ public class AdminService {
 	
 	@Autowired
 	StatRepository statRepository;
+	
+	@Autowired
+	TarifRepository tarifRepository;
 	
 	public Admin getByEmailAndMdp(String email, String mdp) throws EtAuthException{
 		return adminRepository.findAdminByEmailAndMdp(email, mdp);
@@ -118,12 +123,23 @@ public class AdminService {
 		forfaitRepository.updateForfait(forfait);
 	}
 	
-	
-	
+		
 	public List<Data> getDatas(){
 		return dataRepository.findDatas();
 	}
 	
+	public Data insertData(Data data) {
+		int idData = dataRepository.insertData(data);
+		return dataRepository.getDataById(idData);
+	}
+	
+	public void deleteData(int idData) {
+		dataRepository.deleteData(idData);
+	}
+	
+	public List<Tarif> getAllTarifs(){
+		return tarifRepository.getTarifs();
+	}
 
 	//--------------------- Stat
 	public List<Stat> getStatOffre(int annee, int mois){

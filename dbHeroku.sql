@@ -111,6 +111,7 @@ create table forfaits(
 );
 alter table forfaits add constraint fk_forfaits foreign key (idoffre) references offres(idoffre);
 create unique index index_nomforfaits on forfaits(nomforfait);
+alter table forfaits add column types varchar(20) check( types = 'heure' or types = 'jour');
 
 
 drop table forfaitdatas cascade;
@@ -122,6 +123,9 @@ create table forfaitdatas(
 );
 alter table forfaitdatas add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
 insert into forfaitdatas(idforfait,iddata,quantite) values(1,1,500);
+alter table forfaitdatas add valmin time not null default '00:00:01';
+alter table forfaitdatas add valmax time not null default '23:59:59';
+
 
 drop table achatforfaits cascade;
 create table achatforfaits(
@@ -174,6 +178,13 @@ drop table consommationdetails cascade;
 alter table consommationdetails add constraint fk_cons foreign key (idconsommation) references consommations(idconsommation);
 alter table consommationdetails add constraint fk_dataclients foreign key (iddataclient) references dataclients(iddataclient);
 
+
+
+----------------------------- Forfait et dataforfaits
+-- forfaitdatas + datas
+create view v_forfaitdatas as
+select fd.* , d.nomdata  from
+forfaitdatas fd join datas d on fd.iddata = d.iddata;
 
 
 
@@ -242,7 +253,10 @@ returns table ( idforfait int, nomforfait varchar(30), iddata int, quantite deci
  select * from f_getDatasClientActuel(1, '2021-03-28 12:00:00');
  
  
- 
+ --------------- TarifDefaut + nomdata
+ create view tarifpardefaut as
+  select tc.*, da.nomdata from tarifCredit tc join datas da
+  on tc.iddata = da.iddata;
  
  -- ------------------------------------------STATISTIQUE---------------------------------------------------
 CREATE VIEW v_achatinfo AS
@@ -351,4 +365,12 @@ returns table( id int, name varchar(50), montant decimal(10,2),value decimal(10,
 	$func$ Language plpgsql;
 	
 select * from f_consommationdataparmois(3, 2021);	
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+
+
  

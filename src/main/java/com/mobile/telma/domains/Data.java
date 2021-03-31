@@ -1,12 +1,12 @@
 package com.mobile.telma.domains;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Data {
 	private int idData;
 	private String nomData;
-	private int active;
-	private Date dateCreation;
+	private int active = 1;
+	private Timestamp dateCreation = new Timestamp(System.currentTimeMillis());
 
 	
 	public int getActive() {
@@ -33,14 +33,16 @@ public class Data {
 		this.nomData = nomData;
 	}
 
-	public Date getDateCreation() {
+	
+	
+	public Timestamp getDateCreation() {
 		return dateCreation;
 	}
 
-	public void setDateCreation(Date dateCreation) {
+	public void setDateCreation(Timestamp dateCreation) {
 		this.dateCreation = dateCreation;
 	}
-	
+
 	public Data() {}
 
 	public static String appel(){
@@ -96,5 +98,8 @@ public class Data {
 		return 1;
 	}
 	
+	public static int inactive() {
+		return 0;
+	}
 	
 }
