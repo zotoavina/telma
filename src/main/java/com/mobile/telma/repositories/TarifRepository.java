@@ -15,6 +15,7 @@ public class TarifRepository {
 	private static final String SQL_GET_TARIF_BY_DATA = "select * from v_tarifpardefaut where iddata = ?";
 	private static final String SQL_UPDATE_TARIF = "update tarifcredit set interne = ? , autres = ? , "
 			+ "international = ? where idtarif = ?";
+	private static final String SQL_GET_BY_IDTARIF = "select * from v_tarifpardefaut where idtarif = ?";
 	
 	
 	@Autowired
@@ -33,6 +34,12 @@ public class TarifRepository {
 	
 	public List<Tarif> getTarifs(){
 		return jdbcTemplate.query(SQL_GET_TARIFS, tarifRowMapper);
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	public Tarif getTarifById(int idTarif) {
+		return jdbcTemplate.queryForObject(SQL_GET_BY_IDTARIF, new Object[] {idTarif}, tarifRowMapper);
 	}
 	
 	@SuppressWarnings("deprecation")
