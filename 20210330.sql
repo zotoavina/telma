@@ -34,7 +34,7 @@ create table clients(
 );
 alter table clients add constraint fk_operateur foreign key (idoperateur) references operateurs(idoperateur);
 create unique index numtelephone on clients (numero);
-insert into clients (nom, prenom, numero, mdp) values('Rahalinjanahary','martinah','8818232','123456');
+insert into clients (nom, prenom, numero, mdp) values('Rahalinjanahary','martinah','0348818232','123456');
 
 
 create table datas(
@@ -123,8 +123,6 @@ create table forfaitdatas(
 );
 alter table forfaitdatas add constraint fk_forfaits foreign key (idforfait) references forfaits(idforfait);
 insert into forfaitdatas(idforfait,iddata,quantite) values(1,1,500);
-alter table forfaitdatas add valmin time not null default '00:00:01';
-alter table forfaitdatas add valmax time not null default '23:59:59';
 
 
 drop table achatforfaits cascade;
@@ -136,7 +134,6 @@ create table achatforfaits(
 	dateachat timestamp not null default current_timestamp
 );
 alter table achatforfaits add constraint fk_clients foreign key (idclient) references clients(idclient);
-insert into achatforfaits(idclient, idforfait,modepaiement, dateachat) values (1, 1, 'mvola', '2020-10-10 12:00:00');
 
 
 drop table dataclients cascade;
