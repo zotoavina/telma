@@ -1,3 +1,13 @@
+CREATE ROLE zotoavina  login password'123456';
+
+create database telma ;
+
+ALTER DATABASE telma OWNER TO zotoavina;
+
+psql -U zotoavina telma;
+
+
+
 create table operateurs(
     idoperateur serial primary key not null,
     nomoperateur varchar(20) not null,
