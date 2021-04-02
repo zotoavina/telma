@@ -122,9 +122,8 @@ public class ClientService {
 	
 	//-------------------------------------------  Appel et Sms
 	
-	public void addAppel(Appel appel, int idClient) {
-		Client client= clientRepository.getClientById(idClient);
-		appel.setEnvoyeur(client.getNumero());
+	public void addAppel(Appel appel, String numero) {
+		appel.setEnvoyeur(numero);
 		communicationRepository.insertAppel(appel);
 	}
 	
