@@ -89,12 +89,13 @@ public class ClientController {
 		return ResponseMaker.makeResponse(null, 200, "Achat du forfait reussi", HttpStatus.OK);
 	}
 	
+	
 	@PostMapping("/consommer")
 	public ResponseEntity<Map<String,Object>> consommerData(HttpServletRequest request,@RequestBody Map<String, Object> map )
 			throws Exception{
 		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
 		Timestamp date = DateUtils.parse( (String) map.get("dateconsommation"));
-		double quantite = (Double) map.get("quantite");
+		double quantite = Double.parseDouble((String) map.get("quantite"));
 		int idData = (Integer) map.get("iddata");
 		String numero = (String) map.get("numero");
 		Consommation client= new Consommation(idClient, idData, quantite, date);  
