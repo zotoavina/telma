@@ -122,66 +122,8 @@ public class ClientService {
 	
 	//-------------------------------------------  Appel et Sms
 	
-	public void addAppel(Appel appel, String numero) {
-		appel.setEnvoyeur(numero);
-		communicationRepository.insertAppel(appel);
-	}
 	
-	public List<Appel> listeAppels(int idClient) throws EtBadRequestException{
-		Client client = clientRepository.getClientById(idClient);
-		return communicationRepository.getAppelClient(client.getNumero());
-	}
 	
-	public List<Appel> listeAppelSortant(int idClient)throws EtBadRequestException{
-		Client client = clientRepository.getClientById(idClient);
-		return communicationRepository.getAppelClientSortant(client.getNumero());
-	}
-	
-	public List<Appel> listeAppelEntrant(int idClient)throws EtBadRequestException{
-		Client client = clientRepository.getClientById(idClient);
-		return communicationRepository.getAppelClientEntrant(client.getNumero());
-	}
-	
-	public void supprimerHistoriqueSortant(int idClient)throws EtBadRequestException{
-		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerAppelSortant(client.getNumero());
-	}
-	
-	public void supprimerHistoriqueEntrant(int idClient)throws EtBadRequestException {
-		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerAppelEntrant(client.getNumero());
-	}
-	
-	public void supprimerHistoriqueAppel(int idClient)throws EtBadRequestException {
-		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerAppel(client.getNumero());
-	}
-	
-	public void addSms(Sms sms, int idClient) {
-		Client client = clientRepository.getClientById(idClient);
-		sms.setEnvoyeur( client.getNumero() );
-		communicationRepository.insertMessage(sms);
-	}
-	
-	public List<Sms> listeSms(int idClient){
-		Client client = clientRepository.getClientById(idClient);
-		return communicationRepository.getSmsClient(client.getNumero());
-	}
-	
-	public void supprimerSmsEntrant(int idClient) {
-		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerSmsEntrant(client.getNumero());
-	}
-	
-	public void supprimerSmsSortant(int idClient) {
-		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerSmsSortant(client.getNumero());
-	}
-	
-	public void supprimerSms(int idClient) {
-		Client client = clientRepository.getClientById(idClient);
-		communicationRepository.SupprimerSms(client.getNumero());
-	}
 	
 	
 }
