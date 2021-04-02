@@ -25,6 +25,7 @@ import com.mobile.telma.domains.Consommation;
 import com.mobile.telma.domains.Sms;
 import com.mobile.telma.filter.GestionToken;
 import com.mobile.telma.services.ClientService;
+import com.mobile.telma.services.CommunicationService;
 import com.mobile.telma.utils.DateUtils;
 import com.mobile.telma.utils.ResponseMaker;
 import com.mobile.telma.domains.Action;
@@ -40,6 +41,8 @@ public class ClientController {
 
 	@Autowired
 	ClientService clientService;
+	@Autowired
+	CommunicationService comService;
 	
 	@PostMapping("")
 	public ResponseEntity<Map<String,Object>> inscription(@RequestBody Map<String, Object> clientMap){
@@ -124,7 +127,8 @@ public class ClientController {
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
 		Consommation con= new Consommation(idClient, 1, appel.getDuree(), appel.getDate());
 		con = clientService.consommerData(con, appel.getReceveur());
-		clientService.addAppel(appel, idClient);
+		Client client = clientService.getClientById(idClient);
+		comService.addAppel(appel, client.getNumero());
 		return ResponseMaker.makeResponse(con, 200, "Appel effectue",  HttpStatus.OK);
 	}	
 	
