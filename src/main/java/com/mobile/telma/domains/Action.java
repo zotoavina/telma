@@ -79,6 +79,7 @@ public class Action {
 	private String describe() {
 		if(isDepot()) return "depot";
 		if(isRetrait()) return "retrait";
+		if( isAchatCredit() ) return " achat credit d' une valeur de ";
 		return "";
 	}
 	
@@ -87,6 +88,7 @@ public class Action {
 	}
 	
 	public String getDescriptionAttente() {
+		if( isAchatCredit() ) return getDescription();
 		return describe() + " de " + montant + " en attente de validation";
 	}
 	
