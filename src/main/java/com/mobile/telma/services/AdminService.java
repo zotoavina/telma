@@ -145,6 +145,10 @@ public class AdminService {
 		return tarifRepository.getTarifByIdData(idData);
 	}
 	
+	public Tarif getTarifAppel() {
+		return tarifRepository.getTarifByIdData( Data.APPEL );
+	}
+	
 	public Tarif getTarifById(int idTarif) {
 		return tarifRepository.getTarifById(idTarif);
 	}

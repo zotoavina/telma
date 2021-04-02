@@ -10,6 +10,7 @@ import com.mobile.telma.domains.AchatForfait;
 import com.mobile.telma.domains.Action;
 import com.mobile.telma.domains.Client;
 import com.mobile.telma.domains.Consommation;
+import com.mobile.telma.domains.DataActuel;
 import com.mobile.telma.domains.DataClient;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Sms;
@@ -104,6 +105,12 @@ public class ClientService {
 		if( client.consommerData(consommation, numero) ) clientRepository.updateSoldeEtCredit(client);
 		consommationRepository.insertionConsommation(consommation);
 		return consommation;
+	}
+	
+	
+	// -------------------------------------------- Consulation solde
+	public List<DataActuel> getDatasActuel(int idClient, Timestamp date){
+		 return dataClientRepository.getDatasActuel(idClient, date);
 	}
 
 	

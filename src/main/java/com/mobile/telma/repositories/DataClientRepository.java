@@ -22,20 +22,9 @@ public class DataClientRepository {
 	private static final String INSERT_DATA_CLIENT = "insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , validite, expiration) "
 			+ "values( ?, ?, ?, ?, ?, ?, ?)"; 
 	
-	private static final String SQL_DATAS_ACTUEL = "select  dc.idforfait, f.nomforfait ,dc.iddata,"
-			+ " sum(dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata"
-			+ " from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient"
-			+ " and dc.expiration >? join forfaits f on dc.idforfait = f.idforfait"
-			+ " join datas d on dc.iddata = d.iddata where dc.idclient = ?"
-			+ " group by dc.idforfait , f.nomforfait, dc.iddata, d.nomdata";
+	private static final String SQL_DATAS_ACTUEL = "select * from f_getDatasClientActuel(?, ?)";
 	
-	private static final String SQL_DATA_ACTUEL= "select dc.iddataclient, dc.idforfait, f.nomforfait ,dc.iddata,"
-			+ " (dc.quantite - coalesce( cf.quantite, 0) ) as quantite, d.nomdata, offre.interne,"
-			+ " offre.autres, offre.international"
-			+ " from dataclients dc left join v_consommationforfaits cf on dc.iddataclient = cf.iddataclient"
-			+ " and dc.expiration > ? join forfaits f on dc.idforfait = f.idforfait"
-			+ " join datas d on dc.iddata = d.iddata join offres offre on"
-			+ " f.idoffre = offre.idoffre where dc.idclient = ? and dc.iddata = ?";
+	private static final String SQL_DATA_ACTUEL= "select * from select * from f_getDataClientActuel(?, ?, ?)";
 			
 	
 	
