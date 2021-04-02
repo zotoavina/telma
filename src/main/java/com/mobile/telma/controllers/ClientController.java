@@ -143,21 +143,24 @@ public class ClientController {
 	@PutMapping("/appels")
 	public ResponseEntity<Map<String, Object>> supprimerHistoriqueAppel(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		clientService.supprimerHistoriqueAppel(idClient);
+		Client client = clientService.getClientById(idClient);
+		comService.supprimerHistoriqueAppel(client);
 		return ResponseMaker.makeResponse(null, 200, "Appel effectue",  HttpStatus.OK);
 	}
 	
 	@GetMapping("/appels/sortants/supprimer")
 	public ResponseEntity<Map<String, Object>> supprimerAppelSortant(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		clientService.supprimerHistoriqueSortant(idClient);
+		Client client = clientService.getClientById(idClient);
+		comService.supprimerHistoriqueSortant(client);
 		return ResponseMaker.makeResponse(null, 200, "Suppression de l'historique des appels effectues reussie",  HttpStatus.OK);
 	}
 	
 	@PutMapping("/appels/entrants")
 	public ResponseEntity<Map<String, Object>> supprimerAppelEntrant(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		clientService.supprimerHistoriqueEntrant(idClient);
+		Client client = clientService.getClientById(idClient);
+		comService.supprimerHistoriqueEntrant(client);
 		return ResponseMaker.makeResponse(null, 200, "Suppression des appels entrants effectuees",  HttpStatus.OK);
 	}
 	
@@ -165,14 +168,16 @@ public class ClientController {
 	@GetMapping("/appels/entrants")
 	public ResponseEntity<Map<String, Object>> appelsEntrants(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		return ResponseMaker.makeResponse(clientService.listeAppelEntrant(idClient), 200, 
+		Client client = clientService.getClientById(idClient);
+		return ResponseMaker.makeResponse(comService.listeAppelEntrant(client), 200, 
 				"Selection des appels recus effectuee",  HttpStatus.OK);
 	}	
 	
 	@GetMapping("/appels/sortants")
 	public ResponseEntity<Map<String, Object>> appelsSortants(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		return ResponseMaker.makeResponse(clientService.listeAppelSortant(idClient), 200, 
+		Client client = clientService.getClientById(idClient);
+		return ResponseMaker.makeResponse(comService.listeAppelSortant(client), 200, 
 				"Selection des appels sortants effectuee",  HttpStatus.OK);
 	}
 	
@@ -182,21 +187,24 @@ public class ClientController {
 	public ResponseEntity<Map<String, Object>> envoyerSms(HttpServletRequest request,
 			@RequestBody Sms sms)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		clientService.addSms(sms, idClient);
+		Client client = clientService.getClientById(idClient);
+		comService.addSms(sms, client);
 		return ResponseMaker.makeResponse(null, 200, "Sms envoye",  HttpStatus.OK);
 	}	
 	
 	@GetMapping("/sms")
 	public ResponseEntity<Map<String, Object>> sms(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		return ResponseMaker.makeResponse(clientService.listeSms(idClient), 200, 
+		Client client = clientService.getClientById(idClient);
+		return ResponseMaker.makeResponse(comService.listeSms(client), 200, 
 				"Selection des sms (envoyees et recus) terminee",  HttpStatus.OK);
 	}
 	
 	@PutMapping("/sms")
 	public ResponseEntity<Map<String, Object>> supprimerHistoriqueSms(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		clientService.supprimerSms(idClient);
+		Client client = clientService.getClientById(idClient);
+		comService.supprimerSms(client);
 		return ResponseMaker.makeResponse(null, 200, "Suppression sms (envoyees et recus) terminee",  HttpStatus.OK);
 	}
 	
@@ -205,14 +213,16 @@ public class ClientController {
 	@PutMapping("/sms/sortants")
 	public ResponseEntity<Map<String, Object>> supprimerSmsSortant(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		clientService.supprimerSmsSortant(idClient);
+		Client client = clientService.getClientById(idClient);
+		comService.supprimerSmsSortant(client);
 		return ResponseMaker.makeResponse(null, 200, "Suppression de l'historique des sms sortants effectues reussie",  HttpStatus.OK);
 	}
 	
 	@PutMapping("/sms/entrants")
 	public ResponseEntity<Map<String, Object>> supprimerSmsEntrant(HttpServletRequest request)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		clientService.supprimerSmsEntrant(idClient);
+		Client client = clientService.getClientById(idClient);
+		comService.supprimerSmsEntrant(client);
 		return ResponseMaker.makeResponse(null, 200, "Suppression de l'historique des sms entrants effectues reussie",  HttpStatus.OK);
 	}
 	
