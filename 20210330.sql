@@ -69,6 +69,9 @@ create table tarifCredit(
 );
 insert into tarifCredit values(1, 1, 0.3, 1 , 1.5);
 insert into tarifCredit values(2,2 , 50, 150 , 300);
+insert into tarifCredit values(3,3 , 1, 1 , 1);
+insert into tarifCredit values(4,4 , 1, 1 , 1);
+insert into tarifCredit values(5,5 , 1, 1 , 1);
 
 
 create table typeactions(

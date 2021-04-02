@@ -14,6 +14,7 @@ import com.mobile.telma.domains.DataActuel;
 import com.mobile.telma.domains.DataClient;
 import com.mobile.telma.domains.Forfait;
 import com.mobile.telma.domains.Sms;
+import com.mobile.telma.domains.Tarif;
 import com.mobile.telma.domains.Appel;
 import com.mobile.telma.exceptions.EtAuthException;
 import com.mobile.telma.exceptions.EtBadRequestException;
@@ -23,6 +24,7 @@ import com.mobile.telma.repositories.ConsommationRepository;
 import com.mobile.telma.repositories.DataClientRepository;
 import com.mobile.telma.repositories.ClientRepository;
 import com.mobile.telma.repositories.ForfaitRepository;
+import com.mobile.telma.repositories.TarifRepository;
 import com.mobile.telma.utils.DateUtils;
 
 import java.util.Date;
@@ -44,6 +46,8 @@ public class ClientService {
 	DataClientRepository dataClientRepository;
 	@Autowired 
 	ConsommationRepository consommationRepository;
+	@Autowired
+	TarifRepository tarifRepository;
 	
 	public Client createClient(String nom, String prenom, String numero, String mdp)throws EtBadRequestException{
 		int idClient =  clientRepository.insert(nom, prenom, numero, mdp);
@@ -102,7 +106,8 @@ public class ClientService {
 		//java.sql.Date da = DateUtils.utilToSql(date);
 		Client client = clientRepository.getClientById(consommation.getIdClient());
 		setDataActuel(client, consommation.getIdData(), consommation.getDateConsommation());
-		if( client.consommerData(consommation, numero) ) clientRepository.updateSoldeEtCredit(client);
+		Tarif tarif = tarifRepository.getTarifByIdData( consommation.getIdData());
+		if( client.consommerData(consommation, tarif, numero) ) clientRepository.updateSoldeEtCredit(client);
 		consommationRepository.insertionConsommation(consommation);
 		return consommation;
 	}

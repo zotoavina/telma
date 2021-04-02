@@ -167,9 +167,18 @@ public class Client {
 	
 	// Appel
 	public double tarifAUtiliser(DataActuel data, String numero) {
+		if(numero == null || numero.compareTo("") == 0) return 1;
 		if(memeOperateur(numero)) return data.getInterne();
 		if(Operateur.autres(numero)) return data.getAutres();
 		return data.getInternational();
+	}
+	
+	public double tarifAUtiliser(Tarif tarif, String numero) {
+		if(tarif == null) return 1;
+		if(numero == null || numero.compareTo("") == 0) return 1;
+		if(memeOperateur(numero)) return tarif.getInterne();
+		if(Operateur.autres(numero)) return tarif.getAutres();
+		return tarif.getInternational();
 	}
 	
 	
@@ -192,15 +201,35 @@ public class Client {
 	}
 	
 	
-	public boolean consommerData(Consommation consommation, String numero) {
+	public void consommerAvecCredit(Consommation consommation, Tarif tarif, String numero) {
+		if(credit == 0) return;
+		double taf= tarifAUtiliser(tarif, numero);
+		double comp = credit / taf;
+		
+		DetailCons detail = new DetailCons();
+		detail.setTarif( taf );
+		detail.setModeConsommation("credit");
+		consommation.addDetail(detail);
+		if( comp <= consommation.dataRestantAConsommer()) {
+			detail.setQuantite(credit);
+			credit = 0;
+			return;
+		}
+		System.out.println("consommation credit: " + consommation.dataRestantAConsommer());
+		credit = credit - consommation.dataRestantAConsommer() * taf;
+		detail.setQuantite( consommation.dataRestantAConsommer() * taf );
+	}
+	
+	
+	public boolean consommerData(Consommation consommation,Tarif tarifCredit, String numero) {
 		double tmp = 0;
 		System.out.println("Taille data actulee" + dataActuel.size());
 		for(int i = 0; i < dataActuel.size(); i++ ) {
-			tmp = (numero == null)? 1 : tarifAUtiliser(dataActuel.get(i), numero);
+			tmp =  tarifAUtiliser(dataActuel.get(i), numero);
 			System.out.println("tarif a utliser: " + tmp);
 			if(!dataActuel.get(i).consommer(consommation, tmp)) return false;  
 		}
-		consommerAvecCredit(consommation);
+		consommerAvecCredit(consommation, tarifCredit, numero);
 		return true;
 	}
 	
