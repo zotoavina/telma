@@ -3,7 +3,7 @@ package com.mobile.telma.domains;
 import java.sql.Timestamp;
 
 import org.springframework.data.annotation.Id;
-
+import java.util.Date;
 
 /**
  * @author win
@@ -17,7 +17,7 @@ public class Communication {
 	private String receveur;
 	private int activeEnvoyeur = 1;
 	private int activeReceveur = 1;
-	private Timestamp date = new Timestamp( System.currentTimeMillis() );
+	private Date date = new Date( System.currentTimeMillis() );
 	
 	
 	
@@ -38,13 +38,18 @@ public class Communication {
 	
 	
 	
-   public Timestamp getDate() {
+  
+	public Date getDate() {
 		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	public void setDate(Timestamp date) {
 		this.date = date;
 	}
-public int getActiveEnvoyeur() {
+	
+    public int getActiveEnvoyeur() {
 		return activeEnvoyeur;
 	}
 	public void setActiveEnvoyeur(int activeEnvoyeur) {

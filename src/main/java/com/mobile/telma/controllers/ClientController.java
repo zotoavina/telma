@@ -125,7 +125,7 @@ public class ClientController {
 	public ResponseEntity<Map<String, Object>> appeler(HttpServletRequest request,
 			@RequestBody Appel appel)throws Exception{
 		int idClient =  Integer.parseInt( GestionToken.gererTokenClient(request));
-		Consommation con= new Consommation(idClient, 1, appel.getDuree(), appel.getDate());
+		Consommation con= new Consommation(idClient, 1, appel.getDuree(), new Timestamp( appel.getDate().getTime() ) );
 		con = clientService.consommerData(con, appel.getReceveur());
 		Client client = clientService.getClientById(idClient);
 		comService.addAppel(appel, client.getNumero());
