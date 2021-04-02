@@ -103,6 +103,14 @@ public class ClientController {
 		return ResponseMaker.makeResponse(client, 200, "Achat du forfait reussi", HttpStatus.OK);
 	}
 		
+	@GetMapping("/datas")
+	public ResponseEntity<Map<String,Object>> getDatasActuel(HttpServletRequest request)throws Exception{
+		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
+		Timestamp date = new Timestamp(System.currentTimeMillis());
+		return ResponseMaker.makeResponse(clientService.getDatasActuel(idClient, date), 
+				200, "Selection de vos donnees actuelles reussie", HttpStatus.OK);
+		
+	}
 	
 	
 	//------------------------ Appel et Sms

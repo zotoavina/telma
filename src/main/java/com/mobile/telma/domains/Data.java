@@ -7,6 +7,8 @@ public class Data {
 	private String nomData;
 	private int active = 1;
 	private Timestamp dateCreation = new Timestamp(System.currentTimeMillis());
+	
+	public static final int APPEL = 1;
 
 	
 	public int getActive() {

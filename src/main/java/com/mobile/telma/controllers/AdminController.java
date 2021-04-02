@@ -190,6 +190,12 @@ public class AdminController {
 		return ResponseMaker.makeResponse( null, 200, "Mise a jour du tarif reussie", HttpStatus.OK);
 	}
 	
+	@GetMapping("/admin/tarifs/appels")
+	public ResponseEntity<Map<String, Object>> getTarifAppel(HttpServletRequest request)throws Exception{
+		GestionToken.gererTokenAdmin(request);
+		return ResponseMaker.makeResponse( adminService.getTarifAppel(), 200, 
+				"Selection tarif appel par defaut", HttpStatus.OK);
+	}
 	
 	//-------------------------------- Stats
 	@PostMapping("/admin/offres/stats")
