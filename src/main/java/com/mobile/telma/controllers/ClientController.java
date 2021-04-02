@@ -96,7 +96,7 @@ public class ClientController {
 		int idClient = Integer.parseInt( GestionToken.gererTokenClient(request));
 		Timestamp date = DateUtils.parse( (String) map.get("dateconsommation"));
 		double quantite = Double.parseDouble((String) map.get("quantite"));
-		int idData = (Integer) map.get("iddata");
+		int idData = Integer.parseInt((String)map.get("iddata"));
 		String numero = (String) map.get("numero");
 		Consommation client= new Consommation(idClient, idData, quantite, date);  
 	    client = clientService.consommerData(client, numero);
