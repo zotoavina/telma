@@ -84,6 +84,7 @@ public class DataClientRepository {
 	public void insertDataClient(List<DataClient> data) {
 		for(int i = 0 ; i < data.size(); i ++ ) {
 			insert(data.get(i));
+			updateExpiration(data.get(i));
 		}
 	}
 	
