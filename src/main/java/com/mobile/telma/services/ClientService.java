@@ -80,6 +80,7 @@ public class ClientService {
 	
 	public void setDataActuel(Client client, int idData, java.sql.Timestamp date) {
 		System.out.println("data : " +idData);  
+		System.out.println("date : " + date);
 		client.setDataActuel( dataClientRepository.getDataActuel(client.getIdClient(), idData, date));
 	}
 	
@@ -103,10 +104,10 @@ public class ClientService {
 	}
 	
 	public Consommation consommerData(Consommation consommation, String numero) {
-		//java.sql.Date da = DateUtils.utilToSql(date);
 		Client client = clientRepository.getClientById(consommation.getIdClient());
 		setDataActuel(client, consommation.getIdData(), consommation.getDateConsommation());
 		Tarif tarif = tarifRepository.getTarifByIdData( consommation.getIdData());
+		//client.consommerData(consommation, tarif, numero);
 		if( client.consommerData(consommation, tarif, numero) ) clientRepository.updateSoldeEtCredit(client);
 		consommationRepository.insertionConsommation(consommation);
 		return consommation;

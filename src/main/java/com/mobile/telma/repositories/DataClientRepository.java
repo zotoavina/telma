@@ -24,11 +24,11 @@ public class DataClientRepository {
 	
 	private static final String SQL_DATAS_ACTUEL = "select * from f_getDatasClientActuel(?, ?)";
 	
-	private static final String SQL_DATA_ACTUEL= "select * from select * from f_getDataClientActuel(?, ?, ?)";
+	private static final String SQL_DATA_ACTUEL= "select * from f_getDataClientActuel(?, ?, ?)";
 			
 	
 	
-	
+	  
 	@Autowired 
 	private JdbcTemplate jdbcTemplate;
 	
@@ -83,13 +83,13 @@ public class DataClientRepository {
 	
 	@SuppressWarnings("deprecation")
 	public List<DataActuel> getDatasActuel(int idClient, Timestamp date){
-		return jdbcTemplate.query(SQL_DATAS_ACTUEL, new Object[] {  date , idClient}, datasActuelRowMapper);
+		return jdbcTemplate.query(SQL_DATAS_ACTUEL, new Object[] { idClient, date }, datasActuelRowMapper);
 	}
 	
 	@SuppressWarnings("deprecation")
 	public List<DataActuel> getDataActuel(int idClient, int idData,Timestamp date){
 		System.out.println(SQL_DATA_ACTUEL);
-		return jdbcTemplate.query(SQL_DATA_ACTUEL, new Object[] {  date , idClient, idData}, dataActuelRowMapper);
+		return jdbcTemplate.query(SQL_DATA_ACTUEL, new Object[] {  idClient, idData, date }, dataActuelRowMapper);
 	}
 	
 	
