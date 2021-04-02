@@ -90,6 +90,7 @@ public class DataActuel {
 //	}
 
 	public boolean consommer(Consommation consommation,double tarif) {
+		if(quantite == 0) return true;
 		DetailCons detail = new DetailCons();
 		double comp = quantite / tarif; 
 		detail.setModeConsommation( DetailCons.FORFAIT);

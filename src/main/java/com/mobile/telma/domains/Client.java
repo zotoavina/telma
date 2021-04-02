@@ -162,6 +162,7 @@ public class Client {
 	}
 	
 	public boolean memeOperateur(String numero) {
+		System.out.println(getPredicat());
 		return numero.startsWith( getPredicat() );	
 	}
 	
