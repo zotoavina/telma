@@ -61,7 +61,7 @@ public class Consommation {
 	public double sommeDataDetail() {
 		double somme = 0;
 		for(int i = 0; i < details.size(); i++) {
-			somme += details.get(i).getQuantite() * details.get(i).getTarif();
+			somme += details.get(i).getQuantite() / details.get(i).getTarif();
 		}
 		return somme;
 	}

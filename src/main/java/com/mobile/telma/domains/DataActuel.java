@@ -100,7 +100,7 @@ public class DataActuel {
 			consommation.addDetail(detail);
 			return false;
 		}
-		detail.setQuantite( comp );
+		detail.setQuantite( quantite );
 		consommation.addDetail(detail);
 		return true;
 	}
