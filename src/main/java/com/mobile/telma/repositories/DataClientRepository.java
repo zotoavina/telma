@@ -101,6 +101,7 @@ public class DataClientRepository {
 	}
 	
 	public void updateExpiration(DataClient da) {
+		System.out.println("update data client : " + UPDATE_DC_EXPIRATION);
 		jdbcTemplate.update(UPDATE_DC_EXPIRATION , new Object[] { 
 				da.getExpiration(), da.getIdForfait(), da.getIdData()
 		});
