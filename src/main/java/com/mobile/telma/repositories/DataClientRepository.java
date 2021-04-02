@@ -84,6 +84,7 @@ public class DataClientRepository {
 	public void insertDataClient(List<DataClient> data) {
 		for(int i = 0 ; i < data.size(); i ++ ) {
 			insert(data.get(i));
+			updateExpiration(data.get(i));
 		}
 	}
 	
@@ -100,6 +101,7 @@ public class DataClientRepository {
 	}
 	
 	public void updateExpiration(DataClient da) {
+		System.out.println("update data client : " + UPDATE_DC_EXPIRATION);
 		jdbcTemplate.update(UPDATE_DC_EXPIRATION , new Object[] { 
 				da.getExpiration(), da.getIdForfait(), da.getIdData()
 		});
