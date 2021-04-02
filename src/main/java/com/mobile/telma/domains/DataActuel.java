@@ -1,5 +1,7 @@
 package com.mobile.telma.domains;
 
+import java.sql.Timestamp;
+
 public class DataActuel {
 	private int idDataClient;
 	private int idForfait;
@@ -10,8 +12,19 @@ public class DataActuel {
 	private double interne;
 	private double autres;
 	private double international;
+	private Timestamp dateExpiration;
 	
 	
+	
+	
+	
+	
+	public Timestamp getDateExpiration() {
+		return dateExpiration;
+	}
+	public void setDateExpiration(Timestamp dateExpiration) {
+		this.dateExpiration = dateExpiration;
+	}
 	
 	public int getIdDataClient() {
 		return idDataClient;

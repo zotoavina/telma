@@ -22,9 +22,14 @@ public class DataClientRepository {
 	private static final String INSERT_DATA_CLIENT = "insert into dataclients(idclient, idforfait, iddata, quantite, dateachat , validite, expiration) "
 			+ "values( ?, ?, ?, ?, ?, ?, ?)"; 
 	
+	private static final String UPDATE_DC_EXPIRATION = "update dataclients set expiration = ? where idforfait = ? "
+			+ " and iddata = ? ";
+	
 	private static final String SQL_DATAS_ACTUEL = "select * from f_getDatasClientActuel(?, ?)";
 	
 	private static final String SQL_DATA_ACTUEL= "select * from f_getDataClientActuel(?, ?, ?)";
+	
+	
 			
 	
 	
@@ -39,8 +44,10 @@ public class DataClientRepository {
 		da.setIdData(rs.getInt("iddata"));
 		da.setQuantite(rs.getDouble("quantite"));
 		da.setNomData(rs.getString("nomdata"));
+		da.setDateExpiration(rs.getTimestamp("expiration"));
 		return da;
 	} );
+	
 	
 	private RowMapper<DataActuel> dataActuelRowMapper = ( (rs, numRows) -> {
 		DataActuel da = new DataActuel();
@@ -90,6 +97,12 @@ public class DataClientRepository {
 	public List<DataActuel> getDataActuel(int idClient, int idData,Timestamp date){
 		System.out.println(SQL_DATA_ACTUEL);
 		return jdbcTemplate.query(SQL_DATA_ACTUEL, new Object[] {  idClient, idData, date }, dataActuelRowMapper);
+	}
+	
+	public void updateExpiration(DataClient da) {
+		jdbcTemplate.update(UPDATE_DC_EXPIRATION , new Object[] { 
+				da.getExpiration(), da.getIdForfait(), da.getIdData()
+		});
 	}
 	
 	
